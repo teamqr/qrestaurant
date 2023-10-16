@@ -30,3 +30,6 @@ Temporary Items
 
 # secrets
 secrets.properties
+
+# postgres
+postgres-data
