@@ -4,6 +4,7 @@ import com.qrestaurant.qrapp.model.AuthRequest;
 import com.qrestaurant.qrapp.model.User;
 import com.qrestaurant.qrapp.service.JWTTokenService;
 import com.qrestaurant.qrapp.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,14 +26,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<User> register(@Valid @RequestBody AuthRequest authRequest) {
         User user = userService.saveUser(new User(authRequest.email(), authRequest.password()));
 
         return ResponseEntity.ok(user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<String> login(@Valid @RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authRequest.email(), authRequest.password()));
         String token = jwtTokenService.generateToken(authentication);
