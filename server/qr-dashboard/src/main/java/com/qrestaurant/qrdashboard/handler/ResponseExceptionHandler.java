@@ -1,6 +1,7 @@
 package com.qrestaurant.qrdashboard.handler;
 
-import com.qrestaurant.qrdashboard.exception.UserAlreadyExistsException;
+import com.qrestaurant.qrdashboard.exception.EntityNotFoundException;
+import com.qrestaurant.qrdashboard.exception.EntityAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,14 +19,19 @@ import java.util.Map;
 
 @ControllerAdvice
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(value = { AuthenticationException.class })
+    @ExceptionHandler(value = AuthenticationException.class)
     public ResponseEntity<Object> handleAuthenticationException(RuntimeException e, WebRequest webRequest) {
         return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
     }
 
-    @ExceptionHandler(value = UserAlreadyExistsException.class)
-    public ResponseEntity<Object> handleUserAlreadyExistsException(RuntimeException e, WebRequest webRequest) {
+    @ExceptionHandler(value = EntityAlreadyExistsException.class)
+    public ResponseEntity<Object> handleEntityAlreadyExistsException(RuntimeException e, WebRequest webRequest) {
         return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, webRequest);
+    }
+
+    @ExceptionHandler(value = EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(RuntimeException e, WebRequest webRequest) {
+        return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, webRequest);
     }
 
     @Override
