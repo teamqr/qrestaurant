@@ -1,6 +1,6 @@
 package com.qrestaurant.qrapp.handler;
 
-import com.qrestaurant.qrapp.exception.UserAlreadyExistsException;
+import com.qrestaurant.qrapp.exception.EntityAlreadyExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,14 +18,22 @@ import java.util.Map;
 
 @ControllerAdvice
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
+    // 400 - BAD_REQUEST
     @ExceptionHandler(value = { AuthenticationException.class })
     public ResponseEntity<Object> handleAuthenticationException(RuntimeException e, WebRequest webRequest) {
-        return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", e.getMessage());
+
+        return handleExceptionInternal(e, response, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
     }
 
-    @ExceptionHandler(value = UserAlreadyExistsException.class)
-    public ResponseEntity<Object> handleUserAlreadyExistsException(RuntimeException e, WebRequest webRequest) {
-        return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, webRequest);
+    // 409 - CONFLICT
+    @ExceptionHandler(value = EntityAlreadyExistsException.class)
+    public ResponseEntity<Object> handleEntityAlreadyExistsException(RuntimeException e, WebRequest webRequest) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", e.getMessage());
+
+        return handleExceptionInternal(e, response, new HttpHeaders(), HttpStatus.CONFLICT, webRequest);
     }
 
     @Override

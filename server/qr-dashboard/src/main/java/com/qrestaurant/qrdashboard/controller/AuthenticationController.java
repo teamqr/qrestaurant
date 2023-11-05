@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/dashboard/auth")
 public class AuthenticationController {
@@ -24,11 +27,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody AuthRequest authRequest) {
+    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authRequest.email(), authRequest.password()));
         String token = jwtTokenService.generateToken(authentication);
 
-        return ResponseEntity.ok(token);
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+
+        return ResponseEntity.ok(response);
     }
 }
