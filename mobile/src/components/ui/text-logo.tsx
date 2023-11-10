@@ -1,21 +1,17 @@
 import { StyleSheet, Text, TextStyle } from "react-native";
 import { theme } from "../../common/theme";
+import { AppText } from "../text";
 
 export const TextLogo = ({ style }: { style?: TextStyle }) => (
-  <Text style={[styles.title, style]}>
-    <Text style={styles.bold}>QR</Text>
+  <AppText style={[styles.title, style]}>
+    <AppText weight="extra-bold">QR</AppText>
     estaurant
-  </Text>
+  </AppText>
 );
 
 const styles = StyleSheet.create({
   title: {
     color: theme.colors.textOnBackground,
-    fontFamily: theme.fontFamilies.OpenSansRegular,
     fontSize: 24,
-  },
-  bold: {
-    fontWeight: "900",
-    fontFamily: theme.fontFamilies.OpenSansExtraBold,
   },
 });

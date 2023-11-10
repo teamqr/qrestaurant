@@ -1,12 +1,12 @@
-import { Slot, SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Header } from "../components/ui/header";
 
 import {
-  useFonts,
   OpenSans_400Regular,
   OpenSans_700Bold,
   OpenSans_800ExtraBold,
+  useFonts,
 } from "@expo-google-fonts/open-sans";
 import { useEffect } from "react";
 
