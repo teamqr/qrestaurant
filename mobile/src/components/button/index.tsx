@@ -1,21 +1,26 @@
 import { theme } from "@/common/theme";
-import type { ReactNode } from "react";
+import { instyle } from "@/lib/instyle";
+import type { ComponentProps, ReactNode } from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
+
+type ButtonType = ComponentProps<typeof _Button>["variant"];
 
 type Props = {
   label: ReactNode;
   icon?: ReactNode;
+  variant?: ButtonType;
 };
 
-export const Button = ({ label, icon }: Props) => {
+export const Button = ({ label, icon, variant = "contained" }: Props) => {
   return (
-    <Pressable
+    <_Button
       style={[
-        styles.button,
         {
           justifyContent: icon ? "space-between" : "flex-start",
+          gap: icon ? theme.spacing(2) : 0,
         },
       ]}
+      variant={variant}
     >
       {typeof label === "string" ? (
         <Text style={styles.label}>{label}</Text>
@@ -24,21 +29,32 @@ export const Button = ({ label, icon }: Props) => {
       )}
 
       {icon}
-    </Pressable>
+    </_Button>
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
+const _Button = instyle(Pressable, {
+  style: {
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 16,
-    borderWidth: 1,
     borderColor: theme.colors.secondaryLight,
+    borderWidth: 1,
     paddingHorizontal: theme.spacing(3),
-    paddingVertical: theme.spacing(2),
-    backgroundColor: theme.colors.secondary,
+    height: theme.spacing(7),
   },
+  variants: {
+    contained: {
+      backgroundColor: theme.colors.secondary,
+    },
+    outlined: {
+      backgroundColor: theme.colors.background,
+    },
+  },
+  defaultVariant: "contained",
+});
+
+const styles = StyleSheet.create({
   label: {
     fontWeight: "bold",
     fontFamily: theme.fontFamilies.OpenSansBold,

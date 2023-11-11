@@ -1,21 +1,22 @@
+import { theme } from "@/common/theme";
+import { Image } from "expo-image";
 import { Dimensions, View } from "react-native";
-import { AppText } from "../text";
 import Animated, {
   Extrapolate,
   interpolate,
-  interpolateColor,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
+  withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { theme } from "@/common/theme";
-import { Image } from "expo-image";
-import { TextLogo } from "../ui/text-logo";
 import { Button } from "../button";
-import { ArrowForward } from "../icons";
+import { ArrowForward, Login } from "../icons";
+import { AppText } from "../text";
+import { TextLogo } from "../ui/text-logo";
 import { OnboardingIndicator } from "./indicator";
+import { ShadowContainer } from "../shadow-container";
 
 const items = [
   {
@@ -25,11 +26,12 @@ const items = [
   },
   {
     image: require("assets/images/onboarding_2.png"),
-    description: "",
+    description:
+      "Pomożemy Ci znaleźć restaurację, która Ci odpowiada. Wyszukaj restaurację w okolicy, sprawdź menu i ceny, a następnie zarezerwuj stolik. Możesz również zobaczyć opinie innych użytkowników, aby dowiedzieć się, czy restauracja jest godna odwiedzenia.",
   },
   {
-    image: require("assets/images/onboarding_1.png"),
-    description: "",
+    image: require("assets/images/onboarding_3.png"),
+    description: "Zapraszamy do korzystania z QRestaurant! Smacznego!",
   },
 ];
 
@@ -37,17 +39,28 @@ const ITEM_WIDTH = Dimensions.get("window").width;
 
 export const OnboardingCarousel = () => {
   const activeIndex = useSharedValue(0);
+  const onboardingStarted = useDerivedValue(() => activeIndex.value >= 0.5);
 
   const handler = useAnimatedScrollHandler((event) => {
     activeIndex.value = event.contentOffset.x / ITEM_WIDTH;
   });
 
+  const rLoginButtonStyles = useAnimatedStyle(() => {
+    const offset = 80;
+
+    return {
+      marginTop: withSpring(onboardingStarted.value ? -80 : 0),
+      transform: [
+        { translateY: withSpring(onboardingStarted.value ? offset : 0) },
+      ],
+      opacity: withTiming(onboardingStarted.value ? 0 : 1),
+    };
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <Animated.ScrollView
         horizontal
-        // decelerationRate="fast"
-        // snapToInterval={ITEM_WIDTH}
         pagingEnabled
         style={{ flex: 1 }}
         showsHorizontalScrollIndicator={false}
@@ -73,10 +86,29 @@ export const OnboardingCarousel = () => {
       >
         <OnboardingIndicator items={items.length} activeIndex={activeIndex} />
 
-        <Button
-          label="Łapię, pokaż więcej"
-          icon={<ArrowForward color="white" />}
-        />
+        <ShadowContainer>
+          <Button
+            label="Łapię, pokaż więcej"
+            icon={<ArrowForward color="white" />}
+          />
+        </ShadowContainer>
+
+        <Animated.View
+          style={[
+            {
+              alignSelf: "center",
+            },
+            rLoginButtonStyles,
+          ]}
+        >
+          <ShadowContainer>
+            <Button
+              label="Mam już konto"
+              variant="outlined"
+              icon={<Login color="white" />}
+            />
+          </ShadowContainer>
+        </Animated.View>
       </View>
     </View>
   );
@@ -123,7 +155,7 @@ const Item = ({
       <Image
         source={image}
         style={{
-          width: ITEM_WIDTH * 0.65,
+          width: 256,
           aspectRatio: 1,
           marginBottom: theme.spacing(3),
         }}
@@ -141,8 +173,9 @@ const Item = ({
         style={{
           fontSize: 16,
           color: "white",
-          textAlign: "justify",
           lineHeight: 24,
+          alignSelf: "flex-start",
+          textAlign: "justify",
         }}
       >
         {description}
