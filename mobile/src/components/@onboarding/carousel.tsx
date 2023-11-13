@@ -17,6 +17,7 @@ import { AppText } from "../text";
 import { TextLogo } from "../ui/text-logo";
 import { OnboardingIndicator } from "./indicator";
 import { ShadowContainer } from "../shadow-container";
+import { useRouter } from "expo-router";
 
 const items = [
   {
@@ -38,6 +39,8 @@ const items = [
 const ITEM_WIDTH = Dimensions.get("window").width;
 
 export const OnboardingCarousel = () => {
+  const router = useRouter();
+
   const activeIndex = useSharedValue(0);
   const onboardingStarted = useDerivedValue(() => activeIndex.value >= 0.5);
 
@@ -90,6 +93,9 @@ export const OnboardingCarousel = () => {
           <Button
             label="Łapię, pokaż więcej"
             icon={<ArrowForward color="white" />}
+            onPress={() => {
+              router.push("/sign-up");
+            }}
           />
         </ShadowContainer>
 
@@ -101,13 +107,14 @@ export const OnboardingCarousel = () => {
             rLoginButtonStyles,
           ]}
         >
-          <ShadowContainer>
-            <Button
-              label="Mam już konto"
-              variant="outlined"
-              icon={<Login color="white" />}
-            />
-          </ShadowContainer>
+          <Button
+            label="Mam już konto"
+            variant="outlined"
+            icon={<Login color="white" />}
+            onPress={() => {
+              router.push("/sign-in");
+            }}
+          />
         </Animated.View>
       </View>
     </View>

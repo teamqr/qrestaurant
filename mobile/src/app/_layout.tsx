@@ -29,7 +29,6 @@ export default function RootLayout() {
 
   return (
     <>
-      <StatusBar style="light" />
       <Stack>
         <Stack.Screen
           name="index"
@@ -37,7 +36,22 @@ export default function RootLayout() {
             header: () => <Header />,
           }}
         />
+
+        <Stack.Screen
+          name="sign-in"
+          options={{
+            header: ({ navigation }) => <Header onBack={navigation.goBack} />,
+          }}
+        />
+
+        <Stack.Screen
+          name="sign-up"
+          options={{
+            header: ({ navigation }) => <Header onBack={navigation.goBack} />,
+          }}
+        />
       </Stack>
+      <StatusBar style="light" />
     </>
   );
 }

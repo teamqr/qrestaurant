@@ -9,9 +9,15 @@ type Props = {
   label: ReactNode;
   icon?: ReactNode;
   variant?: ButtonType;
+  onPress?: () => void;
 };
 
-export const Button = ({ label, icon, variant = "contained" }: Props) => {
+export const Button = ({
+  label,
+  icon,
+  variant = "contained",
+  onPress,
+}: Props) => {
   return (
     <_Button
       style={[
@@ -21,6 +27,7 @@ export const Button = ({ label, icon, variant = "contained" }: Props) => {
         },
       ]}
       variant={variant}
+      onPress={onPress}
     >
       {typeof label === "string" ? (
         <Text style={styles.label}>{label}</Text>

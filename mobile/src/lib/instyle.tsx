@@ -1,12 +1,5 @@
 import { ComponentProps, ComponentType, FC } from "react";
-import {
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native";
+import { StyleSheet, TextStyle, ViewStyle } from "react-native";
 
 type Style = TextStyle | ViewStyle;
 
