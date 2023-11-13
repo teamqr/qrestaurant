@@ -37,6 +37,7 @@ public class JWTTokenService {
                 .subject(authentication.getName())
                 .claim("scope", scope)
                 .claim("id", user.getId())
+                .claim("restaurantId", user.getRestaurant().getId())
                 .build();
 
         return jwtEncoder

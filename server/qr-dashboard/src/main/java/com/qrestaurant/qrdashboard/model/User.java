@@ -24,13 +24,17 @@ public class User implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
 
     public User() {}
 
-    public User(String email, String password, Role role) {
+    public User(String email, String password, Role role, Restaurant restaurant) {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.restaurant = restaurant;
     }
 
     public Long getId() {
@@ -65,6 +69,14 @@ public class User implements UserDetails {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     @Override
