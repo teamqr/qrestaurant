@@ -33,3 +33,6 @@ secrets.properties
 
 # postgres
 postgres
+
+# certificates
+certificates
