@@ -7,14 +7,14 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "restaurants")
 public class Restaurant {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message = "{restaurant}")
     private String name;
 
     public Restaurant() {}
 
-    public Restaurant(String name) {
+    public Restaurant(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 

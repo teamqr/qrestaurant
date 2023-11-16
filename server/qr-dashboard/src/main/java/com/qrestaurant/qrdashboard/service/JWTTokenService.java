@@ -31,7 +31,7 @@ public class JWTTokenService {
                 .toList();
         JwtClaimsSet claims = JwtClaimsSet
                 .builder()
-                .issuer("self")
+                .issuer("qrestaurant")
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.DAYS))
                 .subject(authentication.getName())
