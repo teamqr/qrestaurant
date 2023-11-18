@@ -31,12 +31,13 @@ public class JWTTokenService {
                 .toList();
         JwtClaimsSet claims = JwtClaimsSet
                 .builder()
-                .issuer("self")
+                .issuer("qrestaurant")
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.DAYS))
                 .subject(authentication.getName())
                 .claim("scope", scope)
                 .claim("id", user.getId())
+                .claim("restaurantId", user.getRestaurant().getId())
                 .build();
 
         return jwtEncoder
