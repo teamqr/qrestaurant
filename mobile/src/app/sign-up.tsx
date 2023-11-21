@@ -1,7 +1,14 @@
 import { theme } from "@/common/theme";
 import { Button } from "@/components/button";
 import { Checkbox } from "@/components/checkbox";
-import { Eye, Mail, Password } from "@/components/icons";
+import {
+  CircleCheck,
+  Eye,
+  EyeClosed,
+  Mail,
+  Password,
+  Repeat,
+} from "@/components/icons";
 import { Input } from "@/components/input";
 import { ShadowContainer } from "@/components/shadow-container";
 import { AppText } from "@/components/text";
@@ -10,6 +17,10 @@ import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "@/context/auth";
+import { useMutation } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
+import { useState } from "react";
 
 const image = require("assets/images/character.png");
 
@@ -31,6 +42,9 @@ const RegisterSchema = z
 type RegisterForm = z.infer<typeof RegisterSchema>;
 
 export default function SignUpPage() {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const { signUp } = useAuth();
   const { control, handleSubmit, formState } = useForm<RegisterForm>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -41,7 +55,27 @@ export default function SignUpPage() {
     },
   });
 
-  const onSubmit = (data: RegisterForm) => {};
+  const signUpMutation = useMutation({
+    mutationFn: signUp,
+    onSuccess: () => {
+      console.log("success");
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        console.log(error.response?.data);
+      }
+    },
+  });
+
+  const onSubmit = async ({ email, password }: RegisterForm) => {
+    signUpMutation.mutate({ email, password });
+  };
+
+  const handlePasswordVisibility = () => {
+    setPasswordVisible((prev) => !prev);
+  };
+
+  const EyeIcon = passwordVisible ? EyeClosed : Eye;
 
   return (
     <View
@@ -87,11 +121,13 @@ export default function SignUpPage() {
             <Input
               placeholder="Hasło"
               prefix={<Password />}
-              suffix={<Eye color="white" />}
+              suffix={
+                <EyeIcon color="white" onPress={handlePasswordVisibility} />
+              }
               value={value}
               onBlur={onBlur}
               onChangeText={onChange}
-              secureTextEntry
+              secureTextEntry={!passwordVisible}
             />
           )}
         />
@@ -101,12 +137,14 @@ export default function SignUpPage() {
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               placeholder="Powtórz hasło"
-              prefix={<Password />}
-              suffix={<Eye color="white" />}
+              prefix={<Repeat />}
+              suffix={
+                <EyeIcon color="white" onPress={handlePasswordVisibility} />
+              }
               value={value}
               onBlur={onBlur}
               onChangeText={onChange}
-              secureTextEntry
+              secureTextEntry={!passwordVisible}
             />
           )}
         />
@@ -136,7 +174,11 @@ export default function SignUpPage() {
         />
 
         <ShadowContainer>
-          <Button label="Zarejestruj się" onPress={handleSubmit(onSubmit)} />
+          <Button
+            label="Zarejestruj się"
+            icon={<CircleCheck />}
+            onPress={handleSubmit(onSubmit)}
+          />
         </ShadowContainer>
       </View>
     </View>
