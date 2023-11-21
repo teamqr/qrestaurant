@@ -1,13 +1,25 @@
-import LoginForm from "@/components/LoginForm";
+"use client";
+import LoginForm from "@/components/auth/LoginForm";
+import { authOptions } from "@/utils/authOptions";
+import { getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function Home() {
+  const { data: session, status } = useSession({
+    required: true,
+  });
+
+  console.log(session);
+
+  if (status === "loading") {
+    return <></>;
+  }
+
   return (
     <div className="flex flex-col justify-center items-center ">
-      <header className="flex justify-center items-center text-5xl mb-8">
-        <strong>QR</strong>estaurant
-      </header>
       <main>
-        <LoginForm />
+        <h1>Main dashboard</h1>
       </main>
     </div>
   );
