@@ -1,4 +1,4 @@
-package com.qrestaurant.qrdashboard.model;
+package com.qrestaurant.qrdashboard.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
