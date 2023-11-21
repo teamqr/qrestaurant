@@ -1,5 +1,6 @@
 package com.qrestaurant.qrdashboard.model;
 
+import com.qrestaurant.qrdashboard.common.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -21,8 +22,6 @@ public class User implements UserDetails {
     private String email;
     @NotBlank(message = "{password}")
     private String password;
-    @ManyToOne
-    @JoinColumn(name = "role_id")
     private Role role;
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
@@ -82,7 +81,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.getName()));
+        authorities.add(new SimpleGrantedAuthority(role.name()));
 
         return authorities;
     }
