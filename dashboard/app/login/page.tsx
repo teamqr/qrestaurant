@@ -1,10 +1,17 @@
 import LoginForm from "@/components/auth/LoginForm";
 import React from "react";
 
-const LoginPage = () => {
+type Props = {
+  searchParams?: Record<"callbackUrl" | "error", string>;
+};
+
+const LoginPage = (props: Props) => {
   return (
     <div>
-      <LoginForm />
+      <LoginForm
+        callBackUrl={props.searchParams?.callbackUrl}
+        error={props.searchParams?.error}
+      />
     </div>
   );
 };
