@@ -1,8 +1,9 @@
-package com.qrestaurant.qrapp.model;
+package com.qrestaurant.qrapp.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,14 +17,21 @@ public class User implements UserDetails {
     private Long id;
     @Email(message = "{email}")
     private String email;
-    @NotBlank(message = "{password}")
+    @Min(8)
+    @NotNull(message = "{password}")
     private String password;
+    @NotNull(message = "{firstname}")
+    private String firstname;
+    @NotNull(message = "{lastname}")
+    private String lastname;
 
     public User() {}
 
-    public User(String email, String password) {
+    public User(String email, String password, String firstname, String lastname) {
         this.email = email;
         this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 
     public Long getId() {
@@ -50,6 +58,22 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     @Override

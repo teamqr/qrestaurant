@@ -1,4 +1,4 @@
-package com.qrestaurant.qrapp.model;
+package com.qrestaurant.qrapp.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

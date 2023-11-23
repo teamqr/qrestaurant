@@ -1,6 +1,6 @@
 package com.qrestaurant.qrapp.service;
 
-import com.qrestaurant.qrapp.model.User;
+import com.qrestaurant.qrapp.model.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -29,6 +29,8 @@ public class JWTTokenService {
                 .expiresAt(now.plus(1, ChronoUnit.DAYS))
                 .subject(authentication.getName())
                 .claim("id", user.getId())
+                .claim("firstname", user.getFirstname())
+                .claim("lastname", user.getLastname())
                 .build();
 
         return jwtEncoder

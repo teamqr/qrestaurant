@@ -1,6 +1,6 @@
 package com.qrestaurant.qrapp.configuration;
 
-import com.qrestaurant.qrapp.model.Restaurant;
+import com.qrestaurant.qrapp.model.entity.Restaurant;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;

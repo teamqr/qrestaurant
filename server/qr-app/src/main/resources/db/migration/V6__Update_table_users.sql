@@ -1,0 +1,8 @@
+ALTER TABLE users
+    ALTER COLUMN firstname SET NOT NULL;
+
+ALTER TABLE users
+    ALTER COLUMN lastname SET NOT NULL;
+
+ALTER TABLE users
+    ALTER COLUMN password SET NOT NULL;
