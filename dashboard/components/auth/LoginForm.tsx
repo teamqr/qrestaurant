@@ -27,7 +27,7 @@ const LoginForm = (props: Props) => {
       email: credentials.email,
       password: credentials.password,
       redirect: true,
-      callbackUrl: props.callBackUrl ?? "http:/localhost:3000/",
+      callbackUrl: props.callBackUrl ?? "http://localhost:3000/",
     });
   };
 

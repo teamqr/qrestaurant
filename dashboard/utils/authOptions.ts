@@ -18,7 +18,7 @@ async function getToken(credentials: AuthCredentials) {
     return JSON.stringify(json.token);
   }
   const errorMessage =
-    "Status " + res.status.toString() + " - " + res.statusText.toString();
+`Status  ${res.status} - ${res.statusText}`;
   throw new Error(errorMessage);
 }
 
