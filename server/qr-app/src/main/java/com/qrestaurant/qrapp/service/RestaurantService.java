@@ -1,7 +1,7 @@
 package com.qrestaurant.qrapp.service;
 
 import com.qrestaurant.qrapp.exception.EntityNotFoundException;
-import com.qrestaurant.qrapp.model.Restaurant;
+import com.qrestaurant.qrapp.model.entity.Restaurant;
 import com.qrestaurant.qrapp.repository.RestaurantRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.qrestaurant.qrdashboard.controller;
 
-import com.qrestaurant.qrdashboard.model.Restaurant;
+import com.qrestaurant.qrdashboard.model.entity.Restaurant;
 import com.qrestaurant.qrdashboard.service.RestaurantService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

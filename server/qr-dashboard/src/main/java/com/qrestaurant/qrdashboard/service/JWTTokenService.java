@@ -1,6 +1,6 @@
 package com.qrestaurant.qrdashboard.service;
 
-import com.qrestaurant.qrdashboard.model.User;
+import com.qrestaurant.qrdashboard.model.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;

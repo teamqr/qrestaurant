@@ -1,10 +1,10 @@
-package com.qrestaurant.qrdashboard.model;
+package com.qrestaurant.qrapp.model;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record AuthRequest(
+public record LoginRequest(
         @NotNull
         @Email
         String email,
