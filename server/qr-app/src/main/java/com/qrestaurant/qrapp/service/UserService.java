@@ -8,6 +8,7 @@ import com.qrestaurant.qrapp.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,12 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
 
-    public UserService(UserRepository userRepository, JWTUtil jwtUtil) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JWTUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
 
@@ -40,6 +43,8 @@ public class UserService implements UserDetailsService {
         if (userRepository.findByEmail(user.getUsername()).isPresent()) {
             throw new EntityAlreadyExistsException("User with this email already exists.");
         }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepository.save(user);
     }
