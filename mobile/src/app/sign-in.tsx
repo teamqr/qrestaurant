@@ -9,6 +9,9 @@ import { Input } from "@/components/input";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "@/context/auth";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
 
 const image = require("assets/images/character.png");
 
@@ -20,6 +23,9 @@ const LoginSchema = z.object({
 type LoginForm = z.infer<typeof LoginSchema>;
 
 export default function SignInPage() {
+  const router = useRouter();
+  const { signInWithEmailAndPassword } = useAuth();
+
   const { control, handleSubmit, formState } = useForm<LoginForm>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -28,7 +34,19 @@ export default function SignInPage() {
     },
   });
 
-  const onSubmit = (data: LoginForm) => {};
+  const signInWithEmailAndPasswordMutation = useMutation({
+    mutationFn: signInWithEmailAndPassword,
+    onSuccess: () => {
+      router.replace("/(app)");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const onSubmit = async ({ email, password }: LoginForm) => {
+    signInWithEmailAndPasswordMutation.mutate({ email, password });
+  };
 
   return (
     <View
