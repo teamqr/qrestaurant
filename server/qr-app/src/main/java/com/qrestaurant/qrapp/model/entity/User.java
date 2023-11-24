@@ -2,8 +2,8 @@ package com.qrestaurant.qrapp.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,14 +15,15 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Email(message = "{email}")
+    @NotNull
+    @Email
     private String email;
-    @Min(8)
-    @NotNull(message = "{password}")
+    @NotNull
+    @Size(min = 8)
     private String password;
-    @NotNull(message = "{firstname}")
+    @NotNull
     private String firstname;
-    @NotNull(message = "{lastname}")
+    @NotNull
     private String lastname;
 
     public User() {}
