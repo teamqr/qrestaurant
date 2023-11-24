@@ -1,6 +1,6 @@
 package com.qrestaurant.qrapp.controller;
 
-import com.qrestaurant.qrapp.model.Restaurant;
+import com.qrestaurant.qrapp.model.entity.Restaurant;
 import com.qrestaurant.qrapp.service.RestaurantService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,7 +1,8 @@
 package com.qrestaurant.qrapp.controller;
 
-import com.qrestaurant.qrapp.model.AuthRequest;
-import com.qrestaurant.qrapp.model.User;
+import com.qrestaurant.qrapp.model.LoginRequest;
+import com.qrestaurant.qrapp.model.RegisterRequest;
+import com.qrestaurant.qrapp.model.entity.User;
 import com.qrestaurant.qrapp.service.JWTTokenService;
 import com.qrestaurant.qrapp.service.UserService;
 import jakarta.validation.Valid;
@@ -29,8 +30,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, User>> register(@Valid @RequestBody AuthRequest authRequest) {
-        User user = userService.saveUser(new User(authRequest.email(), authRequest.password()));
+    public ResponseEntity<Map<String, User>> register(@Valid @RequestBody RegisterRequest registerRequest) {
+        User user = userService.saveUser(new User(
+                registerRequest.email(),
+                registerRequest.password(),
+                registerRequest.firstname(),
+                registerRequest.lastname()
+        ));
 
         Map<String, User> response = new HashMap<>();
         response.put("user", user);
@@ -39,9 +45,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody AuthRequest authRequest) {
+    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(authRequest.email(), authRequest.password()));
+                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password()));
         String token = jwtTokenService.generateToken(authentication);
 
         Map<String, String> response = new HashMap<>();

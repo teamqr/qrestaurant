@@ -1,6 +1,6 @@
 package com.qrestaurant.qrdashboard.configuration;
 
-import com.qrestaurant.qrdashboard.model.Restaurant;
+import com.qrestaurant.qrdashboard.model.entity.Restaurant;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;

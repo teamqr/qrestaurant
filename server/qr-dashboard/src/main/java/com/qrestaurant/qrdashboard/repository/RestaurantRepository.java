@@ -1,6 +1,6 @@
 package com.qrestaurant.qrdashboard.repository;
 
-import com.qrestaurant.qrdashboard.model.Restaurant;
+import com.qrestaurant.qrdashboard.model.entity.Restaurant;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

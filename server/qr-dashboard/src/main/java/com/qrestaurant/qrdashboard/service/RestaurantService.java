@@ -1,7 +1,7 @@
 package com.qrestaurant.qrdashboard.service;
 
 import com.qrestaurant.qrdashboard.exception.EntityNotFoundException;
-import com.qrestaurant.qrdashboard.model.Restaurant;
+import com.qrestaurant.qrdashboard.model.entity.Restaurant;
 import com.qrestaurant.qrdashboard.repository.RestaurantRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
