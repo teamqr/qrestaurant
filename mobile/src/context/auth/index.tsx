@@ -9,27 +9,18 @@ import {
   useEffect,
 } from "react";
 import { z } from "zod";
-
-const CredsSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
-
-const SignInWithEmailAndPasswordResponseSchema = z.object({
-  token: z.string(),
-});
-
-type Creds = z.infer<typeof CredsSchema>;
-type SignInWithEmailAndPasswordResponse = z.infer<
-  typeof SignInWithEmailAndPasswordResponseSchema
->;
+import {
+  SignInResponseSchema,
+  SignInSchemaType,
+  SignUpSchemaType,
+} from "./types";
 
 export type AuthContextType = {
   user: any;
   isAuthenticated: boolean;
   loading: boolean;
-  signUp: (creds: Creds) => Promise<void>;
-  signInWithEmailAndPassword: (creds: Creds) => Promise<void>;
+  signUp: (creds: SignInSchemaType) => Promise<void>;
+  signInWithEmailAndPassword: (creds: SignInSchemaType) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -63,27 +54,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
   }, []);
 
-  const signUp = async ({ email, password }: Creds) => {
+  const signUp = async ({ email, password }: SignInSchemaType) => {
     try {
-      const reposne = await axios.post<Creds>("api/app/auth/register", {
+      const reposne = await axios.post<any>("api/app/auth/register", {
         email,
         password,
-      });
+        firstname: "",
+        lastname: "",
+      } as SignUpSchemaType);
     } catch (error) {
       throw error;
     }
   };
 
-  const signInWithEmailAndPassword = async ({ email, password }: Creds) => {
+  const signInWithEmailAndPassword = async ({
+    email,
+    password,
+  }: SignInSchemaType) => {
     try {
-      const reposne = await axios.post<Creds>("api/app/auth/login", {
+      const reposne = await axios.post("api/app/auth/login", {
         email,
         password,
-      });
+      } as SignInSchemaType);
 
-      const { token } = SignInWithEmailAndPasswordResponseSchema.parse(
-        reposne.data,
-      );
+      const { token } = SignInResponseSchema.parse(reposne.data);
 
       setUser({
         email,
