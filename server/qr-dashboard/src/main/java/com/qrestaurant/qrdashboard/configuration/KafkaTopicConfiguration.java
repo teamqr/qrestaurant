@@ -30,4 +30,11 @@ public class KafkaTopicConfiguration {
                 .name("dashboard-restaurant")
                 .build();
     }
+
+    @Bean
+    public NewTopic menuTopic() {
+        return TopicBuilder
+                .name("dashboard-menu")
+                .build();
+    }
 }

@@ -1,5 +1,6 @@
 package com.qrestaurant.qrapp.configuration;
 
+import com.qrestaurant.qrapp.model.entity.Menu;
 import com.qrestaurant.qrapp.model.entity.Restaurant;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -21,16 +22,26 @@ public class KafkaConsumerConfiguration {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    private Map<String, Object> configs() {
+        Map<String, Object> configs = new HashMap<>();
+
+        configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+
+        return configs;
+    }
+
     @Bean
     public ConsumerFactory<String, Restaurant> restaurantConsumerFactory() {
-        Map<String, Object> properties = new HashMap<>();
-
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-
-        return new DefaultKafkaConsumerFactory<>(properties, new StringDeserializer(),
+        return new DefaultKafkaConsumerFactory<>(configs(), new StringDeserializer(),
                 new JsonDeserializer<>(Restaurant.class, false));
+    }
+
+    @Bean
+    public ConsumerFactory<String, Menu> menuConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(configs(), new StringDeserializer(),
+                new JsonDeserializer<>(Menu.class, false));
     }
 
     @Bean
@@ -39,6 +50,15 @@ public class KafkaConsumerConfiguration {
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(restaurantConsumerFactory());
+
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, Menu> menuConcurrentKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Menu> factory = new ConcurrentKafkaListenerContainerFactory<>();
+
+        factory.setConsumerFactory(menuConsumerFactory());
 
         return factory;
     }
