@@ -1,14 +1,13 @@
 import axios from "@/services/axios";
+import { wait } from "@/utils/promise";
 import { clearToken, getToken, setToken } from "@/utils/token";
-import { isAxiosError } from "axios";
 import {
-  type ReactNode,
   createContext,
   useContext,
-  useState,
   useEffect,
+  useState,
+  type ReactNode,
 } from "react";
-import { z } from "zod";
 import {
   SignInResponseSchema,
   SignInSchemaType,
@@ -55,6 +54,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signUp = async ({ email, password }: SignInSchemaType) => {
+    await wait(1000);
+
     try {
       const reposne = await axios.post<any>("api/app/auth/register", {
         email,
@@ -71,6 +72,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     email,
     password,
   }: SignInSchemaType) => {
+    await wait(1000);
+
     try {
       const reposne = await axios.post("api/app/auth/login", {
         email,

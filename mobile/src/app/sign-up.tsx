@@ -12,15 +12,15 @@ import {
 import { Input } from "@/components/input";
 import { ShadowContainer } from "@/components/shadow-container";
 import { AppText } from "@/components/text";
-import { Image } from "expo-image";
-import { Controller, useForm } from "react-hook-form";
-import { Text, View } from "react-native";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/context/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
+import { Image } from "expo-image";
 import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { View } from "react-native";
+import { z } from "zod";
 
 const image = require("assets/images/character.png");
 
@@ -57,8 +57,8 @@ export default function SignUpPage() {
 
   const signUpMutation = useMutation({
     mutationFn: signUp,
-    onSuccess: () => {
-      console.log("success");
+    onSuccess: (data) => {
+      console.log("success", data);
     },
     onError: (error) => {
       if (isAxiosError(error)) {
@@ -178,6 +178,7 @@ export default function SignUpPage() {
             label="Zarejestruj się"
             icon={<CircleCheck />}
             onPress={handleSubmit(onSubmit)}
+            loading={signUpMutation.isPending}
           />
         </ShadowContainer>
       </View>

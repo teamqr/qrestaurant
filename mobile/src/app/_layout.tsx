@@ -49,14 +49,6 @@ const RootLayoutStack = () => {
   const router = useRouter();
   const { isAuthenticated, loading } = useAuth();
 
-  useEffect(() => {
-    if (loading) return;
-
-    if (isAuthenticated) {
-      router.replace("/(app)");
-    }
-  }, [loading, isAuthenticated]);
-
   return (
     <Stack>
       <Stack.Screen
