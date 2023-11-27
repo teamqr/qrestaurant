@@ -1,0 +1,25 @@
+name: lint-mobile
+
+on:
+  push:
+    branches: develop
+  pull_request:
+    branches: develop
+    paths: 
+      - "mobile/**"
+    
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Change directory
+      run: cd mobile
+      
+    - name: Install modules
+      run: yarn
+
+    - name: Run Linting
+      run: yarn lint
+      
