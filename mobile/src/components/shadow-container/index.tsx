@@ -50,6 +50,7 @@ export const ShadowContainer = ({
       </View>
 
       <AnimatedCanvas
+        pointerEvents="none"
         style={[
           {
             position: "absolute",

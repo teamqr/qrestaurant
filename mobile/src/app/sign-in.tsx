@@ -82,7 +82,10 @@ export default function SignInPage() {
         <Controller
           control={control}
           name="email"
-          render={({ field: { onChange, value }, fieldState: { error } }) => (
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
             <Animated.View style={{ gap: theme.spacing(1) }}>
               <Input
                 textContentType="emailAddress"
@@ -90,6 +93,7 @@ export default function SignInPage() {
                 prefix={<Mail color="white" />}
                 value={value}
                 onChangeText={onChange}
+                onBlur={onBlur}
                 hasError={!!error}
               />
               {!!error && (
@@ -104,7 +108,10 @@ export default function SignInPage() {
         <Controller
           control={control}
           name="password"
-          render={({ field: { onChange, value }, fieldState: { error } }) => (
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
             <Animated.View style={{ gap: theme.spacing(1) }}>
               <Input
                 textContentType="password"
@@ -113,6 +120,7 @@ export default function SignInPage() {
                 prefix={<Password color="white" />}
                 value={value}
                 onChangeText={onChange}
+                onBlur={onBlur}
                 hasError={!!error}
               />
               {!!error && (
