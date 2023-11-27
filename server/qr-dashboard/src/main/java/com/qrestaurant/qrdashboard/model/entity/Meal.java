@@ -3,26 +3,29 @@ package com.qrestaurant.qrdashboard.model.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Entity
-@Table(name = "restaurants")
-public class Restaurant {
+@Table(name = "meals")
+public class Meal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     private String name;
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
-    private List<User> users;
-    @OneToOne(cascade = CascadeType.REMOVE)
+    private String description;
+    @NotNull
+    private BigDecimal price;
+    @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    public Restaurant() {}
+    public Meal() {}
 
-    public Restaurant(String name) {
+    public Meal(String name, String description, BigDecimal price) {
         this.name = name;
+        this.description = description;
+        this.price = price;
     }
 
     public Long getId() {
@@ -41,12 +44,20 @@ public class Restaurant {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public Menu getMenu() {

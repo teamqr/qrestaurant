@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
-    Iterable<User> findAllByRole(Role role);
+    Iterable<User> getAllByRoleAndRestaurant_Id(Role role, Long restaurantId);
     Optional<User> findByEmail(String email);
+    Optional<User> findByIdAndRoleAndRestaurant_Id(Long id, Role role, Long restaurantId);
 }

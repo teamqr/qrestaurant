@@ -6,6 +6,7 @@ import com.qrestaurant.qrdashboard.exception.EntityNotFoundException;
 import com.qrestaurant.qrdashboard.model.entity.Menu;
 import com.qrestaurant.qrdashboard.model.entity.Restaurant;
 import com.qrestaurant.qrdashboard.repository.MenuRepository;
+import com.qrestaurant.qrdashboard.repository.RestaurantRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -14,15 +15,15 @@ import java.util.Optional;
 
 @Service
 public class MenuService {
-    private final RestaurantService restaurantService;
     private final MenuRepository menuRepository;
+    private final RestaurantRepository restaurantRepository;
     private final KafkaTemplate<String, Menu> menuKafkaTemplate;
     private final JWTUtil jwtUtil;
 
-    public MenuService(RestaurantService restaurantService, MenuRepository menuRepository,
+    public MenuService(MenuRepository menuRepository, RestaurantRepository restaurantRepository,
                        KafkaTemplate<String, Menu> menuKafkaTemplate, JWTUtil jwtUtil) {
-        this.restaurantService = restaurantService;
         this.menuRepository = menuRepository;
+        this.restaurantRepository = restaurantRepository;
         this.menuKafkaTemplate = menuKafkaTemplate;
         this.jwtUtil = jwtUtil;
     }
@@ -50,19 +51,19 @@ public class MenuService {
             throw new EntityAlreadyExistsException("Restaurant with id: " + restaurantId + "already has a menu.");
         }
 
-        try {
-            Menu menu = menuRepository.save(new Menu());
+        Menu menu = new Menu();
+        Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurantId);
+
+        if (optionalRestaurant.isPresent()) {
+            menu.setRestaurant(optionalRestaurant.get());
+
+            menu = menuRepository.save(menu);
 
             menuKafkaTemplate.send("dashboard-menu", menu);
 
-            Restaurant restaurant = restaurantService.getRestaurant(restaurantId);
-            restaurant.setMenu(menu);
-
-            restaurantService.updateRestaurant(restaurant);
-
             return menu;
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException(e.getMessage());
+        } else {
+            throw new EntityNotFoundException("Restaurant with id: " + restaurantId + " does not exists.");
         }
     }
 }

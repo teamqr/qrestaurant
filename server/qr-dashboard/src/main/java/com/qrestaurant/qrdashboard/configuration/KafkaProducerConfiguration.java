@@ -1,5 +1,6 @@
 package com.qrestaurant.qrdashboard.configuration;
 
+import com.qrestaurant.qrdashboard.model.entity.Meal;
 import com.qrestaurant.qrdashboard.model.entity.Menu;
 import com.qrestaurant.qrdashboard.model.entity.Restaurant;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -35,7 +36,13 @@ public class KafkaProducerConfiguration {
         return new DefaultKafkaProducerFactory<>(configs());
     }
 
-    @Bean ProducerFactory<String, Menu> menuProducerFactory() {
+    @Bean
+    public ProducerFactory<String, Menu> menuProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(configs());
+    }
+
+    @Bean
+    public ProducerFactory<String, Meal> mealProducerFactory() {
         return new DefaultKafkaProducerFactory<>(configs());
     }
 
@@ -47,5 +54,10 @@ public class KafkaProducerConfiguration {
     @Bean
     public KafkaTemplate<String, Menu> menuKafkaTemplate() {
         return new KafkaTemplate<>(menuProducerFactory());
+    }
+
+    @Bean
+    public KafkaTemplate<String, Meal> mealKafkaTemplate() {
+        return new KafkaTemplate<>(mealProducerFactory());
     }
 }

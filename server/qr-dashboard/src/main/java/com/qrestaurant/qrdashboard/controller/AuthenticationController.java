@@ -1,6 +1,6 @@
 package com.qrestaurant.qrdashboard.controller;
 
-import com.qrestaurant.qrdashboard.model.AuthRequest;
+import com.qrestaurant.qrdashboard.model.request.AuthRequest;
 import com.qrestaurant.qrdashboard.service.JWTTokenService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

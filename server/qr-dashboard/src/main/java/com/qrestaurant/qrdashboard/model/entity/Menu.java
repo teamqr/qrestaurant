@@ -1,7 +1,8 @@
 package com.qrestaurant.qrdashboard.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "menus")
@@ -9,9 +10,10 @@ public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JsonIgnore
     @OneToOne(mappedBy = "menu")
     private Restaurant restaurant;
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.REMOVE)
+    private List<Meal> meals;
 
     public Menu() {}
 
@@ -29,5 +31,13 @@ public class Menu {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public List<Meal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.meals = meals;
     }
 }
