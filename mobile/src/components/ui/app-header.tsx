@@ -1,10 +1,12 @@
-import { theme } from "@/common/theme";
-import { useFixedInsets } from "@/hooks/useFixedInsets";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
 import { ArrowLeft } from "../icons";
 import { AppText } from "../text";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
+import { theme } from "@/common/theme";
+import { useFixedInsets } from "@/hooks/useFixedInsets";
 
 type Props = {
   title?: string;

@@ -1,5 +1,3 @@
-import { theme } from "@/common/theme";
-import { instyle } from "@/lib/instyle";
 import { useEffect, type ComponentProps, type ReactNode } from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
 import Animated, {
@@ -10,7 +8,11 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+
 import { Loader } from "../icons";
+
+import { theme } from "@/common/theme";
+import { instyle } from "@/lib/instyle";
 
 type ButtonType = ComponentProps<typeof _Button>["variant"];
 

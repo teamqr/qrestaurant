@@ -1,12 +1,14 @@
-import { theme } from "@/common/theme";
-import { Pressable, StyleSheet, View } from "react-native";
-import { Check } from "../icons";
+import { Pressable, StyleSheet } from "react-native";
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
   useDerivedValue,
   withTiming,
 } from "react-native-reanimated";
+
+import { Check } from "../icons";
+
+import { theme } from "@/common/theme";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 

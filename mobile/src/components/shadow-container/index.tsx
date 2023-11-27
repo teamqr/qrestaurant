@@ -1,5 +1,4 @@
-import { theme } from "@/common/theme";
-import { Canvas, Rect, RoundedRect, Shadow } from "@shopify/react-native-skia";
+import { Canvas, RoundedRect, Shadow } from "@shopify/react-native-skia";
 import { ReactNode, useState } from "react";
 import { View } from "react-native";
 import Animated, {
@@ -7,6 +6,8 @@ import Animated, {
   useDerivedValue,
   withTiming,
 } from "react-native-reanimated";
+
+import { theme } from "@/common/theme";
 
 const OFFSET = 128;
 const AnimatedCanvas = Animated.createAnimatedComponent(Canvas);

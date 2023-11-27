@@ -1,16 +1,17 @@
-import { SplashScreen, Stack, useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { Header } from "../components/ui/header";
-
 import {
   OpenSans_400Regular,
   OpenSans_700Bold,
   OpenSans_800ExtraBold,
   useFonts,
 } from "@expo-google-fonts/open-sans";
-import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider, useAuth } from "@/context/auth";
+import { SplashScreen, Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+
+import { Header } from "../components/ui/header";
+
+import { AuthProvider } from "@/context/auth";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -46,9 +47,6 @@ export default function RootLayout() {
 }
 
 const RootLayoutStack = () => {
-  const router = useRouter();
-  const { isAuthenticated, loading } = useAuth();
-
   return (
     <Stack>
       <Stack.Screen

@@ -1,10 +1,3 @@
-import { theme } from "@/common/theme";
-import { Button } from "@/components/button";
-import { Facebbok, Google, Login, Mail, Password } from "@/components/icons";
-import { Input } from "@/components/input";
-import { ShadowContainer } from "@/components/shadow-container";
-import { AppText } from "@/components/text";
-import { useAuth } from "@/context/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonActions } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
@@ -14,6 +7,14 @@ import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { z } from "zod";
+
+import { theme } from "@/common/theme";
+import { Button } from "@/components/button";
+import { Facebbok, Google, Login, Mail, Password } from "@/components/icons";
+import { Input } from "@/components/input";
+import { ShadowContainer } from "@/components/shadow-container";
+import { AppText } from "@/components/text";
+import { useAuth } from "@/context/auth";
 
 const image = require("assets/images/character.png");
 
@@ -28,7 +29,7 @@ export default function SignInPage() {
   const navigation = useNavigation();
   const { signInWithEmailAndPassword } = useAuth();
 
-  const { control, handleSubmit, formState } = useForm<LoginForm>({
+  const { control, handleSubmit } = useForm<LoginForm>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",

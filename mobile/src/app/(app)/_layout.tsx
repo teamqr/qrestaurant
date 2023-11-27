@@ -1,6 +1,7 @@
+import { Redirect, Stack } from "expo-router";
+
 import { AppHeader } from "@/components/ui/app-header";
 import { useAuth } from "@/context/auth";
-import { Redirect, Stack } from "expo-router";
 
 export default function AppLayout() {
   const { isAuthenticated } = useAuth();

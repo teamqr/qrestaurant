@@ -1,4 +1,3 @@
-import { getToken } from "@/utils/token";
 import _axios from "axios";
 
 const axios = _axios.create({

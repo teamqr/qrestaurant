@@ -1,11 +1,11 @@
+import { useRouter } from "expo-router";
+import { View } from "react-native";
+
 import { theme } from "@/common/theme";
 import { Button } from "@/components/button";
 import { ArrowLeft } from "@/components/icons";
-import { AppText } from "@/components/text";
 import { useAuth } from "@/context/auth";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
-import { useRouter } from "expo-router";
-import { View } from "react-native";
 
 export default function App() {
   const { top, bottom } = useFixedInsets();

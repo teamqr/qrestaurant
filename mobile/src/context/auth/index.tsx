@@ -1,6 +1,3 @@
-import axios from "@/services/axios";
-import { wait } from "@/utils/promise";
-import { clearToken, getToken, setToken } from "@/utils/token";
 import {
   createContext,
   useContext,
@@ -8,11 +5,16 @@ import {
   useState,
   type ReactNode,
 } from "react";
+
 import {
   SignInResponseSchema,
   SignInSchemaType,
   SignUpSchemaType,
 } from "./types";
+
+import axios from "@/services/axios";
+import { wait } from "@/utils/promise";
+import { clearToken, getToken, setToken } from "@/utils/token";
 
 export type AuthContextType = {
   user: any;
@@ -57,7 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await wait(1000);
 
     try {
-      const reposne = await axios.post<any>("api/app/auth/register", {
+      await axios.post<any>("api/app/auth/register", {
         email,
         password,
         firstname: "",

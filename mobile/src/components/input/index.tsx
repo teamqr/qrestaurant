@@ -1,20 +1,19 @@
-import { theme } from "@/common/theme";
+import { ReactNode, forwardRef, useImperativeHandle, useRef } from "react";
 import {
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   TextInputProps,
   View,
 } from "react-native";
-import { Login } from "../icons";
-import { ReactNode, forwardRef, useImperativeHandle, useRef } from "react";
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
   useDerivedValue,
   withTiming,
 } from "react-native-reanimated";
+
+import { theme } from "@/common/theme";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
