@@ -14,7 +14,7 @@ type InstyleOptions<
   defaultVariant: DefaultVariant;
 };
 
-type InstyledComponent<Props = {}> = FC<Props>;
+type InstyledComponent<Props = object> = FC<Props>;
 
 function instyle<
   Variants extends string,

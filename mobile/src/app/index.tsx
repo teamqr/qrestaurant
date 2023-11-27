@@ -1,9 +1,9 @@
-import { OnboardingCarousel } from "@/components/@onboarding/carousel";
-import { Button } from "@/components/button";
-import { ArrowForward } from "@/components/icons";
-import { useFixedInsets } from "@/hooks/useFixedInsets";
 import { View } from "react-native";
+
 import { theme } from "../common/theme";
+
+import { OnboardingCarousel } from "@/components/@onboarding/carousel";
+import { useFixedInsets } from "@/hooks/useFixedInsets";
 
 export default function RootPage() {
   const { bottom } = useFixedInsets();

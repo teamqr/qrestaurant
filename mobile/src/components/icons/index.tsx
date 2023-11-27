@@ -7,3 +7,7 @@ export { default as Facebbok } from "./facebook";
 export { default as Google } from "./google";
 export { default as Check } from "./check";
 export { default as Eye } from "./eye";
+export { default as EyeClosed } from "./eye-closed";
+export { default as CircleCheck } from "./circle-check";
+export { default as Repeat } from "./repeat";
+export { default as Loader } from "./loader";

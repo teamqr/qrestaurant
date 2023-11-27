@@ -1,6 +1,7 @@
-import { theme } from "@/common/theme";
 import { ReactNode, forwardRef } from "react";
 import { Text, TextProps } from "react-native";
+
+import { theme } from "@/common/theme";
 
 type _Props = {
   children?: ReactNode;
