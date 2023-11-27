@@ -9,14 +9,24 @@ import {
 } from "react-native";
 import { Login } from "../icons";
 import { ReactNode, forwardRef, useImperativeHandle, useRef } from "react";
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useDerivedValue,
+  withTiming,
+} from "react-native-reanimated";
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 interface Props extends TextInputProps {
   prefix?: ReactNode;
   suffix?: ReactNode;
+  hasError?: boolean;
 }
 
 export const Input = forwardRef<TextInput, Props>(
-  ({ prefix, suffix, ...props }, ref) => {
+  ({ prefix, suffix, hasError = false, ...props }, ref) => {
+    const colorProgress = useDerivedValue(() => withTiming(hasError ? 1 : 0));
     const inputRef = useRef<TextInput>(null);
 
     useImperativeHandle(ref, () => inputRef.current!);
@@ -25,8 +35,21 @@ export const Input = forwardRef<TextInput, Props>(
       inputRef.current?.focus();
     };
 
+    const rInputStyle = useAnimatedStyle(() => {
+      return {
+        borderColor: interpolateColor(
+          colorProgress.value,
+          [0, 1],
+          [theme.colors.secondaryLight, theme.colors.danger],
+        ),
+      };
+    });
+
     return (
-      <Pressable style={styles.container} onPress={focus}>
+      <AnimatedPressable
+        style={[styles.container, rInputStyle]}
+        onPress={focus}
+      >
         {prefix}
         <View style={{ flex: 1 }}>
           <TextInput
@@ -38,7 +61,7 @@ export const Input = forwardRef<TextInput, Props>(
           {/* <View style={[StyleSheet.absoluteFill]} /> */}
         </View>
         {suffix}
-      </Pressable>
+      </AnimatedPressable>
     );
   },
 );

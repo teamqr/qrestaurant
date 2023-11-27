@@ -1,3 +1,4 @@
+import { AppHeader } from "@/components/ui/app-header";
 import { useAuth } from "@/context/auth";
 import { Redirect, Stack } from "expo-router";
 
@@ -9,10 +10,19 @@ export default function AppLayout() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    />
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          header: () => <AppHeader title="Polecane w pobliżu " />,
+        }}
+      />
+      <Stack.Screen
+        name="scanner"
+        options={{
+          header: () => <AppHeader title="Skanuj kod" />,
+        }}
+      />
+    </Stack>
   );
 }

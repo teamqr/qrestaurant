@@ -12,13 +12,14 @@ import { Image } from "expo-image";
 import { useNavigation } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
+import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { z } from "zod";
 
 const image = require("assets/images/character.png");
 
 const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  email: z.string().email("Niepoprawny adres e-mail"),
+  password: z.string().min(8, "Hasło musi mieć co najmniej 8 znaków"),
 });
 
 type LoginForm = z.infer<typeof LoginSchema>;
@@ -51,12 +52,15 @@ export default function SignInPage() {
   };
 
   return (
-    <View
+    <Animated.ScrollView
       style={{
         flex: 1,
         backgroundColor: theme.colors.background,
-        paddingHorizontal: theme.spacing(3),
+      }}
+      contentContainerStyle={{
         gap: theme.spacing(4),
+        paddingHorizontal: theme.spacing(3),
+        flexGrow: 1,
       }}
     >
       <Image
@@ -77,29 +81,45 @@ export default function SignInPage() {
         <Controller
           control={control}
           name="email"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              textContentType="emailAddress"
-              placeholder="E-mail"
-              prefix={<Mail color="white" />}
-              value={value}
-              onChangeText={onChange}
-            />
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <Animated.View style={{ gap: theme.spacing(1) }}>
+              <Input
+                textContentType="emailAddress"
+                placeholder="E-mail"
+                prefix={<Mail color="white" />}
+                value={value}
+                onChangeText={onChange}
+                hasError={!!error}
+              />
+              {!!error && (
+                <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
+                  <AppText style={styles.error}>{error?.message}</AppText>
+                </Animated.View>
+              )}
+            </Animated.View>
           )}
         />
 
         <Controller
           control={control}
           name="password"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              textContentType="password"
-              secureTextEntry
-              placeholder="Hasło"
-              prefix={<Password color="white" />}
-              value={value}
-              onChangeText={onChange}
-            />
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <Animated.View style={{ gap: theme.spacing(1) }}>
+              <Input
+                textContentType="password"
+                secureTextEntry
+                placeholder="Hasło"
+                prefix={<Password color="white" />}
+                value={value}
+                onChangeText={onChange}
+                hasError={!!error}
+              />
+              {!!error && (
+                <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
+                  <AppText style={styles.error}>{error?.message}</AppText>
+                </Animated.View>
+              )}
+            </Animated.View>
           )}
         />
 
@@ -140,7 +160,7 @@ export default function SignInPage() {
           icon={<Google color="white" />}
         />
       </View>
-    </View>
+    </Animated.ScrollView>
   );
 }
 
@@ -150,5 +170,9 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     backgroundColor: theme.colors.secondary,
     flex: 1,
+  },
+  error: {
+    color: theme.colors.danger,
+    fontSize: 12,
   },
 });

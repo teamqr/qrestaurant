@@ -19,23 +19,25 @@ import { isAxiosError } from "axios";
 import { Image } from "expo-image";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { z } from "zod";
 
 const image = require("assets/images/character.png");
 
 const RegisterSchema = z
   .object({
-    email: z.string().email(),
-    password: z.string().min(8),
-    passwordConfirmation: z.string().min(8),
-    terms: z.boolean().refine((value) => value, {
-      message: "You must accept terms and conditions",
-      path: ["terms"],
-    }),
+    email: z.string().email("Niepoprawny adres e-mail"),
+    password: z.string().min(8, "Hasło musi mieć co najmniej 8 znaków"),
+    passwordConfirmation: z
+      .string()
+      .min(8, "Hasło musi mieć co najmniej 8 znaków"),
+    terms: z
+      .boolean()
+      .refine((value) => value, "Musisz zaakceptować regulamin"),
   })
   .refine((data) => data.password === data.passwordConfirmation, {
-    message: "Passwords do not match",
+    message: "Hasła muszą być takie same",
     path: ["passwordConfirmation"],
   });
 
@@ -78,10 +80,12 @@ export default function SignUpPage() {
   const EyeIcon = passwordVisible ? EyeClosed : Eye;
 
   return (
-    <View
+    <Animated.ScrollView
       style={{
         flex: 1,
         backgroundColor: theme.colors.background,
+      }}
+      contentContainerStyle={{
         paddingHorizontal: theme.spacing(3),
         gap: theme.spacing(4),
       }}
@@ -104,71 +108,119 @@ export default function SignUpPage() {
         <Controller
           control={control}
           name="email"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Email"
-              prefix={<Mail />}
-              value={value}
-              onBlur={onBlur}
-              onChangeText={onChange}
-            />
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
+            <Animated.View style={{ gap: theme.spacing(1) }}>
+              <Input
+                placeholder="Email"
+                prefix={<Mail />}
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                hasError={!!error}
+              />
+              {!!error && (
+                <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
+                  <AppText style={styles.error}>{error?.message}</AppText>
+                </Animated.View>
+              )}
+            </Animated.View>
           )}
         />
         <Controller
           control={control}
           name="password"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Hasło"
-              prefix={<Password />}
-              suffix={
-                <EyeIcon color="white" onPress={handlePasswordVisibility} />
-              }
-              value={value}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              secureTextEntry={!passwordVisible}
-            />
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
+            <Animated.View style={{ gap: theme.spacing(1) }}>
+              <Input
+                placeholder="Hasło"
+                prefix={<Password />}
+                suffix={
+                  <EyeIcon color="white" onPress={handlePasswordVisibility} />
+                }
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                secureTextEntry={!passwordVisible}
+                hasError={!!error}
+              />
+              {!!error && (
+                <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
+                  <AppText style={styles.error}>{error?.message}</AppText>
+                </Animated.View>
+              )}
+            </Animated.View>
           )}
         />
         <Controller
           control={control}
           name="passwordConfirmation"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Powtórz hasło"
-              prefix={<Repeat />}
-              suffix={
-                <EyeIcon color="white" onPress={handlePasswordVisibility} />
-              }
-              value={value}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              secureTextEntry={!passwordVisible}
-            />
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
+            <Animated.View style={{ gap: theme.spacing(1) }}>
+              <Input
+                placeholder="Powtórz hasło"
+                prefix={<Repeat />}
+                suffix={
+                  <EyeIcon color="white" onPress={handlePasswordVisibility} />
+                }
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                secureTextEntry={!passwordVisible}
+                hasError={!!error}
+              />
+              {!!error && (
+                <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
+                  <AppText style={styles.error}>{error?.message}</AppText>
+                </Animated.View>
+              )}
+            </Animated.View>
           )}
         />
 
         <Controller
           control={control}
           name="terms"
-          render={({ field: { onChange, value } }) => (
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: theme.spacing(2),
                 zIndex: 1,
+                gap: theme.spacing(1),
               }}
             >
-              <Checkbox value={value} onChange={onChange} />
-              <AppText
+              <View
                 style={{
-                  color: theme.colors.textOnBackground,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: theme.spacing(2),
                 }}
               >
-                akceptuję <AppText weight="bold">regulamin</AppText>
-              </AppText>
+                <Checkbox
+                  value={value}
+                  onChange={onChange}
+                  hasError={!!error}
+                />
+                <AppText
+                  style={{
+                    color: theme.colors.textOnBackground,
+                  }}
+                >
+                  akceptuję <AppText weight="bold">regulamin</AppText>
+                </AppText>
+              </View>
+              {!!error && (
+                <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
+                  <AppText style={styles.error}>{error?.message}</AppText>
+                </Animated.View>
+              )}
             </View>
           )}
         />
@@ -182,6 +234,13 @@ export default function SignUpPage() {
           />
         </ShadowContainer>
       </View>
-    </View>
+    </Animated.ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  error: {
+    color: theme.colors.danger,
+    fontSize: 12,
+  },
+});
