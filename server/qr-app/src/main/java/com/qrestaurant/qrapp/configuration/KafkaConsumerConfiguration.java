@@ -1,5 +1,6 @@
 package com.qrestaurant.qrapp.configuration;
 
+import com.qrestaurant.qrapp.model.entity.Meal;
 import com.qrestaurant.qrapp.model.entity.Menu;
 import com.qrestaurant.qrapp.model.entity.Restaurant;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -45,6 +46,12 @@ public class KafkaConsumerConfiguration {
     }
 
     @Bean
+    public ConsumerFactory<String, Meal> mealConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(configs(), new StringDeserializer(),
+                new JsonDeserializer<>(Meal.class, false));
+    }
+
+    @Bean
     public ConcurrentKafkaListenerContainerFactory<String, Restaurant> restaurantKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Restaurant> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
@@ -59,6 +66,15 @@ public class KafkaConsumerConfiguration {
         ConcurrentKafkaListenerContainerFactory<String, Menu> factory = new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(menuConsumerFactory());
+
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, Meal> mealConcurrentKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Meal> factory = new ConcurrentKafkaListenerContainerFactory<>();
+
+        factory.setConsumerFactory(mealConsumerFactory());
 
         return factory;
     }

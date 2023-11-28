@@ -1,4 +1,4 @@
-package com.qrestaurant.qrapp.model;
+package com.qrestaurant.qrapp.model.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

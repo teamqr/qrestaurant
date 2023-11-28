@@ -6,8 +6,6 @@ import com.qrestaurant.qrapp.repository.RestaurantRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
@@ -29,10 +27,6 @@ public class RestaurantService {
     @KafkaListener(topics = "dashboard-restaurant", groupId = "qrestaurant",
             containerFactory = "restaurantKafkaListenerContainerFactory")
     public void restaurantListener(Restaurant restaurant) {
-        Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurant.getId());
-
-        if (optionalRestaurant.isPresent()) {
-            restaurantRepository.save(restaurant);
-        }
+        restaurantRepository.save(restaurant);
     }
 }

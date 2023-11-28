@@ -1,19 +1,18 @@
 package com.qrestaurant.qrapp.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "menus")
 public class Menu {
     @Id
     private Long id;
-    @JsonIgnore
     @OneToOne(mappedBy = "menu")
     private Restaurant restaurant;
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.REMOVE)
+    private List<Meal> meals;
 
     public Menu() {}
 
@@ -35,5 +34,13 @@ public class Menu {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public List<Meal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.meals = meals;
     }
 }

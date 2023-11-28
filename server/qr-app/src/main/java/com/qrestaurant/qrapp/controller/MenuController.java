@@ -1,5 +1,7 @@
 package com.qrestaurant.qrapp.controller;
 
+import com.qrestaurant.qrapp.common.MapperDTO;
+import com.qrestaurant.qrapp.model.dto.MenuDTO;
 import com.qrestaurant.qrapp.model.entity.Menu;
 import com.qrestaurant.qrapp.service.MenuService;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +17,19 @@ import java.util.Map;
 @RequestMapping("/api/app/menu")
 public class MenuController {
     private final MenuService menuService;
+    private final MapperDTO mapperDTO;
 
-    public MenuController(MenuService menuService) {
+    public MenuController(MenuService menuService, MapperDTO mapperDTO) {
         this.menuService = menuService;
+        this.mapperDTO = mapperDTO;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Menu>> getMenu(@PathVariable Long id) {
+    public ResponseEntity<Map<String, MenuDTO>> getMenu(@PathVariable Long id) {
         Menu menu = menuService.getMenu(id);
 
-        Map<String, Menu> response = new HashMap<>();
-        response.put("menu", menu);
+        Map<String, MenuDTO> response = new HashMap<>();
+        response.put("menu", mapperDTO.toMenuDTO(menu));
 
         return ResponseEntity.ok(response);
     }
