@@ -1,5 +1,5 @@
-import { theme } from "@/common/theme";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { Dimensions, View } from "react-native";
 import Animated, {
   Extrapolate,
@@ -11,13 +11,15 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+
+import { OnboardingIndicator } from "./indicator";
 import { Button } from "../button";
 import { ArrowForward, Login } from "../icons";
+import { ShadowContainer } from "../shadow-container";
 import { AppText } from "../text";
 import { TextLogo } from "../ui/text-logo";
-import { OnboardingIndicator } from "./indicator";
-import { ShadowContainer } from "../shadow-container";
-import { useRouter } from "expo-router";
+
+import { theme } from "@/common/theme";
 
 const items = [
   {

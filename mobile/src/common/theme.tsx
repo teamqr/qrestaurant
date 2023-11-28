@@ -9,6 +9,9 @@ export const theme = {
     secondaryLight: "#404040",
 
     shadow: "rgba(0,0,0,0.75)",
+
+    danger: "#FC4F4F",
+    dangerLight: "#FF7979",
   },
   fontFamilies: {
     OpenSansRegular: "OpenSans_400Regular",
