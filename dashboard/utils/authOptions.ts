@@ -1,9 +1,10 @@
 import { NextAuthOptions, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { AuthCredentials } from "@/types/AuthCredentials";
+import { serverUlr } from "@/config/serverConfig";
 
 async function getToken(credentials: AuthCredentials) {
-  const reqUrl = process.env.SERVER_URL + "/api/dashboard/auth/login";
+  const reqUrl = `${serverUlr}/api/dashboard/auth/login`;
 
   const res = await fetch(reqUrl, {
     method: "POST",

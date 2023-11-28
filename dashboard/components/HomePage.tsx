@@ -1,23 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
-import { jwtDecode } from "jwt-decode";
-
-async function fetchRestaurantData(token: any) {
-  if (token) {
-    const tokenData: any = jwtDecode(token);
-    const restaurantId: number = tokenData.restaurantId;
-    const reqUrl = `http://localhost:8080/api/dashboard/restaurant/${restaurantId}`;
-    const res = await fetch(reqUrl, {
-      headers: { Authorization: "Bearer " + token },
-    });
-    if (res.ok) {
-      const json = await res.json();
-      return json.restaurant;
-    }
-  }
-  return null;
-}
+import Link from "next/link";
+import { fetchRestaurantData } from "@/utils/fetchRestaurant";
 
 const HomePage = () => {
   const { data: session, status } = useSession({
@@ -38,18 +23,20 @@ const HomePage = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center ">
+    <div className="flex flex-col px-5">
       <main>
-        <h1>Main dashboard</h1>
-        <p>Zalogowano jako {session.user?.email}</p>
-        <p>Restauracja: {restaurant} </p>
-        <button
-          onClick={() => {
-            signOut();
-          }}
-        >
-          Wyloguj się
-        </button>
+        <div id="userData" className="flex justify-around mb-10">
+          <p>Zalogowano jako {session.user?.email}</p>
+          <p>Restauracja: {restaurant} </p>
+        </div>
+        <div className="flex justify-center items-center ">
+          <Link
+            className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 "
+            href="/restaurant"
+          >
+            Zarządzaj restauracją
+          </Link>
+        </div>
       </main>
     </div>
   );

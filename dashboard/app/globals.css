@@ -2,8 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: #222;
-  color: white;
-  padding: 1rem;
+#signOutButton {
+  position: absolute;
+  left: 90%;
 }
