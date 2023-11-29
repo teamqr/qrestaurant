@@ -1,11 +1,8 @@
-import { serverUlr } from "@/config/serverConfig";
-import { jwtDecode } from "jwt-decode";
+import { serverUrl } from "@/config/serverConfig";
 
 export async function fetchRestaurantData(token: any) {
   if (token) {
-    const tokenData: any = jwtDecode(token);
-    const restaurantId: number = tokenData.restaurantId;
-    const reqUrl = `${serverUlr}/api/dashboard/restaurant/${restaurantId}`;
+    const reqUrl = `${serverUrl}/api/dashboard/restaurant`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
     });
