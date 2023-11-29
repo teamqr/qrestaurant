@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NextAuthSessionProvider from "./providers/sessionProvider";
+import NavBar from "@/components/NavBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,11 +18,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <header className="flex justify-center items-center text-5xl mb-8">
-          <strong>QR</strong>estaurant
-        </header>
-        <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
+      <body className="text-white bg-gray-800">
+        <NextAuthSessionProvider>
+          <NavBar />
+          <div>{children}</div>
+        </NextAuthSessionProvider>
       </body>
     </html>
   );

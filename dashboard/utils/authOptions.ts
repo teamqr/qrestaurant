@@ -1,9 +1,10 @@
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { AuthCredentials } from "@/types/AuthCredentials";
+import { serverUrl } from "@/config/serverConfig";
 
 async function getToken(credentials: AuthCredentials) {
-  const reqUrl = process.env.SERVER_URL + "/api/dashboard/auth/login";
+  const reqUrl = `${serverUrl}/api/dashboard/auth/login`;
 
   const res = await fetch(reqUrl, {
     method: "POST",
@@ -15,10 +16,10 @@ async function getToken(credentials: AuthCredentials) {
 
   if (res.ok) {
     const json = await res.json();
-    return JSON.stringify(json.token);
+
+    return json.token;
   }
-  const errorMessage =
-`Status  ${res.status} - ${res.statusText}`;
+  const errorMessage = `Status  ${res.status} - ${res.statusText}`;
   throw new Error(errorMessage);
 }
 
@@ -40,7 +41,7 @@ export const authOptions: NextAuthOptions = {
           const userData = {
             id: "1",
             email: credentials.email,
-            token: token,
+            userToken: token,
           };
 
           return userData;
@@ -53,5 +54,20 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/login",
+  },
+  callbacks: {
+    async jwt({ token, trigger, user }) {
+      if (trigger == "signIn") {
+        token.userToken = user.userToken;
+      }
+
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.userToken = token.userToken;
+      }
+      return session;
+    },
   },
 };
