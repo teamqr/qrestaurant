@@ -1,5 +1,6 @@
-import { theme } from "@/common/theme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { theme } from "@/common/theme";
 
 export const useFixedInsets = () => {
   const { bottom, ...rest } = useSafeAreaInsets();

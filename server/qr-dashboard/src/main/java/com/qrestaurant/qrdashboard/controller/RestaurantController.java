@@ -1,6 +1,9 @@
 package com.qrestaurant.qrdashboard.controller;
 
+import com.qrestaurant.qrdashboard.common.MapperDTO;
+import com.qrestaurant.qrdashboard.model.dto.RestaurantDTO;
 import com.qrestaurant.qrdashboard.model.entity.Restaurant;
+import com.qrestaurant.qrdashboard.model.request.UpdateRestaurantRequest;
 import com.qrestaurant.qrdashboard.service.RestaurantService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -14,28 +17,34 @@ import java.util.Map;
 @RequestMapping("/api/dashboard/restaurant")
 public class RestaurantController {
     private final RestaurantService restaurantService;
+    private final MapperDTO mapperDTO;
 
-    public RestaurantController(RestaurantService restaurantService) {
+    public RestaurantController(RestaurantService restaurantService, MapperDTO mapperDTO) {
         this.restaurantService = restaurantService;
+        this.mapperDTO = mapperDTO;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Restaurant>> getRestaurant(@PathVariable Long id) {
-        Restaurant restaurant = restaurantService.getRestaurant(id);
+    @GetMapping
+    public ResponseEntity<Map<String, RestaurantDTO>> getRestaurant(
+            @RequestHeader("Authorization") String authorizationHeader) {
+        Restaurant restaurant = restaurantService.getRestaurant(authorizationHeader);
 
-        Map<String, Restaurant> response = new HashMap<>();
-        response.put("restaurant", restaurant);
+        Map<String, RestaurantDTO> response = new HashMap<>();
+        response.put("restaurant", mapperDTO.toRestaurantDTO(restaurant));
 
         return ResponseEntity.ok(response);
     }
 
     @PutMapping
     @PreAuthorize(value = "hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<Map<String, Restaurant>> updateRestaurant(@Valid @RequestBody Restaurant restaurant) {
-        Restaurant updatedRestaurant = restaurantService.updateRestaurant(restaurant);
+    public ResponseEntity<Map<String, RestaurantDTO>> updateRestaurant(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @Valid @RequestBody UpdateRestaurantRequest updateRestaurantRequest
+    ) {
+        Restaurant restaurant = restaurantService.updateRestaurant(authorizationHeader, updateRestaurantRequest);
 
-        Map<String, Restaurant> response = new HashMap<>();
-        response.put("restaurant", updatedRestaurant);
+        Map<String, RestaurantDTO> response = new HashMap<>();
+        response.put("restaurant", mapperDTO.toRestaurantDTO(restaurant));
 
         return ResponseEntity.ok(response);
     }

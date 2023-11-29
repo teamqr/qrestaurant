@@ -1,4 +1,3 @@
-import { theme } from "@/common/theme";
 import { StyleSheet, View } from "react-native";
 import Animated, {
   Extrapolate,
@@ -6,6 +5,8 @@ import Animated, {
   interpolateColor,
   useAnimatedStyle,
 } from "react-native-reanimated";
+
+import { theme } from "@/common/theme";
 
 export const OnboardingIndicator = ({
   items,
