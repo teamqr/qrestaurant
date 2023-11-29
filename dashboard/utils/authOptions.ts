@@ -2,6 +2,8 @@ import { NextAuthOptions, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { AuthCredentials } from "@/types/AuthCredentials";
 import { serverUlr } from "@/config/serverConfig";
+import { decodeToken } from "./fetchRestaurant";
+import { TokenData } from "@/types/TokenData";
 
 async function getToken(credentials: AuthCredentials) {
   const reqUrl = `${serverUlr}/api/dashboard/auth/login`;
@@ -38,10 +40,12 @@ export const authOptions: NextAuthOptions = {
         };
         try {
           const token = await getToken(credentials);
+          const tokenData: TokenData = decodeToken(token);
           const userData = {
             id: "1",
             email: credentials.email,
             userToken: token,
+            role: tokenData.role,
           };
 
           return userData;
@@ -59,6 +63,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, trigger, user }) {
       if (trigger == "signIn") {
         token.userToken = user.userToken;
+        token.role = user.role;
       }
 
       return token;
@@ -66,6 +71,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.user.userToken = token.userToken;
+        session.user.role = token.role;
       }
       return session;
     },

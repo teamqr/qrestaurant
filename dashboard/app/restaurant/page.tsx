@@ -2,6 +2,7 @@
 
 import { fetchRestaurantData } from "@/utils/fetchRestaurant";
 import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import React, { useState } from "react";
 
 const RestaurantManagement = () => {
@@ -14,6 +15,10 @@ const RestaurantManagement = () => {
     const restaurantData = await fetchRestaurantData(token);
     setResturant(restaurantData?.name);
   })();
+
+  if (session?.user.role != "ADMIN") {
+    redirect("/");
+  }
 
   if (status != "authenticated") {
     return <></>;

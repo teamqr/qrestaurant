@@ -33,6 +33,15 @@ const LoginForm = (props: Props) => {
 
   return (
     <div className="flex flex-col items-center">
+      <div>
+        {props.error == "CredentialsSignin" ? (
+          <p className="text-white bg-red-700 rounded-md p-2">
+            Podano błędny e-mail lub hasło. Spróbuj ponownie.
+          </p>
+        ) : (
+          <></>
+        )}
+      </div>
       <input
         type="text"
         className="block rounded-md border-0 my-4 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
