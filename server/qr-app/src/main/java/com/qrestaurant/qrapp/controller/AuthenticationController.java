@@ -1,7 +1,9 @@
 package com.qrestaurant.qrapp.controller;
 
-import com.qrestaurant.qrapp.model.LoginRequest;
-import com.qrestaurant.qrapp.model.RegisterRequest;
+import com.qrestaurant.qrapp.common.MapperDTO;
+import com.qrestaurant.qrapp.model.dto.UserDTO;
+import com.qrestaurant.qrapp.model.request.LoginRequest;
+import com.qrestaurant.qrapp.model.request.RegisterRequest;
 import com.qrestaurant.qrapp.model.entity.User;
 import com.qrestaurant.qrapp.service.JWTTokenService;
 import com.qrestaurant.qrapp.service.UserService;
@@ -21,16 +23,18 @@ public class AuthenticationController {
     private final UserService userService;
     private final JWTTokenService jwtTokenService;
     private final AuthenticationManager authenticationManager;
+    private final MapperDTO mapperDTO;
 
     public AuthenticationController(UserService userService, JWTTokenService jwtTokenService,
-                                    AuthenticationManager authenticationManager) {
+                                    AuthenticationManager authenticationManager, MapperDTO mapperDTO) {
         this.userService = userService;
         this.jwtTokenService = jwtTokenService;
         this.authenticationManager = authenticationManager;
+        this.mapperDTO = mapperDTO;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, User>> register(@Valid @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<Map<String, UserDTO>> register(@Valid @RequestBody RegisterRequest registerRequest) {
         User user = userService.saveUser(new User(
                 registerRequest.email(),
                 registerRequest.password(),
@@ -38,8 +42,8 @@ public class AuthenticationController {
                 registerRequest.lastname()
         ));
 
-        Map<String, User> response = new HashMap<>();
-        response.put("user", user);
+        Map<String, UserDTO> response = new HashMap<>();
+        response.put("user", mapperDTO.toUserDTO(user));
 
         return ResponseEntity.ok(response);
     }

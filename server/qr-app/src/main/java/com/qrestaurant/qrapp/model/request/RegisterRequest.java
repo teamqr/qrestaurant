@@ -1,10 +1,10 @@
-package com.qrestaurant.qrdashboard.model;
+package com.qrestaurant.qrapp.model.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record NewUserRequest(
+public record RegisterRequest(
         @NotNull
         @Email
         String email,
@@ -12,5 +12,7 @@ public record NewUserRequest(
         @Size(min = 8)
         String password,
         @NotNull
-        Long restaurantId
+        String firstname,
+        @NotNull
+        String lastname
 ) {}

@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { TextLogo } from "./text-logo";
 import { theme } from "../../common/theme";
 import { ArrowLeft } from "../icons";
-import { TextLogo } from "./text-logo";
 
 type Props = {
   onBack?: () => void;

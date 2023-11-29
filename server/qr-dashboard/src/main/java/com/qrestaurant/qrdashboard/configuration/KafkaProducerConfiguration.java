@@ -1,5 +1,10 @@
 package com.qrestaurant.qrdashboard.configuration;
 
+import com.qrestaurant.qrdashboard.model.dto.MealDTO;
+import com.qrestaurant.qrdashboard.model.dto.MenuDTO;
+import com.qrestaurant.qrdashboard.model.dto.RestaurantDTO;
+import com.qrestaurant.qrdashboard.model.entity.Meal;
+import com.qrestaurant.qrdashboard.model.entity.Menu;
 import com.qrestaurant.qrdashboard.model.entity.Restaurant;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -19,19 +24,43 @@ public class KafkaProducerConfiguration {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Bean
-    public ProducerFactory<String, Restaurant> restaurantProducerFactory() {
-        Map<String, Object> properties = new HashMap<>();
+    private Map<String, Object> configs() {
+        Map<String, Object> configs = new HashMap<>();
 
-        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 
-        return new DefaultKafkaProducerFactory<>(properties);
+        return configs;
     }
 
     @Bean
-    public KafkaTemplate<String, Restaurant> restaurantKafkaTemplate() {
+    public ProducerFactory<String, RestaurantDTO> restaurantProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(configs());
+    }
+
+    @Bean
+    public ProducerFactory<String, MenuDTO> menuProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(configs());
+    }
+
+    @Bean
+    public ProducerFactory<String, MealDTO> mealProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(configs());
+    }
+
+    @Bean
+    public KafkaTemplate<String, RestaurantDTO> restaurantKafkaTemplate() {
         return new KafkaTemplate<>(restaurantProducerFactory());
+    }
+
+    @Bean
+    public KafkaTemplate<String, MenuDTO> menuKafkaTemplate() {
+        return new KafkaTemplate<>(menuProducerFactory());
+    }
+
+    @Bean
+    public KafkaTemplate<String, MealDTO> mealKafkaTemplate() {
+        return new KafkaTemplate<>(mealProducerFactory());
     }
 }

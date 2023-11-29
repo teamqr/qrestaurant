@@ -1,26 +1,35 @@
-import { theme } from "@/common/theme";
-import { AppText } from "@/components/text";
-import { StyleSheet, View } from "react-native";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CommonActions } from "@react-navigation/native";
+import { useMutation } from "@tanstack/react-query";
 import { Image } from "expo-image";
+import { useNavigation } from "expo-router";
+import { Controller, useForm } from "react-hook-form";
+import { StyleSheet, View } from "react-native";
+import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
+import { z } from "zod";
+
+import { theme } from "@/common/theme";
 import { Button } from "@/components/button";
-import { ShadowContainer } from "@/components/shadow-container";
 import { Facebbok, Google, Login, Mail, Password } from "@/components/icons";
 import { Input } from "@/components/input";
-import { z } from "zod";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { ShadowContainer } from "@/components/shadow-container";
+import { AppText } from "@/components/text";
+import { useAuth } from "@/context/auth";
 
 const image = require("assets/images/character.png");
 
 const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  email: z.string().email("Niepoprawny adres e-mail"),
+  password: z.string().min(8, "Hasło musi mieć co najmniej 8 znaków"),
 });
 
 type LoginForm = z.infer<typeof LoginSchema>;
 
 export default function SignInPage() {
-  const { control, handleSubmit, formState } = useForm<LoginForm>({
+  const navigation = useNavigation();
+  const { signInWithEmailAndPassword } = useAuth();
+
+  const { control, handleSubmit } = useForm<LoginForm>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
@@ -28,15 +37,31 @@ export default function SignInPage() {
     },
   });
 
-  const onSubmit = (data: LoginForm) => {};
+  const signInMutation = useMutation({
+    mutationFn: signInWithEmailAndPassword,
+    onSuccess: () => {
+      navigation.dispatch(
+        CommonActions.reset({
+          routes: [{ name: "(app)" }],
+        }),
+      );
+    },
+  });
+
+  const onSubmit = async ({ email, password }: LoginForm) => {
+    signInMutation.mutate({ email, password });
+  };
 
   return (
-    <View
+    <Animated.ScrollView
       style={{
         flex: 1,
         backgroundColor: theme.colors.background,
-        paddingHorizontal: theme.spacing(3),
+      }}
+      contentContainerStyle={{
         gap: theme.spacing(4),
+        paddingHorizontal: theme.spacing(3),
+        flexGrow: 1,
       }}
     >
       <Image
@@ -57,29 +82,53 @@ export default function SignInPage() {
         <Controller
           control={control}
           name="email"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              textContentType="emailAddress"
-              placeholder="E-mail"
-              prefix={<Mail color="white" />}
-              value={value}
-              onChangeText={onChange}
-            />
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
+            <Animated.View style={{ gap: theme.spacing(1) }}>
+              <Input
+                textContentType="emailAddress"
+                placeholder="E-mail"
+                prefix={<Mail color="white" />}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                hasError={!!error}
+              />
+              {!!error && (
+                <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
+                  <AppText style={styles.error}>{error?.message}</AppText>
+                </Animated.View>
+              )}
+            </Animated.View>
           )}
         />
 
         <Controller
           control={control}
           name="password"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              textContentType="password"
-              secureTextEntry
-              placeholder="Hasło"
-              prefix={<Password color="white" />}
-              value={value}
-              onChangeText={onChange}
-            />
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
+            <Animated.View style={{ gap: theme.spacing(1) }}>
+              <Input
+                textContentType="password"
+                secureTextEntry
+                placeholder="Hasło"
+                prefix={<Password color="white" />}
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                hasError={!!error}
+              />
+              {!!error && (
+                <Animated.View entering={FadeInRight} exiting={FadeOutLeft}>
+                  <AppText style={styles.error}>{error?.message}</AppText>
+                </Animated.View>
+              )}
+            </Animated.View>
           )}
         />
 
@@ -88,6 +137,7 @@ export default function SignInPage() {
             label="Zaloguj się"
             icon={<Login color="white" />}
             onPress={handleSubmit(onSubmit)}
+            loading={signInMutation.isPending}
           />
         </ShadowContainer>
 
@@ -119,7 +169,7 @@ export default function SignInPage() {
           icon={<Google color="white" />}
         />
       </View>
-    </View>
+    </Animated.ScrollView>
   );
 }
 
@@ -129,5 +179,9 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     backgroundColor: theme.colors.secondary,
     flex: 1,
+  },
+  error: {
+    color: theme.colors.danger,
+    fontSize: 12,
   },
 });
