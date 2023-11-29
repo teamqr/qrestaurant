@@ -16,13 +16,21 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "$(PRODUCT_NAME) wymaga dostępu do kamery, aby skanować kod QR"
+      },
+      "bundleIdentifier": "com.teamqr.qrestaurant"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "package": "com.teamqr.qrestaurant"
     },
     "web": {
       "bundler": "metro",
@@ -39,11 +47,25 @@
           }
         }
       ],
-      "react-native-vision-camera"
+      [
+        "react-native-vision-camera",
+        {
+          "cameraPermissionText": "$(PRODUCT_NAME) wymaga dostępu do kamery, aby skanować kod QR"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "36f426a1-392b-498c-b58c-8536d41d21d2"
+      }
+    },
+    "owner": "teamqr"
   }
 }

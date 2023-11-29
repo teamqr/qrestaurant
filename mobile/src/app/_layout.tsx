@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { useCameraPermission } from "react-native-vision-camera";
 
 import { Header } from "../components/ui/header";
 
@@ -18,6 +19,8 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
+  const { hasPermission, requestPermission } = useCameraPermission();
+
   const [fontsLoaded, fontError] = useFonts({
     OpenSans_400Regular,
     OpenSans_700Bold,
@@ -29,6 +32,12 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);
+
+  useEffect(() => {
+    if (!hasPermission) {
+      requestPermission();
+    }
+  }, [hasPermission, requestPermission]);
 
   if (!fontsLoaded && !fontError) return null;
 
