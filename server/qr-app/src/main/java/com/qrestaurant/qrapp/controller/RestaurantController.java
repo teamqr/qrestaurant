@@ -1,5 +1,7 @@
 package com.qrestaurant.qrapp.controller;
 
+import com.qrestaurant.qrapp.common.MapperDTO;
+import com.qrestaurant.qrapp.model.dto.RestaurantDTO;
 import com.qrestaurant.qrapp.model.entity.Restaurant;
 import com.qrestaurant.qrapp.service.RestaurantService;
 import org.springframework.http.ResponseEntity;
@@ -15,27 +17,29 @@ import java.util.Map;
 @RequestMapping("/api/app/restaurant")
 public class RestaurantController {
     private final RestaurantService restaurantService;
+    private final MapperDTO mapperDTO;
 
-    public RestaurantController(RestaurantService restaurantService) {
+    public RestaurantController(RestaurantService restaurantService, MapperDTO mapperDTO) {
         this.restaurantService = restaurantService;
+        this.mapperDTO = mapperDTO;
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, Iterable<Restaurant>>> getRestaurants() {
+    public ResponseEntity<Map<String, Iterable<RestaurantDTO>>> getRestaurants() {
         Iterable<Restaurant> restaurants = restaurantService.getRestaurants();
 
-        Map<String, Iterable<Restaurant>> response  = new HashMap<>();
-        response.put("restaurants", restaurants);
+        Map<String, Iterable<RestaurantDTO>> response  = new HashMap<>();
+        response.put("restaurants", mapperDTO.toRestaurantDTOs(restaurants));
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Restaurant>> getRestaurant(@PathVariable Long id) {
+    public ResponseEntity<Map<String, RestaurantDTO>> getRestaurant(@PathVariable Long id) {
         Restaurant restaurant = restaurantService.getRestaurant(id);
 
-        Map<String, Restaurant> response = new HashMap<>();
-        response.put("restaurant", restaurant);
+        Map<String, RestaurantDTO> response = new HashMap<>();
+        response.put("restaurant", mapperDTO.toRestaurantDTO(restaurant));
 
         return ResponseEntity.ok(response);
     }

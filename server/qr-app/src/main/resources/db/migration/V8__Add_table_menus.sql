@@ -1,0 +1,14 @@
+CREATE TABLE menus
+(
+    id BIGINT NOT NULL,
+    CONSTRAINT pk_menus PRIMARY KEY (id)
+);
+
+ALTER TABLE restaurants
+    ADD menu_id BIGINT;
+
+ALTER TABLE restaurants
+    ADD CONSTRAINT FK_RESTAURANTS_ON_MENU FOREIGN KEY (menu_id) REFERENCES menus (id);
+
+ALTER TABLE restaurants
+    ALTER COLUMN name SET NOT NULL;
