@@ -1,7 +1,9 @@
 package com.qrestaurant.qrdashboard.service;
 
 import com.qrestaurant.qrdashboard.common.JWTUtil;
+import com.qrestaurant.qrdashboard.common.MapperDTO;
 import com.qrestaurant.qrdashboard.exception.EntityNotFoundException;
+import com.qrestaurant.qrdashboard.model.dto.MealDTO;
 import com.qrestaurant.qrdashboard.model.entity.Meal;
 import com.qrestaurant.qrdashboard.model.entity.Menu;
 import com.qrestaurant.qrdashboard.model.request.NewMealRequest;
@@ -18,15 +20,17 @@ import java.util.Optional;
 public class MealService {
     private final MealRepository mealRepository;
     private final MenuRepository menuRepository;
-    private final KafkaTemplate<String, Meal> mealKafkaTemplate;
+    private final KafkaTemplate<String, MealDTO> mealKafkaTemplate;
     private final JWTUtil jwtUtil;
+    private final MapperDTO mapperDTO;
 
     public MealService(MealRepository mealRepository, MenuRepository menuRepository,
-                       KafkaTemplate<String, Meal> mealKafkaTemplate, JWTUtil jwtUtil) {
+                       KafkaTemplate<String, MealDTO> mealKafkaTemplate, JWTUtil jwtUtil, MapperDTO mapperDTO) {
         this.mealRepository = mealRepository;
         this.menuRepository = menuRepository;
         this.mealKafkaTemplate = mealKafkaTemplate;
         this.jwtUtil = jwtUtil;
+        this.mapperDTO = mapperDTO;
     }
 
     public Iterable<Meal> getMeals(String authorizationHeader) {
@@ -60,7 +64,7 @@ public class MealService {
 
             meal = mealRepository.save(meal);
 
-            mealKafkaTemplate.send("dashboard-meal", meal);
+            mealKafkaTemplate.send("dashboard-meal", mapperDTO.toMealDTO(meal));
 
             return meal;
         } else {
@@ -84,7 +88,7 @@ public class MealService {
 
             meal = mealRepository.save(meal);
 
-            mealKafkaTemplate.send("dashboard-meal", meal);
+            mealKafkaTemplate.send("dashboard-meal", mapperDTO.toMealDTO(meal));
 
             return meal;
         } else {

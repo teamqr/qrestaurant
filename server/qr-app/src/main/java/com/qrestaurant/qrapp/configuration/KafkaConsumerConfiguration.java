@@ -1,5 +1,8 @@
 package com.qrestaurant.qrapp.configuration;
 
+import com.qrestaurant.qrapp.model.dto.MealDTO;
+import com.qrestaurant.qrapp.model.dto.MenuDTO;
+import com.qrestaurant.qrapp.model.dto.RestaurantDTO;
 import com.qrestaurant.qrapp.model.entity.Meal;
 import com.qrestaurant.qrapp.model.entity.Menu;
 import com.qrestaurant.qrapp.model.entity.Restaurant;
@@ -34,26 +37,26 @@ public class KafkaConsumerConfiguration {
     }
 
     @Bean
-    public ConsumerFactory<String, Restaurant> restaurantConsumerFactory() {
+    public ConsumerFactory<String, RestaurantDTO> restaurantConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(configs(), new StringDeserializer(),
-                new JsonDeserializer<>(Restaurant.class, false));
+                new JsonDeserializer<>(RestaurantDTO.class, false));
     }
 
     @Bean
-    public ConsumerFactory<String, Menu> menuConsumerFactory() {
+    public ConsumerFactory<String, MenuDTO> menuConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(configs(), new StringDeserializer(),
-                new JsonDeserializer<>(Menu.class, false));
+                new JsonDeserializer<>(MenuDTO.class, false));
     }
 
     @Bean
-    public ConsumerFactory<String, Meal> mealConsumerFactory() {
+    public ConsumerFactory<String, MealDTO> mealConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(configs(), new StringDeserializer(),
-                new JsonDeserializer<>(Meal.class, false));
+                new JsonDeserializer<>(MealDTO.class, false));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Restaurant> restaurantKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Restaurant> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, RestaurantDTO> restaurantKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, RestaurantDTO> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(restaurantConsumerFactory());
@@ -62,8 +65,9 @@ public class KafkaConsumerConfiguration {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Menu> menuConcurrentKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Menu> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, MenuDTO> menuConcurrentKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, MenuDTO> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(menuConsumerFactory());
 
@@ -71,8 +75,9 @@ public class KafkaConsumerConfiguration {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Meal> mealConcurrentKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Meal> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, MealDTO> mealConcurrentKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, MealDTO> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(mealConsumerFactory());
 

@@ -1,5 +1,8 @@
 package com.qrestaurant.qrdashboard.configuration;
 
+import com.qrestaurant.qrdashboard.model.dto.MealDTO;
+import com.qrestaurant.qrdashboard.model.dto.MenuDTO;
+import com.qrestaurant.qrdashboard.model.dto.RestaurantDTO;
 import com.qrestaurant.qrdashboard.model.entity.Meal;
 import com.qrestaurant.qrdashboard.model.entity.Menu;
 import com.qrestaurant.qrdashboard.model.entity.Restaurant;
@@ -32,32 +35,32 @@ public class KafkaProducerConfiguration {
     }
 
     @Bean
-    public ProducerFactory<String, Restaurant> restaurantProducerFactory() {
+    public ProducerFactory<String, RestaurantDTO> restaurantProducerFactory() {
         return new DefaultKafkaProducerFactory<>(configs());
     }
 
     @Bean
-    public ProducerFactory<String, Menu> menuProducerFactory() {
+    public ProducerFactory<String, MenuDTO> menuProducerFactory() {
         return new DefaultKafkaProducerFactory<>(configs());
     }
 
     @Bean
-    public ProducerFactory<String, Meal> mealProducerFactory() {
+    public ProducerFactory<String, MealDTO> mealProducerFactory() {
         return new DefaultKafkaProducerFactory<>(configs());
     }
 
     @Bean
-    public KafkaTemplate<String, Restaurant> restaurantKafkaTemplate() {
+    public KafkaTemplate<String, RestaurantDTO> restaurantKafkaTemplate() {
         return new KafkaTemplate<>(restaurantProducerFactory());
     }
 
     @Bean
-    public KafkaTemplate<String, Menu> menuKafkaTemplate() {
+    public KafkaTemplate<String, MenuDTO> menuKafkaTemplate() {
         return new KafkaTemplate<>(menuProducerFactory());
     }
 
     @Bean
-    public KafkaTemplate<String, Meal> mealKafkaTemplate() {
+    public KafkaTemplate<String, MealDTO> mealKafkaTemplate() {
         return new KafkaTemplate<>(mealProducerFactory());
     }
 }

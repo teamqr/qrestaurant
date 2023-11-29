@@ -9,7 +9,8 @@ import java.util.List;
 public class Menu {
     @Id
     private Long id;
-    @OneToOne(mappedBy = "menu")
+    @OneToOne
+    @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
     @OneToMany(mappedBy = "menu", cascade = CascadeType.REMOVE)
     private List<Meal> meals;

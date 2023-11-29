@@ -21,7 +21,13 @@ public class MapperDTO {
                 .map(User::getId)
                 .toList();
 
-        return new RestaurantDTO(restaurant.getId(), restaurant.getName(), userIds, restaurant.getMenu().getId());
+        Long menuId = null;
+
+        if (restaurant.getMenu() != null) {
+            menuId = restaurant.getMenu().getId();
+        }
+
+        return new RestaurantDTO(restaurant.getId(), restaurant.getName(), userIds, menuId);
     }
 
     public UserDTO toUserDTO(User user) {
@@ -39,10 +45,14 @@ public class MapperDTO {
     }
 
     public MenuDTO toMenuDTO(Menu menu) {
-        Iterable<Long> mealIds = menu.getMeals()
-                .stream()
-                .map(Meal::getId)
-                .toList();
+        Iterable<Long> mealIds = new ArrayList<>();
+
+        if (menu.getMeals() != null) {
+            mealIds = menu.getMeals()
+                    .stream()
+                    .map(Meal::getId)
+                    .toList();
+        }
 
         return new MenuDTO(menu.getId(), menu.getRestaurant().getId(), mealIds);
     }

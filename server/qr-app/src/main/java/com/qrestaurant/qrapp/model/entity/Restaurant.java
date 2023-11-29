@@ -10,8 +10,7 @@ public class Restaurant {
     private Long id;
     @NotNull
     private String name;
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "menu_id")
+    @OneToOne(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
     private Menu menu;
 
     public Restaurant() {}

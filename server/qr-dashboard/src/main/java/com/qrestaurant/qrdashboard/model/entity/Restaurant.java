@@ -15,8 +15,7 @@ public class Restaurant {
     private String name;
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
     private List<User> users;
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "menu_id")
+    @OneToOne(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
     private Menu menu;
 
     public Restaurant() {}

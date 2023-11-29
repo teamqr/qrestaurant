@@ -10,7 +10,8 @@ public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(mappedBy = "menu")
+    @OneToOne
+    @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
     @OneToMany(mappedBy = "menu", cascade = CascadeType.REMOVE)
     private List<Meal> meals;

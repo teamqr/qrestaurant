@@ -65,6 +65,8 @@ public class UserService implements UserDetailsService {
         Optional<User> optionalUser = userRepository.findByIdAndRoleAndRestaurant_Id(id, Role.WORKER, restaurantId);
 
         if (optionalUser.isPresent()) {
+            userRepository.deleteById(id);
+
             return optionalUser.get();
         } else {
             throw new EntityNotFoundException("Worker with id: " + id + " does not exist.");

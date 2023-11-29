@@ -1,8 +1,10 @@
 package com.qrestaurant.qrdashboard.service;
 
 import com.qrestaurant.qrdashboard.common.JWTUtil;
+import com.qrestaurant.qrdashboard.common.MapperDTO;
 import com.qrestaurant.qrdashboard.exception.EntityAlreadyExistsException;
 import com.qrestaurant.qrdashboard.exception.EntityNotFoundException;
+import com.qrestaurant.qrdashboard.model.dto.MenuDTO;
 import com.qrestaurant.qrdashboard.model.entity.Menu;
 import com.qrestaurant.qrdashboard.model.entity.Restaurant;
 import com.qrestaurant.qrdashboard.repository.MenuRepository;
@@ -17,15 +19,17 @@ import java.util.Optional;
 public class MenuService {
     private final MenuRepository menuRepository;
     private final RestaurantRepository restaurantRepository;
-    private final KafkaTemplate<String, Menu> menuKafkaTemplate;
+    private final KafkaTemplate<String, MenuDTO> menuKafkaTemplate;
     private final JWTUtil jwtUtil;
+    private final MapperDTO mapperDTO;
 
     public MenuService(MenuRepository menuRepository, RestaurantRepository restaurantRepository,
-                       KafkaTemplate<String, Menu> menuKafkaTemplate, JWTUtil jwtUtil) {
+                       KafkaTemplate<String, MenuDTO> menuKafkaTemplate, JWTUtil jwtUtil, MapperDTO mapperDTO) {
         this.menuRepository = menuRepository;
         this.restaurantRepository = restaurantRepository;
         this.menuKafkaTemplate = menuKafkaTemplate;
         this.jwtUtil = jwtUtil;
+        this.mapperDTO = mapperDTO;
     }
 
     public Menu getMenu(String authorizationHeader) throws EntityNotFoundException {
@@ -48,7 +52,7 @@ public class MenuService {
         Optional<Menu> optionalMenu = menuRepository.findMenuByRestaurant_Id(restaurantId);
 
         if (optionalMenu.isPresent()) {
-            throw new EntityAlreadyExistsException("Restaurant with id: " + restaurantId + "already has a menu.");
+            throw new EntityAlreadyExistsException("Restaurant with id: " + restaurantId + " already has a menu.");
         }
 
         Menu menu = new Menu();
@@ -59,7 +63,7 @@ public class MenuService {
 
             menu = menuRepository.save(menu);
 
-            menuKafkaTemplate.send("dashboard-menu", menu);
+            menuKafkaTemplate.send("dashboard-menu", mapperDTO.toMenuDTO(menu));
 
             return menu;
         } else {

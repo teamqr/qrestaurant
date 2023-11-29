@@ -1,17 +1,24 @@
 package com.qrestaurant.qrapp.service;
 
 import com.qrestaurant.qrapp.exception.EntityNotFoundException;
+import com.qrestaurant.qrapp.model.dto.MealDTO;
 import com.qrestaurant.qrapp.model.entity.Meal;
+import com.qrestaurant.qrapp.model.entity.Menu;
 import com.qrestaurant.qrapp.repository.MealRepository;
+import com.qrestaurant.qrapp.repository.MenuRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class MealService {
     private final MealRepository mealRepository;
+    private final MenuRepository menuRepository;
 
-    public MealService(MealRepository mealRepository) {
+    public MealService(MealRepository mealRepository, MenuRepository menuRepository) {
         this.mealRepository = mealRepository;
+        this.menuRepository = menuRepository;
     }
 
     public Iterable<Meal> getMeals(Long restaurantId) {
@@ -27,7 +34,15 @@ public class MealService {
 
     @KafkaListener(topics = "dashboard-meal", groupId = "qrestaurant",
             containerFactory = "mealConcurrentKafkaListenerContainerFactory")
-    public void mealListener(Meal meal) {
-        mealRepository.save(meal);
+    public void mealListener(MealDTO mealDTO) {
+        Meal meal = new Meal(mealDTO.id(), mealDTO.name(), mealDTO.description(), mealDTO.price());
+
+        Optional<Menu> optionalMenu = menuRepository.findById(mealDTO.menuId());
+
+        if (optionalMenu.isPresent()) {
+            meal.setMenu(optionalMenu.get());
+
+            mealRepository.save(meal);
+        }
     }
 }

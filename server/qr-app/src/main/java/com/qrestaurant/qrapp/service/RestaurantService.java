@@ -1,10 +1,13 @@
 package com.qrestaurant.qrapp.service;
 
 import com.qrestaurant.qrapp.exception.EntityNotFoundException;
+import com.qrestaurant.qrapp.model.dto.RestaurantDTO;
 import com.qrestaurant.qrapp.model.entity.Restaurant;
 import com.qrestaurant.qrapp.repository.RestaurantRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class RestaurantService {
@@ -26,7 +29,15 @@ public class RestaurantService {
 
     @KafkaListener(topics = "dashboard-restaurant", groupId = "qrestaurant",
             containerFactory = "restaurantKafkaListenerContainerFactory")
-    public void restaurantListener(Restaurant restaurant) {
-        restaurantRepository.save(restaurant);
+    public void restaurantListener(RestaurantDTO restaurantDTO) {
+        Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurantDTO.id());
+
+        if (optionalRestaurant.isPresent()) {
+            Restaurant restaurant = optionalRestaurant.get();
+
+            restaurant.setName(restaurantDTO.name());
+
+            restaurantRepository.save(restaurant);
+        }
     }
 }
