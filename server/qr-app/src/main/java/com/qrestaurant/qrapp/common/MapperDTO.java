@@ -20,14 +20,27 @@ public class MapperDTO {
     }
 
     public RestaurantDTO toRestaurantDTO(Restaurant restaurant) {
-        return new RestaurantDTO(restaurant.getId(), restaurant.getName(), restaurant.getMenu().getId());
+        Long menuId = null;
+
+        if (restaurant.getMenu() != null) {
+            menuId = restaurant.getMenu().getId();
+        }
+
+        return new RestaurantDTO(restaurant.getId(), restaurant.getName(), menuId);
     }
 
     public Iterable<RestaurantDTO> toRestaurantDTOs(Iterable<Restaurant> restaurants) {
         List<RestaurantDTO> restaurantDTOs = new ArrayList<>();
 
-        restaurants.forEach(restaurant -> restaurantDTOs.add(
-                new RestaurantDTO(restaurant.getId(), restaurant.getName(), restaurant.getMenu().getId())));
+        restaurants.forEach(restaurant -> {
+            Long menuId = null;
+
+            if (restaurant.getMenu() != null) {
+                menuId = restaurant.getMenu().getId();
+            }
+
+            restaurantDTOs.add(new RestaurantDTO(restaurant.getId(), restaurant.getName(), menuId));
+        });
 
         return restaurantDTOs;
     }
