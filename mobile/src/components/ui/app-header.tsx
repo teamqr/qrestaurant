@@ -28,6 +28,7 @@ export const AppHeader = ({ title }: Props) => {
       <View
         style={{
           gap: theme.spacing(4),
+          flex: 1,
         }}
       >
         {router.canGoBack() && (

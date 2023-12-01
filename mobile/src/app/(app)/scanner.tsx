@@ -1,3 +1,4 @@
+import { Canvas, Rect, Shadow } from "@shopify/react-native-skia";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import {
@@ -69,6 +70,19 @@ export default function ScannerPage() {
           </ShadowContainer>
         </View>
       </View>
+
+      <Canvas style={StyleSheet.absoluteFill}>
+        <Rect width={size.width} height={size.height}>
+          <Shadow
+            dx={0}
+            dy={0}
+            blur={20}
+            inner
+            color={theme.colors.background}
+            shadowOnly
+          />
+        </Rect>
+      </Canvas>
     </>
   );
 }

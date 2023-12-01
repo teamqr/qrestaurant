@@ -46,6 +46,9 @@ export default function SignInPage() {
         }),
       );
     },
+    onError: (error) => {
+      console.log(error);
+    },
   });
 
   const onSubmit = async ({ email, password }: LoginForm) => {
