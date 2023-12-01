@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { fetchRestaurantData } from "@/utils/fetchRestaurant";
+import { fetchRestaurantData } from "@/utils/apiUtils";
 
 const HomePage = () => {
   const { data: session, status } = useSession({

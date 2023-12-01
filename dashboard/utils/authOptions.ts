@@ -2,7 +2,7 @@ import { NextAuthOptions, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { AuthCredentials } from "@/types/AuthCredentials";
 import { serverUrl } from "@/config/serverConfig";
-import { decodeToken } from "./fetchRestaurant";
+import { decodeToken } from "./apiUtils";
 import { TokenData } from "@/types/TokenData";
 
 async function getToken(credentials: AuthCredentials) {
@@ -58,6 +58,9 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/login",
+  },
+  session: {
+    maxAge: 60 * 60 * 24, // Session token expires after 24 hours
   },
   callbacks: {
     async jwt({ token, trigger, user }) {
