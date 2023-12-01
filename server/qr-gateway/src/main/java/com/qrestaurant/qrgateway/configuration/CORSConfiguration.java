@@ -22,10 +22,18 @@ public class CORSConfiguration {
         dashboardCorsConfiguration.setAllowedHeaders(List.of("*"));
         dashboardCorsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
 
+        CorsConfiguration swaggerCorsConfiguration = new CorsConfiguration();
+        swaggerCorsConfiguration.setAllowedMethods(List.of("*"));
+        swaggerCorsConfiguration.setAllowedHeaders(List.of("*"));
+        swaggerCorsConfiguration.setAllowedOrigins(List.of("http://localhost"));
+
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/api/app/**", appCorsConfiguration);
         urlBasedCorsConfigurationSource
                 .registerCorsConfiguration("/api/dashboard/**", dashboardCorsConfiguration);
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("**/swagger-ui/**", swaggerCorsConfiguration);
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/app/**", swaggerCorsConfiguration);
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/dashboard/**", swaggerCorsConfiguration);
 
         return new CorsWebFilter(urlBasedCorsConfigurationSource);
     }

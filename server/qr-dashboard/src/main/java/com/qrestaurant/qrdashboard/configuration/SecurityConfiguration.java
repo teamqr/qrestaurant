@@ -50,6 +50,8 @@ public class SecurityConfiguration {
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers("/api/dashboard/auth/login")
                                 .permitAll()
+                                .requestMatchers("/dashboard/**")
+                                .permitAll()
                                 .anyRequest()
                                 .authenticated()
                 )
