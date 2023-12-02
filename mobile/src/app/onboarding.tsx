@@ -13,7 +13,6 @@ export default function RootPage() {
       style={{
         flex: 1,
         backgroundColor: theme.colors.background,
-        // paddingHorizontal: theme.spacing(3),
         gap: theme.spacing(4),
         paddingBottom: bottom,
       }}
