@@ -4,23 +4,20 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { fetchRestaurantData } from "@/utils/apiUtils";
 
-const HomePage = () => {
+type Props = {
+  restaurantName: string | undefined;
+};
+
+const HomePage = (props: Props) => {
   const { data: session, status } = useSession({
     required: true,
   });
 
-  const token = session?.user?.userToken;
-
-  const [restaurant, setResturant] = useState(undefined);
-
-  (async () => {
-    const restaurantData = await fetchRestaurantData(token);
-    setResturant(restaurantData?.name);
-  })();
-
   if (status === "loading") {
     return <></>;
   }
+
+  const restaurant = props?.restaurantName;
 
   return (
     <div className="flex flex-col px-5">

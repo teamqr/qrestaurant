@@ -1,5 +1,6 @@
 "use client";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { removeTokenFromCookies } from "@/utils/cookieUtils";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
@@ -17,7 +18,13 @@ const NavBar = () => {
         <div id="signOutButton">
           {session?.user ? (
             <>
-              <button className="text-red-500" onClick={() => signOut()}>
+              <button
+                className="text-red-500"
+                onClick={async () => {
+                  await removeTokenFromCookies();
+                  signOut();
+                }}
+              >
                 Wyloguj się
               </button>
             </>
