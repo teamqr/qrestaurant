@@ -1,5 +1,5 @@
 "use client";
-import { removeTokenFromCookies } from "@/utils/cookieUtils";
+import { removeTokenFromCookies } from "@/utils/tokenUtils";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";

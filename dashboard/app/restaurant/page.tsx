@@ -1,31 +1,63 @@
-import { fetchRestaurantData, fetchWorkersData } from "@/utils/apiUtils";
+import {
+  addWorker,
+  fetchRestaurantData,
+  fetchWorkersData,
+} from "@/utils/apiUtils";
 import RestaurantPage from "@/components/RestaurantPage";
-import { revalidatePath } from "next/cache";
-import { getTokenFromCookies } from "@/utils/cookieUtils";
+import { revalidateTag } from "next/cache";
+import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
 
 const RestaurantManagement = async () => {
-  revalidatePath("/restaurant", "page");
-  const token = await getTokenFromCookies();
-
-  let restaurantName;
-  let workersData;
-
-  try {
-    const restaurantData = await fetchRestaurantData(token);
-    restaurantName = restaurantData.name;
-    workersData = await fetchWorkersData(token);
-  } catch (error) {
-    console.error(
-      "Nie udało się pobrać tokenu użytkownika. Zaloguj się ponownie"
-    );
+  const token: string = (await getTokenFromCookies()) as string;
+  let role: string = "";
+  if (token) {
+    const tokenData = await getTokenData(token);
+    role = tokenData.role;
   }
 
+  let workersData;
+  let restaurantName;
+  try {
+    workersData = await fetchWorkersData(token);
+    const restaurantData = await fetchRestaurantData(token);
+    restaurantName = restaurantData.name;
+  } catch (err) {
+    console.error(err);
+  }
+
+  const addNewWorker = async (formData: FormData) => {
+    "use server";
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    addWorker(email, password, token)
+      .then(async () => {
+        revalidateTag("workers");
+      })
+      .catch((err: any) => {
+        console.error(err);
+      });
+  };
+
   return (
-    <RestaurantPage
-      restaurantName={restaurantName}
-      workersData={workersData}
-      token={token}
-    />
+    <div>
+      <RestaurantPage
+        restaurantName={restaurantName}
+        workersData={workersData}
+        token={token}
+      />
+      {token && role == "ADMIN" ? (
+        <form
+          className="flex flex-col justify-center items-center"
+          action={addNewWorker}
+        >
+          <input className="text-black" type="text" name="email" />
+          <input className="text-black" type="password" name="password" />
+          <button type="submit">Dodaj</button>
+        </form>
+      ) : (
+        <></>
+      )}
+    </div>
   );
 };
 

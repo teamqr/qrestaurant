@@ -1,8 +1,8 @@
 "use client";
 import { WorkerData } from "@/types/WorkerData";
 import { deleteWorker } from "@/utils/apiUtils";
-import { redirect } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { RedirectType, redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 type Props = {
@@ -21,12 +21,21 @@ function isWorkerInList(id: number, list: WorkerData[]) {
 }
 
 const WorkerManagePage = (props: Props) => {
-  const [deleted, setDeleted] = useState(false);
-  const router = useRouter();
+  const { data: session, status } = useSession({
+    required: true,
+  });
 
+  if (status != "authenticated") {
+    return <></>;
+  }
+
+  if (session?.user.role != "ADMIN" || !props.token) {
+    redirect("/");
+  }
+  const [deleted, setDeleted] = useState(false);
   useEffect(() => {
     if (deleted || !isWorkerInList(props.workerId, props.workers)) {
-      redirect("/restaurant");
+      redirect("/restaurant", RedirectType.replace);
     }
   }, [deleted]);
 
@@ -38,7 +47,6 @@ const WorkerManagePage = (props: Props) => {
         onClick={async () => {
           await deleteWorker(props.workerId, props.token);
           setDeleted(true);
-          router.prefetch("/restaurant");
         }}
       >
         Usuń pracownika

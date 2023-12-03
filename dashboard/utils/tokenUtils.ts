@@ -1,6 +1,7 @@
 "use server";
 import { unsealData } from "iron-session";
 import { cookies } from "next/headers";
+import { decodeToken } from "./apiUtils";
 
 export async function removeTokenFromCookies() {
   const cookieStore = cookies();
@@ -16,4 +17,9 @@ export async function getTokenFromCookies() {
     : null;
 
   return token;
+}
+
+export async function getTokenData(token: string) {
+  const decodedToken = await decodeToken(token);
+  return decodedToken;
 }
