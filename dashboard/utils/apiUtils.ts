@@ -97,3 +97,31 @@ export async function addWorker(
       });
   }
 }
+export async function changeRestaurantName(
+  newName: string,
+  token?: string | null
+) {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/restaurant`;
+    const reqBody = { name: newName };
+    fetch(reqUrl, {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+      next: { tags: ["restaurant"], revalidate: 5 },
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          const json = await res.json();
+          const name = json?.restaurant?.name;
+          console.log(`Poprawnie zmieniono nazwę restauracji na ${name}`);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+}

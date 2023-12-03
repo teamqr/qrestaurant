@@ -38,6 +38,11 @@ const RestaurantManagement = async () => {
       });
   };
 
+  const refresh = async () => {
+    "use server";
+    revalidateTag("workers");
+  };
+
   return (
     <div>
       <RestaurantPage
@@ -46,14 +51,40 @@ const RestaurantManagement = async () => {
         token={token}
       />
       {token && role == "ADMIN" ? (
-        <form
-          className="flex flex-col justify-center items-center"
-          action={addNewWorker}
-        >
-          <input className="text-black" type="text" name="email" />
-          <input className="text-black" type="password" name="password" />
-          <button type="submit">Dodaj</button>
-        </form>
+        <div>
+          <form
+            className="flex flex-col justify-center items-center"
+            action={addNewWorker}
+          >
+            <input
+              className="block rounded-md border-0 my-1 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 text-black"
+              type="text"
+              name="email"
+            />
+            <input
+              className="block rounded-md border-0 my-1 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 text-black"
+              type="password"
+              name="password"
+            />
+            <button
+              className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 "
+              type="submit"
+            >
+              Dodaj
+            </button>
+          </form>
+          <form
+            className="flex flex-col justify-center items-center"
+            action={refresh}
+          >
+            <button
+              className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 "
+              type="submit"
+            >
+              Odśwież dane
+            </button>
+          </form>
+        </div>
       ) : (
         <></>
       )}

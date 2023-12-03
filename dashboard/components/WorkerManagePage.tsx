@@ -2,7 +2,7 @@
 import { WorkerData } from "@/types/WorkerData";
 import { deleteWorker } from "@/utils/apiUtils";
 import { useSession } from "next-auth/react";
-import { RedirectType, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 type Props = {
@@ -35,7 +35,7 @@ const WorkerManagePage = (props: Props) => {
   const [deleted, setDeleted] = useState(false);
   useEffect(() => {
     if (deleted || !isWorkerInList(props.workerId, props.workers)) {
-      redirect("/restaurant", RedirectType.replace);
+      redirect("/restaurant");
     }
   }, [deleted]);
 
