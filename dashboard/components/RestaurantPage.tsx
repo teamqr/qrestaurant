@@ -2,7 +2,7 @@
 import Worker from "@/components/Worker";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { changeRestaurantName } from "@/utils/apiUtils";
 
@@ -15,6 +15,8 @@ type Props = {
 const RestaurantPage = (props: Props) => {
   const [restaurantName, setRestaurantName] = useState(props.restaurantName);
   const token = props.token;
+
+  const router = useRouter();
 
   const { data: session, status } = useSession({
     required: true,
@@ -35,37 +37,44 @@ const RestaurantPage = (props: Props) => {
 
   return (
     <div>
-      <div className="flex flex-col justify-center items-center">
-        <h1 className="text-3xl">Zarządzanie restauracją</h1>
+      <div className="m-5">
+        <h1 className="text-4xl flex flex-col justify-center items-center">
+          Zarządzanie restauracją
+        </h1>
+        <h1 className="text-2xl py-2">Informacje o restauracji</h1>
         <input
-          className="bg-transparent border-0 text-xl text-center"
+          className="bg-transparent border-0 text-l"
           type="text"
           value={restaurantName}
           name="name"
           onChange={handleChange}
         />
         <button
-          className="block rounded-md border-0 my-2 py-1 px-5 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 "
+          className="block rounded-md border-0 my-2 py-1 px-5 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-green-500 "
           onClick={() => {
             changeRestaurantName(restaurantName, token);
+            router.refresh();
           }}
         >
           Zmień nazwę
         </button>
       </div>
       <div className="p-5">
-        <h1 className="text-3xl">Pracownicy</h1>
-        <ul>
+        <h1 className="text-2xl py-2">Pracownicy</h1>
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>Aders email</th>
+            <th>Zarządzaj profilem pracownika</th>
+          </tr>
           {props.workersData ? (
             props.workersData.map((worker: any, i: number) => (
-              <li key={worker.id}>
-                <Worker data={worker} token={props.token} />
-              </li>
+              <Worker data={worker} token={props.token} />
             ))
           ) : (
             <></>
           )}
-        </ul>
+        </table>
       </div>
     </div>
   );

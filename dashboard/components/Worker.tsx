@@ -11,13 +11,19 @@ type Props = {
 
 const Worker = (props: Props) => {
   return (
-    <div>
-      {props.data.email}
+    <tr className="even:bg-gray-800 odd:bg-gray-900">
+      <td>{props.data.id}</td>
+      <td>{props.data.email}</td>
 
-      <Link href={`/restaurant/worker/${props.data.id}`}>
-        Zarządzaj profilem pracownika
-      </Link>
-    </div>
+      <td>
+        <Link
+          href={`/restaurant/worker/${props.data.id}`}
+          className="block rounded-md border-0 m-2 py-1 px-5 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 "
+        >
+          Zarządzaj profilem pracownika
+        </Link>
+      </td>
+    </tr>
   );
 };
 

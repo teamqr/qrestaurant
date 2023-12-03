@@ -29,7 +29,7 @@ const HomePage = (props: Props) => {
         {session.user?.role == "ADMIN" ? (
           <div className="flex justify-center items-center ">
             <Link
-              className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 "
+              className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 "
               href="/restaurant"
             >
               Zarządzaj restauracją
