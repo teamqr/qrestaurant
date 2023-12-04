@@ -52,8 +52,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   validateToken: async () => {
     const token = await getToken();
 
-    console.log({ token });
-
     if (!token) return;
 
     const user = await auth.me();
