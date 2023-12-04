@@ -63,6 +63,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 }));
 
 export const useIsAuthenticated = () => {
-  const { user } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
   return !!user;
 };
