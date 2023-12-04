@@ -4,7 +4,7 @@ import {
   fetchWorkersData,
 } from "@/utils/apiUtils";
 import RestaurantPage from "@/components/RestaurantPage";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
 
 const RestaurantManagement = async () => {
@@ -29,13 +29,9 @@ const RestaurantManagement = async () => {
     "use server";
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    addWorker(email, password, token)
-      .then(async () => {
-        revalidateTag("workers");
-      })
-      .catch((err: any) => {
-        console.error(err);
-      });
+    await addWorker(email, password, token);
+
+    revalidatePath("/restaurant");
   };
 
   const refresh = async () => {
