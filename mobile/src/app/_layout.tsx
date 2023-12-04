@@ -28,12 +28,6 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (fontsLoaded || fontError) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
-
-  useEffect(() => {
     if (!hasPermission) {
       requestPermission();
     }
@@ -59,7 +53,14 @@ const RootLayoutStack = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="index"
+        name="(app)"
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="onboarding"
         options={{
           header: () => <Header />,
         }}
@@ -76,13 +77,6 @@ const RootLayoutStack = () => {
         name="sign-up"
         options={{
           header: ({ navigation }) => <Header onBack={navigation.goBack} />,
-        }}
-      />
-
-      <Stack.Screen
-        name="(app)"
-        options={{
-          headerShown: false,
         }}
       />
     </Stack>
