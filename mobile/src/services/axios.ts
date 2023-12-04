@@ -1,5 +1,6 @@
 import _axios from "axios";
 
+import { useAuthStore } from "@/stores/auth";
 import { getToken, clearToken } from "@/utils/token";
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:8080";
@@ -18,9 +19,15 @@ axios.interceptors.request.use(
 
     return config;
   },
+  async (error) => Promise.reject(error),
+);
+
+axios.interceptors.response.use(
+  (response) => response,
   async (error) => {
     if (error.response.status === 401) {
       await clearToken();
+      await useAuthStore.getState().signOut();
     }
 
     return Promise.reject(error);

@@ -12,8 +12,6 @@ import { useCameraPermission } from "react-native-vision-camera";
 
 import { Header } from "../components/ui/header";
 
-import { AuthProvider } from "@/context/auth";
-
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
@@ -38,12 +36,10 @@ export default function RootLayout() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <>
-            <RootLayoutStack />
-            <StatusBar style="light" />
-          </>
-        </AuthProvider>
+        <>
+          <RootLayoutStack />
+          <StatusBar style="light" />
+        </>
       </QueryClientProvider>
     </>
   );

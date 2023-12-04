@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/input";
 import { ShadowContainer } from "@/components/shadow-container";
 import { AppText } from "@/components/text";
-import { useAuth } from "@/context/auth";
+import { useAuthStore } from "@/stores/auth";
 
 const image = require("assets/images/character.png");
 
@@ -47,7 +47,8 @@ type RegisterForm = z.infer<typeof RegisterSchema>;
 export default function SignUpPage() {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const { signUp } = useAuth();
+  const signUp = useAuthStore((state) => state.signUp);
+
   const { control, handleSubmit } = useForm<RegisterForm>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -71,7 +72,12 @@ export default function SignUpPage() {
   });
 
   const onSubmit = async ({ email, password }: RegisterForm) => {
-    signUpMutation.mutate({ email, password });
+    signUpMutation.mutate({
+      email,
+      password,
+      firstname: "Adam",
+      lastname: "Kowalski",
+    });
   };
 
   const handlePasswordVisibility = () => {

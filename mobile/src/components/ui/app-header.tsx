@@ -58,5 +58,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     color: theme.colors.textOnBackground,
+    maxWidth: "60%",
   },
 });

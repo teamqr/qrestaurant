@@ -8,9 +8,9 @@ import { IconButton } from "@/components/icon-button";
 import { Logout, Search } from "@/components/icons";
 import { Input } from "@/components/input";
 import { AppText } from "@/components/text";
-import { useAuth } from "@/context/auth";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import axios from "@/services/axios";
+import { useAuthStore } from "@/stores/auth";
 
 const getRestaurants = async () => {
   const response = await axios.get<{ restaurants: Restaurant[] }>(
@@ -21,7 +21,7 @@ const getRestaurants = async () => {
 
 export default function RestaurantsPage() {
   const { bottom } = useFixedInsets();
-  const { signOut } = useAuth();
+  const signOut = useAuthStore((state) => state.signOut);
 
   const restaurants = useQuery({
     queryKey: ["restaurants"],

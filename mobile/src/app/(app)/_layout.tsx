@@ -2,18 +2,24 @@ import { Redirect, SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 
 import { AppHeader } from "@/components/ui/app-header";
-import { useAuth } from "@/context/auth";
+import { useSetupAuth } from "@/hooks/useSetupAuth";
+import { useIsAuthenticated } from "@/stores/auth";
 
 export default function AppLayout() {
-  const { isAuthenticated, loading } = useAuth();
+  const { loading } = useSetupAuth();
+  const isAuthenticated = useIsAuthenticated();
 
   useEffect(() => {
-    if (!loading) {
-      SplashScreen.hideAsync();
+    if (loading) {
+      return;
     }
+
+    SplashScreen.hideAsync();
   }, [loading]);
 
-  if (loading) return <></>;
+  if (loading) {
+    return <></>;
+  }
 
   if (!isAuthenticated) {
     return <Redirect href="/onboarding" />;
