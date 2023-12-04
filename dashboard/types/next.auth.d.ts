@@ -5,16 +5,19 @@ import { JWT, DefaultJWT } from "next-auth/jwt";
 declare module "next-auth" {
   interface Session {
     user: {
-      userToken?: string;
+      userToken: string;
+      role: string;
     } & DefaultSession["user"];
   }
   interface User {
-    userToken?: string;
+    userToken: string;
+    role: string;
   }
 }
 
 declare module "next-auth/jwt" {
   interface DefaultJWT {
-    userToken?: string;
+    userToken: string;
+    role: string;
   }
 }

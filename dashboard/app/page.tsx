@@ -1,9 +1,18 @@
 import HomePage from "@/components/HomePage";
+import { fetchRestaurantData } from "@/utils/apiUtils";
+import { getTokenFromCookies } from "@/utils/tokenUtils";
+import React from "react";
 
-export default function Home() {
+const Home = async () => {
+  const token = await getTokenFromCookies();
+
+  const restaurantData = await fetchRestaurantData(token);
+
   return (
     <div>
-      <HomePage />
+      <HomePage restaurantName={restaurantData?.name} />
     </div>
   );
-}
+};
+
+export default Home;

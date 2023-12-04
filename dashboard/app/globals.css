@@ -6,3 +6,16 @@
   position: absolute;
   left: 90%;
 }
+
+table {
+  border-collapse: separate;
+  border-radius: 0.2rem;
+  background-color: rgb(17 24 39);
+  border: none;
+}
+
+td,
+th {
+  padding: 0.75rem;
+  border: none;
+}
