@@ -2,6 +2,10 @@ import { NextAuthOptions, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { AuthCredentials } from "@/types/AuthCredentials";
 import { serverUrl } from "@/config/serverConfig";
+import { decodeToken } from "./apiUtils";
+import { TokenData } from "@/types/TokenData";
+import { cookies } from "next/headers";
+import { sealData } from "iron-session";
 
 async function getToken(credentials: AuthCredentials) {
   const reqUrl = `${serverUrl}/api/dashboard/auth/login`;
@@ -32,16 +36,27 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Hasło" },
       },
       async authorize(credentials, req) {
+        const cookieStore = cookies();
         credentials = {
           email: req.body?.email,
           password: req.body?.password,
         };
         try {
           const token = await getToken(credentials);
+          const tokenData: TokenData = await decodeToken(token);
+          const sessionSecret: string = process.env.SESSION_SECRET || "";
+          const sealedToken = await sealData(token, {
+            password: sessionSecret,
+          });
+          cookieStore.set("user-token", sealedToken, {
+            sameSite: "strict",
+            httpOnly: true,
+          });
           const userData = {
             id: "1",
             email: credentials.email,
             userToken: token,
+            role: tokenData.role,
           };
 
           return userData;
@@ -55,10 +70,14 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
   },
+  session: {
+    maxAge: 60 * 60 * 24, // Session token expires after 24 hours
+  },
   callbacks: {
     async jwt({ token, trigger, user }) {
       if (trigger == "signIn") {
         token.userToken = user.userToken;
+        token.role = user.role;
       }
 
       return token;
@@ -66,6 +85,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.user.userToken = token.userToken;
+        session.user.role = token.role;
       }
       return session;
     },

@@ -46,6 +46,8 @@ public class SecurityConfiguration {
                                 .permitAll()
                                 .requestMatchers("/api/app/auth/register")
                                 .permitAll()
+                                .requestMatchers("/app/**")
+                                .permitAll()
                                 .anyRequest()
                                 .authenticated()
                 )

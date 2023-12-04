@@ -16,7 +16,15 @@ public class RouteConfiguration {
                         .uri("http://qr-app:8081")
                 )
                 .route(predicateSpec -> predicateSpec
+                        .path("/app/**")
+                        .uri("http://qr-app:8081")
+                )
+                .route(predicateSpec -> predicateSpec
                         .path("/api/dashboard/**")
+                        .uri("http://qr-dashboard:8082")
+                )
+                .route(predicateSpec -> predicateSpec
+                        .path("/dashboard/**")
                         .uri("http://qr-dashboard:8082")
                 )
                 .build();
