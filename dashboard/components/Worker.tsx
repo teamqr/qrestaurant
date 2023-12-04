@@ -1,6 +1,4 @@
 import { WorkerData } from "@/types/WorkerData";
-import { deleteWorker } from "@/utils/apiUtils";
-import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import React from "react";
 

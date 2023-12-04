@@ -6,10 +6,8 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 function isWorkerInList(id: number, list: WorkerData[]) {
-  for (let i = 0; i < list.length; i++) {
-    if (list[i].id == id) {
-      return true;
-    }
+  if (list.find((worker) => worker.id == id)) {
+    return true;
   }
   return false;
 }

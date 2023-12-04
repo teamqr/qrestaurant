@@ -3,7 +3,7 @@ import { WorkerData } from "@/types/WorkerData";
 import { deleteWorker } from "@/utils/apiUtils";
 import { useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 type Props = {
   id: number;
@@ -24,18 +24,15 @@ function extractWorkerData(id: number, list: WorkerData[]) {
 const WorkerManagePage = (props: Props) => {
   const [showDialog, setShowDialog] = useState("hidden");
   const [showContent, setShowContent] = useState("visible");
-  const [bgBlur, setBgBlur] = useState("blur-0");
 
   function showConfirmationDialog() {
     setShowDialog("visible");
     setShowContent("hidden");
-    setBgBlur("blur-sm");
   }
 
   function closeConfirmationDialog() {
     setShowDialog("hidden");
     setShowContent("visible");
-    setBgBlur("blur-0");
   }
 
   const router = useRouter();
@@ -80,7 +77,7 @@ const WorkerManagePage = (props: Props) => {
             </div>
           </div>
         </div>
-        <div className={`${bgBlur} p-5 pt-0 ${showContent}`}>
+        <div className={`p-5 pt-0 ${showContent}`}>
           <button
             className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500"
             onClick={async () => {
