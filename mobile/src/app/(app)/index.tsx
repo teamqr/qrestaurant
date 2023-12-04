@@ -1,42 +1,131 @@
-import { useRouter } from "expo-router";
-import { View } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { ScrollView, View } from "react-native";
 
 import { theme } from "@/common/theme";
-import { Button } from "@/components/button";
-import { ArrowLeft } from "@/components/icons";
-import { useAuth } from "@/context/auth";
+import { Restaurant } from "@/common/types";
+import { RestaurantsNavigation } from "@/components/@restaurants/navigation";
+import { IconButton } from "@/components/icon-button";
+import { Logout, Search } from "@/components/icons";
+import { Input } from "@/components/input";
+import { AppText } from "@/components/text";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
+import axios from "@/services/axios";
+import { useAuthStore } from "@/stores/auth";
 
-export default function App() {
-  const { top, bottom } = useFixedInsets();
-  const router = useRouter();
-  const { signOut } = useAuth();
+const getRestaurants = async () => {
+  const response = await axios.get<{ restaurants: Restaurant[] }>(
+    "api/app/restaurant",
+  );
+  return response.data;
+};
+
+export default function RestaurantsPage() {
+  const { bottom } = useFixedInsets();
+  const signOut = useAuthStore((state) => state.signOut);
+
+  const restaurants = useQuery({
+    queryKey: ["restaurants"],
+    queryFn: getRestaurants,
+  });
 
   return (
     <View
       style={{
-        paddingTop: top,
-        paddingBottom: bottom,
         flex: 1,
-        paddingHorizontal: theme.spacing(3),
         backgroundColor: theme.colors.background,
       }}
     >
-      <View style={{ marginTop: "auto", gap: theme.spacing(2) }}>
-        <Button
-          label="Skaner"
-          onPress={() => {
-            router.push("/scanner");
+      <View
+        style={{
+          paddingHorizontal: theme.spacing(3),
+          paddingVertical: theme.spacing(2),
+          flexDirection: "row",
+          gap: theme.spacing(2),
+          alignItems: "center",
+        }}
+      >
+        <Input
+          placeholder="szukaj restauracji"
+          prefix={<Search color="white" />}
+          containerStyle={{ flex: 1 }}
+        />
+        <IconButton
+          icon={<Logout color={theme.colors.danger} />}
+          onPress={async () => {
+            await signOut();
           }}
         />
-        <Button
-          label="Wyloguj się"
-          icon={<ArrowLeft width={16} height={16} />}
-          onPress={signOut}
-          variant="outlined"
-          // loading
-        />
       </View>
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: bottom,
+          paddingHorizontal: theme.spacing(3),
+          paddingTop: theme.spacing(3),
+          flexGrow: 1,
+        }}
+        style={{
+          flex: 1,
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View
+          style={{
+            gap: theme.spacing(2),
+            flex: 1,
+          }}
+        >
+          {restaurants.data?.restaurants.map((restaurant) => (
+            <View
+              key={restaurant.id}
+              style={{
+                padding: theme.spacing(3),
+                backgroundColor: theme.colors.card,
+                borderWidth: 1,
+                borderColor: theme.colors.secondary,
+                borderRadius: theme.radii.medium,
+                gap: theme.spacing(1),
+              }}
+            >
+              <AppText
+                style={{
+                  color: theme.colors.textOnBackground,
+                  fontSize: 24,
+                }}
+                weight="bold"
+              >
+                {restaurant.name}
+              </AppText>
+              <AppText
+                style={{
+                  color: theme.colors.textOnBackground,
+                  fontSize: 16,
+                }}
+              >
+                1 kilometr stąd
+              </AppText>
+              <AppText
+                style={{
+                  color: theme.colors.textOnBackground,
+                  fontSize: 16,
+                }}
+                weight="bold"
+              >
+                $$
+                <AppText
+                  style={{
+                    color: theme.colors.secondaryLight,
+                  }}
+                  weight="regular"
+                >
+                  $
+                </AppText>
+              </AppText>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+
+      <RestaurantsNavigation />
     </View>
   );
 }

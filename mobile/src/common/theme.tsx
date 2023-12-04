@@ -12,6 +12,8 @@ export const theme = {
 
     danger: "#FC4F4F",
     dangerLight: "#FF7979",
+
+    card: "#171717",
   },
   fontFamilies: {
     OpenSansRegular: "OpenSans_400Regular",
