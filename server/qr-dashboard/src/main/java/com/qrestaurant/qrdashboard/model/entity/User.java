@@ -2,6 +2,7 @@ package com.qrestaurant.qrdashboard.model.entity;
 
 import com.qrestaurant.qrdashboard.common.Role;
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
