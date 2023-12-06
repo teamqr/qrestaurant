@@ -18,6 +18,11 @@ public class KafkaProducerFactoryConfiguration {
     }
 
     @Bean
+    public ProducerFactory<String, Long> deleteProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(kafkaProducerConfiguration.deleteConfigs());
+    }
+
+    @Bean
     public ProducerFactory<String, RestaurantDTO> restaurantProducerFactory() {
         return new DefaultKafkaProducerFactory<>(kafkaProducerConfiguration.configs());
     }

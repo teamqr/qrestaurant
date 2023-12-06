@@ -31,8 +31,8 @@ public class TableService {
         }
     }
 
-    @KafkaListener(topics = "dashboard-table", groupId = "qrestaurant", containerFactory =
-            "tableConcurrentKafkaListenerContainerFactory")
+    @KafkaListener(topics = "dashboard-table", groupId = "qrestaurant",
+            containerFactory = "tableConcurrentKafkaListenerContainerFactory")
     public void tableListener(TableDTO tableDTO) {
         Table table = new Table(tableDTO.id(), tableDTO.number(), tableDTO.prefix(), tableDTO.code());
 
@@ -43,5 +43,11 @@ public class TableService {
 
             tableRepository.save(table);
         }
+    }
+
+    @KafkaListener(topics = "dashboard-table-delete", groupId = "qrestaurant",
+            containerFactory = "deleteKafkaListenerContainerFactory")
+    public void tableDeleteListener(Long id) {
+        tableRepository.deleteById(id);
     }
 }

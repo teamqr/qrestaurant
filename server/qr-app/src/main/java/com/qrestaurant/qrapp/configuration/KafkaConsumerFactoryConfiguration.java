@@ -4,6 +4,7 @@ import com.qrestaurant.qrapp.model.dto.MealDTO;
 import com.qrestaurant.qrapp.model.dto.MenuDTO;
 import com.qrestaurant.qrapp.model.dto.RestaurantDTO;
 import com.qrestaurant.qrapp.model.dto.TableDTO;
+import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,12 @@ public class KafkaConsumerFactoryConfiguration {
 
     public KafkaConsumerFactoryConfiguration(KafkaConsumerConfiguration kafkaConsumerConfiguration) {
         this.kafkaConsumerConfiguration = kafkaConsumerConfiguration;
+    }
+
+    @Bean
+    public ConsumerFactory<String, Long> deleteConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(
+                kafkaConsumerConfiguration.deleteConfigs(), new StringDeserializer(), new LongDeserializer());
     }
 
     @Bean

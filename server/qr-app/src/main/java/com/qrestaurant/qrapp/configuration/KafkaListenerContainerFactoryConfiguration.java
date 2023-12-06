@@ -18,6 +18,15 @@ public class KafkaListenerContainerFactoryConfiguration {
     }
 
     @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, Long> deleteKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Long> factory = new ConcurrentKafkaListenerContainerFactory<>();
+
+        factory.setConsumerFactory(kafkaConsumerFactoryConfiguration.deleteConsumerFactory());
+
+        return factory;
+    }
+
+    @Bean
     public ConcurrentKafkaListenerContainerFactory<String, RestaurantDTO> restaurantKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, RestaurantDTO> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();

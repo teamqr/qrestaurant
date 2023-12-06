@@ -23,16 +23,19 @@ public class TableService {
     private final TableRepository tableRepository;
     private final RestaurantRepository restaurantRepository;
     private final KafkaTemplate<String, TableDTO> tableKafkaTemplate;
+    private final KafkaTemplate<String, Long> deleteKafkaTemplate;
     private final JWTUtil jwtUtil;
     private final MapperDTO mapperDTO;
     private final Generator generator;
 
     public TableService(TableRepository tableRepository, RestaurantRepository restaurantRepository,
-                        KafkaTemplate<String, TableDTO> tableKafkaTemplate, JWTUtil jwtUtil, MapperDTO mapperDTO,
+                        KafkaTemplate<String, TableDTO> tableKafkaTemplate,
+                        KafkaTemplate<String, Long> deleteKafkaTemplate, JWTUtil jwtUtil, MapperDTO mapperDTO,
                         Generator generator) {
         this.tableRepository = tableRepository;
         this.restaurantRepository = restaurantRepository;
         this.tableKafkaTemplate = tableKafkaTemplate;
+        this.deleteKafkaTemplate = deleteKafkaTemplate;
         this.jwtUtil = jwtUtil;
         this.mapperDTO = mapperDTO;
         this.generator = generator;
@@ -122,6 +125,24 @@ public class TableService {
             throw new EntityNotFoundException(
                     "Table with id: " + updateTableRequest.id() + " does not exists in restaurant with id: "
                             + restaurantId + '.');
+        }
+    }
+
+    public Table deleteTable(String authorizationHeader, Long id) throws EntityNotFoundException {
+        Jwt jwtToken = jwtUtil.getJWTToken(authorizationHeader);
+        Long restaurantId = jwtToken.getClaim("restaurantId");
+
+        Optional<Table> optionalTable = tableRepository.findByIdAndRestaurant_Id(id, restaurantId);
+
+        if (optionalTable.isPresent()) {
+            tableRepository.delete(optionalTable.get());
+
+            deleteKafkaTemplate.send("dashboard-table-delete", id);
+
+            return optionalTable.get();
+        } else {
+            throw new EntityNotFoundException(
+                    "Table with id: " + id + " does not exists in restaurant with id: " + restaurantId + '.');
         }
     }
 }

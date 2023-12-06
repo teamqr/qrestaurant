@@ -17,6 +17,11 @@ public class KafkaTemplateConfiguration {
     }
 
     @Bean
+    public KafkaTemplate<String, Long> deleteKafkaTemplate() {
+        return new KafkaTemplate<>(kafkaProducerFactoryConfiguration.deleteProducerFactory());
+    }
+
+    @Bean
     public KafkaTemplate<String, RestaurantDTO> restaurantKafkaTemplate() {
         return new KafkaTemplate<>(kafkaProducerFactoryConfiguration.restaurantProducerFactory());
     }

@@ -69,4 +69,15 @@ public class TableController {
 
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, TableDTO>> deleteTable(@RequestHeader("Authorization") String authorizationHeader,
+                                                             @PathVariable Long id) {
+        Table table = tableService.deleteTable(authorizationHeader, id);
+
+        Map<String, TableDTO> response = new HashMap<>();
+        response.put("table", mapperDTO.toTableDTO(table));
+
+        return ResponseEntity.ok(response);
+    }
 }
