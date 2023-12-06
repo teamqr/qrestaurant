@@ -9,6 +9,7 @@ import com.qrestaurant.qrdashboard.model.dto.TableDTO;
 import com.qrestaurant.qrdashboard.model.entity.Restaurant;
 import com.qrestaurant.qrdashboard.model.entity.Table;
 import com.qrestaurant.qrdashboard.model.request.NewTableRequest;
+import com.qrestaurant.qrdashboard.model.request.UpdateTableRequest;
 import com.qrestaurant.qrdashboard.repository.RestaurantRepository;
 import com.qrestaurant.qrdashboard.repository.TableRepository;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -92,6 +93,35 @@ public class TableService {
             return table;
         } else {
             throw new EntityNotFoundException("Restaurant with id: " + restaurantId + " does not exists.");
+        }
+    }
+
+    public Table updateTable(String authorizationHeader, UpdateTableRequest updateTableRequest)
+            throws RuntimeException {
+        Jwt jwtToken = jwtUtil.getJWTToken(authorizationHeader);
+        Long restaurantId = jwtToken.getClaim("restaurantId");
+
+        if (tableRepository.findByNumberAndRestaurant_Id(updateTableRequest.number(), restaurantId).isPresent()) {
+            throw new EntityAlreadyExistsException(
+                    "Table with number: " + updateTableRequest.number() + " already exists in restaurant with id: "
+                            + restaurantId + '.');
+        }
+
+        Optional<Table> optionalTable = tableRepository.findByIdAndRestaurant_Id(updateTableRequest.id(), restaurantId);
+
+        if (optionalTable.isPresent()) {
+            Table table = optionalTable.get();
+            table.setNumber(updateTableRequest.number());
+
+            table = tableRepository.save(table);
+
+            tableKafkaTemplate.send("dashboard-table", mapperDTO.toTableDTO(table));
+
+            return table;
+        } else {
+            throw new EntityNotFoundException(
+                    "Table with id: " + updateTableRequest.id() + " does not exists in restaurant with id: "
+                            + restaurantId + '.');
         }
     }
 }

@@ -4,6 +4,7 @@ import com.qrestaurant.qrdashboard.common.MapperDTO;
 import com.qrestaurant.qrdashboard.model.dto.TableDTO;
 import com.qrestaurant.qrdashboard.model.entity.Table;
 import com.qrestaurant.qrdashboard.model.request.NewTableRequest;
+import com.qrestaurant.qrdashboard.model.request.UpdateTableRequest;
 import com.qrestaurant.qrdashboard.service.TableService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,17 @@ public class TableController {
     public ResponseEntity<Map<String, TableDTO>> createTable(@RequestHeader("Authorization") String authorizationHeader,
                                                 @Valid @RequestBody NewTableRequest newTableRequest) {
         Table table = tableService.createTable(authorizationHeader, newTableRequest);
+
+        Map<String, TableDTO> response = new HashMap<>();
+        response.put("table", mapperDTO.toTableDTO(table));
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping
+    public ResponseEntity<Map<String, TableDTO>> updateTable(@RequestHeader("Authorization") String authorizationHeader,
+                                                             @Valid @RequestBody UpdateTableRequest updateTableRequest) {
+        Table table = tableService.updateTable(authorizationHeader, updateTableRequest);
 
         Map<String, TableDTO> response = new HashMap<>();
         response.put("table", mapperDTO.toTableDTO(table));

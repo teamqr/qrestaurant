@@ -73,14 +73,16 @@ public class MapperDTO {
     }
 
     public TableDTO toTableDTO(Table table) {
-        return new TableDTO(table.getId(), table.getNumber(), table.getCode(), table.getRestaurant().getId());
+        return new TableDTO(
+                table.getId(), table.getNumber(), table.getPrefix(), table.getCode(), table.getRestaurant().getId());
     }
 
     public Iterable<TableDTO> toTableDTOs(Iterable<Table> tables) {
         List<TableDTO> tableDTOs = new ArrayList<>();
 
         tables.forEach(table -> tableDTOs.add(
-                new TableDTO(table.getId(), table.getNumber(), table.getCode(), table.getRestaurant().getId())));
+                new TableDTO(table.getId(), table.getNumber(), table.getPrefix(), table.getCode(),
+                        table.getRestaurant().getId())));
 
         return tableDTOs;
     }
