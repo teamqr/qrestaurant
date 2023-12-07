@@ -9,6 +9,7 @@ import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
 import { TokenData } from "@/types/TokenData";
 
 const RestaurantManagement = async () => {
+  revalidatePath("/restaurant");
   const token: string = (await getTokenFromCookies()) as string;
   const tokenData: TokenData = await getTokenData(token);
   const role: string = tokenData.role;

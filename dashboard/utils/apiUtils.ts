@@ -166,3 +166,25 @@ export async function fetchMealsData(
   }
   return [] as MealData[];
 }
+
+export async function addMeal(
+  name: string,
+  description: string | null,
+  price: number,
+  token?: string | null
+) {
+  "use server";
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/meal`;
+    const reqBody = { name, description, price };
+    await fetch(reqUrl, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+    });
+    revalidatePath("/menu");
+  }
+}
