@@ -3,8 +3,8 @@ import Worker from "@/components/Worker";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
-import { revalidatePath, revalidateTag } from "next/cache";
 import { changeRestaurantName } from "@/utils/apiUtils";
+import { WorkerData } from "@/types/WorkerData";
 
 type Props = {
   restaurantName: string;
@@ -62,18 +62,22 @@ const RestaurantPage = (props: Props) => {
       <div className="p-5">
         <h1 className="text-2xl py-2">Pracownicy</h1>
         <table>
-          <tr>
-            <th>ID</th>
-            <th>Aders email</th>
-            <th>Zarządzaj profilem pracownika</th>
-          </tr>
-          {props.workersData ? (
-            props.workersData.map((worker: any, i: number) => (
-              <Worker data={worker} token={props.token} />
-            ))
-          ) : (
-            <></>
-          )}
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Aders email</th>
+              <th>Zarządzaj profilem pracownika</th>
+            </tr>
+          </thead>
+          <tbody>
+            {props.workersData ? (
+              props.workersData.map((worker: WorkerData, i: number) => (
+                <Worker key={i} data={worker} token={props.token} />
+              ))
+            ) : (
+              <></>
+            )}
+          </tbody>
         </table>
       </div>
     </div>

@@ -6,14 +6,12 @@ import {
 import RestaurantPage from "@/components/RestaurantPage";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
+import { TokenData } from "@/types/TokenData";
 
 const RestaurantManagement = async () => {
   const token: string = (await getTokenFromCookies()) as string;
-  let role: string = "";
-  if (token) {
-    const tokenData = await getTokenData(token);
-    role = tokenData.role;
-  }
+  const tokenData: TokenData = await getTokenData(token);
+  const role: string = tokenData.role;
 
   let workersData;
   let restaurantName;

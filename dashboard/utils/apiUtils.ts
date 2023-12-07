@@ -3,17 +3,22 @@ import { TokenData } from "@/types/TokenData";
 import { jwtDecode } from "jwt-decode";
 import { serverUrl } from "@/config/serverConfig";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { WorkerData } from "@/types/WorkerData";
 
-export async function decodeToken(token: string) {
-  const decodedToken: any = jwtDecode(token);
-  const tokenData: TokenData = {
-    restaurantId: decodedToken?.restaurantId,
-    role: decodedToken?.scope[0],
-  };
-  return tokenData;
+export async function decodeToken(token: string | null): Promise<TokenData> {
+  if (token) {
+    const decodedToken: any = jwtDecode(token);
+    const tokenData: TokenData = {
+      userId: decodedToken?.userId,
+      restaurantId: decodedToken?.restaurantId,
+      role: decodedToken?.scope[0],
+    };
+    return tokenData;
+  }
+  return {} as TokenData;
 }
 
-export async function fetchRestaurantData(token: any) {
+export async function fetchRestaurantData(token: string | null) {
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/restaurant`;
     const res = await fetch(reqUrl, {
@@ -29,7 +34,9 @@ export async function fetchRestaurantData(token: any) {
   return null;
 }
 
-export async function fetchWorkersData(token: any) {
+export async function fetchWorkersData(
+  token: string | null
+): Promise<WorkerData[]> {
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/worker`;
     const res = await fetch(reqUrl, {

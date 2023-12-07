@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
           const token = await getToken(credentials);
           const tokenData: TokenData = await decodeToken(token);
           const sessionSecret: string = process.env.SESSION_SECRET || "";
-          const sealedToken = await sealData(token, {
+          const sealedToken: string = await sealData(token, {
             password: sessionSecret,
           });
           cookieStore.set("user-token", sealedToken, {
@@ -53,7 +53,7 @@ export const authOptions: NextAuthOptions = {
             httpOnly: true,
           });
           const userData = {
-            id: "1",
+            id: tokenData.userId,
             email: credentials.email,
             userToken: token,
             role: tokenData.role,
