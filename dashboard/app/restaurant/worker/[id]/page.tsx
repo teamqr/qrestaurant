@@ -1,4 +1,4 @@
-import WorkerManagePage from "@/components/WorkerManagePage";
+import WorkerManagePage from "@/components/restaurant/WorkerManagePage";
 import { WorkerData } from "@/types/WorkerData";
 import { fetchWorkersData } from "@/utils/apiUtils";
 import { getTokenFromCookies } from "@/utils/tokenUtils";

@@ -4,6 +4,8 @@ import { jwtDecode } from "jwt-decode";
 import { serverUrl } from "@/config/serverConfig";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { WorkerData } from "@/types/WorkerData";
+import { MenuData } from "@/types/MenuData";
+import { MealData } from "@/types/MealData";
 
 export async function decodeToken(token: string | null): Promise<TokenData> {
   if (token) {
@@ -109,4 +111,58 @@ export async function changeRestaurantName(
         console.error(err);
       });
   }
+}
+
+export async function createMenu(token: string) {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/menu`;
+    const res = await fetch(reqUrl, {
+      method: "POST",
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["menu"], revalidate: 1 },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json;
+    }
+  }
+  return null;
+}
+
+export async function fetchMenuData(
+  token: string | null
+): Promise<MenuData | null> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/menu`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["menu"], revalidate: 1 },
+    });
+
+    if (res.ok) {
+      const json = await res.json();
+      return json.menu;
+    } else if (res.status == 404) {
+      const newMenu = await createMenu(token);
+      return newMenu;
+    }
+  }
+  return null;
+}
+
+export async function fetchMealsData(
+  token: string | null
+): Promise<MealData[]> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/meal`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["meals"], revalidate: 1 },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.meals;
+    }
+  }
+  return [] as MealData[];
 }

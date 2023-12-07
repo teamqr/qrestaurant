@@ -1,5 +1,5 @@
 "use client";
-import Worker from "@/components/Worker";
+import Worker from "@/components/restaurant/Worker";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
@@ -72,7 +72,7 @@ const RestaurantPage = (props: Props) => {
           <tbody>
             {props.workersData ? (
               props.workersData.map((worker: WorkerData, i: number) => (
-                <Worker key={i} data={worker} token={props.token} />
+                <Worker key={i} data={worker} />
               ))
             ) : (
               <></>

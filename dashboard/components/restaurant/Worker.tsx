@@ -4,12 +4,11 @@ import React from "react";
 
 type Props = {
   data: WorkerData;
-  token?: string | null;
 };
 
 const Worker = (props: Props) => {
   return (
-    <tr className="even:bg-gray-800 odd:bg-gray-900">
+    <tr className="odd:bg-gray-800 even:bg-gray-900">
       <td>{props.data.id}</td>
       <td>{props.data.email}</td>
 

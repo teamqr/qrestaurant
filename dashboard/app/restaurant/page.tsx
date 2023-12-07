@@ -3,7 +3,7 @@ import {
   fetchRestaurantData,
   fetchWorkersData,
 } from "@/utils/apiUtils";
-import RestaurantPage from "@/components/RestaurantPage";
+import RestaurantPage from "@/components/restaurant/RestaurantPage";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
 import { TokenData } from "@/types/TokenData";
