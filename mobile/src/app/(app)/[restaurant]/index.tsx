@@ -1,18 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect } from "react";
+import { StyleSheet, View } from "react-native";
 
+import { theme } from "@/common/theme";
 import { Restaurant } from "@/common/types";
+import { MealList } from "@/components/@restaurant/meal-list";
+import { IconButton } from "@/components/icon-button";
+import { QrCode, Search } from "@/components/icons";
+import { Input } from "@/components/input";
 import { AppText } from "@/components/text";
 import axios from "@/services/axios";
-import { StyleSheet, View } from "react-native";
-import { theme } from "@/common/theme";
-import { Button } from "@/components/button";
-import { QrCode, Search } from "@/components/icons";
-import { IconButton } from "@/components/icon-button";
-import { Input } from "@/components/input";
-import { Suspense, useEffect } from "react";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
-import { MealList } from "@/components/@restaurant/meal-list";
 
 const getRestaurant = async (id: string) => {
   const { data } = await axios.get<{ restaurant: Restaurant }>(

@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Pressable, ScrollView, View } from "react-native";
-import Animated from "react-native-reanimated";
 
 import { theme } from "@/common/theme";
 import { Restaurant } from "@/common/types";
