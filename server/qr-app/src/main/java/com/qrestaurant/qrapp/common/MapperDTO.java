@@ -2,6 +2,7 @@ package com.qrestaurant.qrapp.common;
 
 import com.qrestaurant.qrapp.model.dto.*;
 import com.qrestaurant.qrapp.model.entity.*;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,7 +26,8 @@ public class MapperDTO {
                 .map(Table::getId)
                 .toList();
 
-        return new RestaurantDTO(restaurant.getId(), restaurant.getName(), restaurant.getPrefix(), menuId, tableIds);
+        return new RestaurantDTO(restaurant.getId(), restaurant.getName(), restaurant.getPrefix(), restaurant.getImage(),
+                menuId, tableIds);
     }
 
     public Iterable<RestaurantDTO> toRestaurantDTOs(Iterable<Restaurant> restaurants) {
@@ -43,13 +45,14 @@ public class MapperDTO {
                     .map(Table::getId)
                     .toList();
 
-            restaurantDTOs.add(new RestaurantDTO(
-                    restaurant.getId(), restaurant.getName(), restaurant.getPrefix(), menuId, tableIds));
+            restaurantDTOs.add(new RestaurantDTO(restaurant.getId(), restaurant.getName(), restaurant.getPrefix(),
+                    restaurant.getImage(), menuId, tableIds));
         });
 
         return restaurantDTOs;
     }
 
+    @Transactional
     public MenuDTO toMenuDTO(Menu menu) {
         List<Long> mealIds = menu.getMeals()
                 .stream()

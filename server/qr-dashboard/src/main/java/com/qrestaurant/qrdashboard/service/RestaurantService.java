@@ -50,6 +50,7 @@ public class RestaurantService {
             Restaurant restaurant = optionalRestaurant.get();
 
             restaurant.setName(updateRestaurantRequest.name());
+            restaurant.setImage(updateRestaurantRequest.image());
 
             restaurant = restaurantRepository.save(restaurant);
 
