@@ -28,6 +28,7 @@ export const AppHeader = ({ title }: Props) => {
       <View
         style={{
           gap: theme.spacing(4),
+          flex: 1,
         }}
       >
         {router.canGoBack() && (
@@ -57,5 +58,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     color: theme.colors.textOnBackground,
+    maxWidth: "60%",
   },
 });

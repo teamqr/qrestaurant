@@ -14,7 +14,7 @@ import { Facebbok, Google, Login, Mail, Password } from "@/components/icons";
 import { Input } from "@/components/input";
 import { ShadowContainer } from "@/components/shadow-container";
 import { AppText } from "@/components/text";
-import { useAuth } from "@/context/auth";
+import { useAuthStore } from "@/stores/auth";
 
 const image = require("assets/images/character.png");
 
@@ -27,7 +27,9 @@ type LoginForm = z.infer<typeof LoginSchema>;
 
 export default function SignInPage() {
   const navigation = useNavigation();
-  const { signInWithEmailAndPassword } = useAuth();
+  const signInWithEmailAndPassword = useAuthStore(
+    (state) => state.signInWithEmailAndPassword,
+  );
 
   const { control, handleSubmit } = useForm<LoginForm>({
     resolver: zodResolver(LoginSchema),
@@ -45,6 +47,9 @@ export default function SignInPage() {
           routes: [{ name: "(app)" }],
         }),
       );
+    },
+    onError: (error) => {
+      console.log(error);
     },
   });
 

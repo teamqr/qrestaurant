@@ -1,10 +1,12 @@
 import { ReactNode, forwardRef, useImperativeHandle, useRef } from "react";
 import {
   Pressable,
+  StyleProp,
   StyleSheet,
   TextInput,
   TextInputProps,
   View,
+  ViewStyle,
 } from "react-native";
 import Animated, {
   interpolateColor,
@@ -21,10 +23,11 @@ interface Props extends TextInputProps {
   prefix?: ReactNode;
   suffix?: ReactNode;
   hasError?: boolean;
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const Input = forwardRef<TextInput, Props>(
-  ({ prefix, suffix, hasError = false, ...props }, ref) => {
+  ({ prefix, suffix, hasError = false, containerStyle, ...props }, ref) => {
     const colorProgress = useDerivedValue(() => withTiming(hasError ? 1 : 0));
     const inputRef = useRef<TextInput>(null);
 
@@ -46,7 +49,7 @@ export const Input = forwardRef<TextInput, Props>(
 
     return (
       <AnimatedPressable
-        style={[styles.container, rInputStyle]}
+        style={[styles.container, rInputStyle, containerStyle]}
         onPress={focus}
       >
         {prefix}

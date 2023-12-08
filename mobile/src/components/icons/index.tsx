@@ -13,3 +13,8 @@ export { default as Repeat } from "./repeat";
 export { default as Loader } from "./loader";
 export { default as QrIndicator } from "./qr-indicator";
 export { default as Dialpad } from "./dialpad";
+export { default as QrCode } from "./qrcode";
+export { default as Receipt } from "./receipt";
+export { default as Settings } from "./settings";
+export { default as Search } from "./search";
+export { default as Logout } from "./logout";
