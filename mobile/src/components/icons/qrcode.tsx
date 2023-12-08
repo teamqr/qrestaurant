@@ -5,11 +5,12 @@ const SvgQrCode = (props: SvgProps) => (
     width={24}
     height={24}
     fill="none"
+    color="white"
     viewBox="0 0 33 32"
     {...props}
   >
     <Path
-      stroke="#fff"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}

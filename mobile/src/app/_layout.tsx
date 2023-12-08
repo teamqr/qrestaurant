@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { useCameraPermission } from "react-native-vision-camera";
 
 import { Header } from "../components/ui/header";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,12 +36,14 @@ export default function RootLayout() {
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <>
-          <RootLayoutStack />
-          <StatusBar style="light" />
-        </>
-      </QueryClientProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <QueryClientProvider client={queryClient}>
+          <>
+            <RootLayoutStack />
+            <StatusBar style="light" />
+          </>
+        </QueryClientProvider>
+      </GestureHandlerRootView>
     </>
   );
 }

@@ -39,6 +39,12 @@ export default function AppLayout() {
           header: () => <AppHeader title="Skanuj kod" />,
         }}
       />
+      <Stack.Screen
+        name="[restaurant]"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }
