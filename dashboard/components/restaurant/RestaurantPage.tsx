@@ -35,6 +35,16 @@ const RestaurantPage = (props: Props) => {
     setRestaurantName(copy);
   };
 
+  props.workersData.sort((a: any, b: any) => {
+    if (a.id > b.id) {
+      return 1;
+    } else if (a.id < b.id) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+
   return (
     <div>
       <div className="m-5">

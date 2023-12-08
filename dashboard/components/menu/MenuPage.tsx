@@ -35,6 +35,7 @@ const MenuPage = (props: Props) => {
               <th>Nazwa</th>
               <th>Opis</th>
               <th>Cena</th>
+              <th>Edytuj</th>
             </tr>
           </thead>
           <tbody>

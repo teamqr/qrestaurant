@@ -167,6 +167,24 @@ export async function fetchMealsData(
   return [] as MealData[];
 }
 
+export async function fetchMealData(
+  id: number,
+  token: string | null
+): Promise<MealData> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/meal/${id}`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["meals"], revalidate: 1 },
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.meal;
+    }
+  }
+  return {} as MealData;
+}
+
 export async function addMeal(
   name: string,
   description: string | null,
@@ -179,6 +197,29 @@ export async function addMeal(
     const reqBody = { name, description, price };
     await fetch(reqUrl, {
       method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+    });
+    revalidatePath("/menu");
+  }
+}
+
+export async function editMeal(
+  id: number,
+  name: string,
+  description: string | null,
+  price: number,
+  token?: string | null
+) {
+  "use server";
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/meal`;
+    const reqBody = { id, name, description, price };
+    await fetch(reqUrl, {
+      method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
         "Content-Type": "application/json",
