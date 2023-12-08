@@ -18,3 +18,8 @@ export { default as Receipt } from "./receipt";
 export { default as Settings } from "./settings";
 export { default as Search } from "./search";
 export { default as Logout } from "./logout";
+export { default as Account } from "./account";
+export { default as Location } from "./location";
+export { default as Bell } from "./bell";
+export { default as Ad } from "./ad";
+export { default as Trash } from "./trash";

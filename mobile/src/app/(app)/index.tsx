@@ -4,13 +4,11 @@ import { ScrollView, View } from "react-native";
 import { theme } from "@/common/theme";
 import { Restaurant } from "@/common/types";
 import { RestaurantsNavigation } from "@/components/@restaurants/navigation";
-import { IconButton } from "@/components/icon-button";
-import { Logout, Search } from "@/components/icons";
+import { Search } from "@/components/icons";
 import { Input } from "@/components/input";
 import { AppText } from "@/components/text";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import axios from "@/services/axios";
-import { useAuthStore } from "@/stores/auth";
 
 const getRestaurants = async () => {
   const response = await axios.get<{ restaurants: Restaurant[] }>(
@@ -21,7 +19,6 @@ const getRestaurants = async () => {
 
 export default function RestaurantsPage() {
   const { bottom } = useFixedInsets();
-  const signOut = useAuthStore((state) => state.signOut);
 
   const restaurants = useQuery({
     queryKey: ["restaurants"],
@@ -48,12 +45,6 @@ export default function RestaurantsPage() {
           placeholder="szukaj restauracji"
           prefix={<Search color="white" />}
           containerStyle={{ flex: 1 }}
-        />
-        <IconButton
-          icon={<Logout color={theme.colors.danger} />}
-          onPress={async () => {
-            await signOut();
-          }}
         />
       </View>
       <ScrollView
