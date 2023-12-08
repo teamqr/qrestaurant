@@ -1,18 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
+import { Link, useRouter } from "expo-router";
 import { Pressable, ScrollView, View } from "react-native";
+import Animated from "react-native-reanimated";
 
 import { theme } from "@/common/theme";
 import { Restaurant } from "@/common/types";
 import { RestaurantsNavigation } from "@/components/@restaurants/navigation";
-import { IconButton } from "@/components/icon-button";
-import { Logout, Search } from "@/components/icons";
+import { Search } from "@/components/icons";
 import { Input } from "@/components/input";
 import { AppText } from "@/components/text";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import axios from "@/services/axios";
-import { useAuthStore } from "@/stores/auth";
-import { Link, useRouter } from "expo-router";
-import Animated from "react-native-reanimated";
 
 const getRestaurants = async () => {
   const response = await axios.get<{ restaurants: Restaurant[] }>(
@@ -23,14 +21,12 @@ const getRestaurants = async () => {
 
 export default function RestaurantsPage() {
   const { bottom } = useFixedInsets();
-  const signOut = useAuthStore((state) => state.signOut);
-
-  const router = useRouter();
-
   const restaurants = useQuery({
     queryKey: ["restaurants"],
     queryFn: getRestaurants,
   });
+
+  const router = useRouter();
 
   return (
     <View
@@ -52,12 +48,6 @@ export default function RestaurantsPage() {
           placeholder="szukaj restauracji"
           prefix={<Search color="white" />}
           containerStyle={{ flex: 1 }}
-        />
-        <IconButton
-          icon={<Logout color={theme.colors.danger} />}
-          onPress={async () => {
-            await signOut();
-          }}
         />
       </View>
       <ScrollView

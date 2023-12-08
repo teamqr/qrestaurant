@@ -28,7 +28,12 @@ export const RestaurantsNavigation = () => {
           router.push("/(app)/scanner");
         }}
       />
-      <IconButton icon={<Settings color="white" />} onPress={() => {}} />
+      <IconButton
+        icon={<Settings color="white" />}
+        onPress={() => {
+          router.push("/(app)/settings");
+        }}
+      />
     </View>
   );
 };

@@ -45,6 +45,12 @@ export default function AppLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="settings/index"
+        options={{
+          header: () => <AppHeader title="Ustawienia" />,
+        }}
+      />
     </Stack>
   );
 }

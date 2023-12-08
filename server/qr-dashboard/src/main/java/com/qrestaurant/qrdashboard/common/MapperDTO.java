@@ -1,13 +1,7 @@
 package com.qrestaurant.qrdashboard.common;
 
-import com.qrestaurant.qrdashboard.model.dto.MealDTO;
-import com.qrestaurant.qrdashboard.model.dto.MenuDTO;
-import com.qrestaurant.qrdashboard.model.dto.RestaurantDTO;
-import com.qrestaurant.qrdashboard.model.dto.UserDTO;
-import com.qrestaurant.qrdashboard.model.entity.Meal;
-import com.qrestaurant.qrdashboard.model.entity.Menu;
-import com.qrestaurant.qrdashboard.model.entity.Restaurant;
-import com.qrestaurant.qrdashboard.model.entity.User;
+import com.qrestaurant.qrdashboard.model.dto.*;
+import com.qrestaurant.qrdashboard.model.entity.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -27,7 +21,13 @@ public class MapperDTO {
             menuId = restaurant.getMenu().getId();
         }
 
-        return new RestaurantDTO(restaurant.getId(), restaurant.getName(), userIds, menuId);
+        Iterable<Long> tableIds = restaurant.getTables()
+                .stream()
+                .map(Table::getId)
+                .toList();
+
+        return new RestaurantDTO(
+                restaurant.getId(), restaurant.getName(), restaurant.getPrefix(), userIds, menuId, tableIds);
     }
 
     public UserDTO toUserDTO(User user) {
@@ -70,5 +70,20 @@ public class MapperDTO {
         );
 
         return mealDTOs;
+    }
+
+    public TableDTO toTableDTO(Table table) {
+        return new TableDTO(
+                table.getId(), table.getNumber(), table.getPrefix(), table.getCode(), table.getRestaurant().getId());
+    }
+
+    public Iterable<TableDTO> toTableDTOs(Iterable<Table> tables) {
+        List<TableDTO> tableDTOs = new ArrayList<>();
+
+        tables.forEach(table -> tableDTOs.add(
+                new TableDTO(table.getId(), table.getNumber(), table.getPrefix(), table.getCode(),
+                        table.getRestaurant().getId())));
+
+        return tableDTOs;
     }
 }
