@@ -1,6 +1,7 @@
 package com.qrestaurant.qrapp.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 
 import java.util.List;
 

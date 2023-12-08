@@ -1,13 +1,7 @@
 package com.qrestaurant.qrapp.common;
 
-import com.qrestaurant.qrapp.model.dto.MealDTO;
-import com.qrestaurant.qrapp.model.dto.MenuDTO;
-import com.qrestaurant.qrapp.model.dto.RestaurantDTO;
-import com.qrestaurant.qrapp.model.dto.UserDTO;
-import com.qrestaurant.qrapp.model.entity.Meal;
-import com.qrestaurant.qrapp.model.entity.Menu;
-import com.qrestaurant.qrapp.model.entity.Restaurant;
-import com.qrestaurant.qrapp.model.entity.User;
+import com.qrestaurant.qrapp.model.dto.*;
+import com.qrestaurant.qrapp.model.entity.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -26,7 +20,12 @@ public class MapperDTO {
             menuId = restaurant.getMenu().getId();
         }
 
-        return new RestaurantDTO(restaurant.getId(), restaurant.getName(), menuId);
+        Iterable<Long> tableIds = restaurant.getTables()
+                .stream()
+                .map(Table::getId)
+                .toList();
+
+        return new RestaurantDTO(restaurant.getId(), restaurant.getName(), restaurant.getPrefix(), menuId, tableIds);
     }
 
     public Iterable<RestaurantDTO> toRestaurantDTOs(Iterable<Restaurant> restaurants) {
@@ -39,7 +38,13 @@ public class MapperDTO {
                 menuId = restaurant.getMenu().getId();
             }
 
-            restaurantDTOs.add(new RestaurantDTO(restaurant.getId(), restaurant.getName(), menuId));
+            Iterable<Long> tableIds = restaurant.getTables()
+                    .stream()
+                    .map(Table::getId)
+                    .toList();
+
+            restaurantDTOs.add(new RestaurantDTO(
+                    restaurant.getId(), restaurant.getName(), restaurant.getPrefix(), menuId, tableIds));
         });
 
         return restaurantDTOs;
@@ -66,5 +71,10 @@ public class MapperDTO {
         )));
 
         return mealDTOs;
+    }
+
+    public TableDTO toTableDTO(Table table) {
+        return new TableDTO(
+                table.getId(), table.getNumber(), table.getPrefix(), table.getCode(), table.getRestaurant().getId());
     }
 }

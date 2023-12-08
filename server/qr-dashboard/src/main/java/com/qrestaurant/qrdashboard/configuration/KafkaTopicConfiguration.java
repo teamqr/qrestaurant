@@ -44,4 +44,18 @@ public class KafkaTopicConfiguration {
                 .name("dashboard-meal")
                 .build();
     }
+
+    @Bean
+    public NewTopic tableTopic() {
+        return TopicBuilder
+                .name("dashboard-table")
+                .build();
+    }
+
+    @Bean
+    public NewTopic tableDeleteTopic() {
+        return TopicBuilder
+                .name("dashboard-table-delete")
+                .build();
+    }
 }
