@@ -17,16 +17,19 @@ public class Meal {
     private String description;
     @NotNull
     private BigDecimal price;
+    @Lob
+    private String image;
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
     public Meal() {}
 
-    public Meal(String name, String description, BigDecimal price) {
+    public Meal(String name, String description, BigDecimal price, String image) {
         this.name = name;
         this.description = description;
         this.price = price;
+        this.image = image;
     }
 
     public Long getId() {
@@ -59,6 +62,14 @@ public class Meal {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Menu getMenu() {

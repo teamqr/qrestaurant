@@ -11,5 +11,6 @@ public record UpdateMealRequest(
         String name,
         String description,
         @NotNull
-        BigDecimal price
+        BigDecimal price,
+        String image
 ) {}

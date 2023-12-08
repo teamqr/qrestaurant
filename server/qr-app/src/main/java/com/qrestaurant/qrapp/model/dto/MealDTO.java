@@ -7,5 +7,6 @@ public record MealDTO(
         String name,
         String description,
         BigDecimal price,
+        String image,
         Long menuId
 ) {}

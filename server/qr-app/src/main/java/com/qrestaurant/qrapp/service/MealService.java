@@ -35,7 +35,7 @@ public class MealService {
     @KafkaListener(topics = "dashboard-meal", groupId = "qrestaurant",
             containerFactory = "mealConcurrentKafkaListenerContainerFactory")
     public void mealListener(MealDTO mealDTO) {
-        Meal meal = new Meal(mealDTO.id(), mealDTO.name(), mealDTO.description(), mealDTO.price());
+        Meal meal = new Meal(mealDTO.id(), mealDTO.name(), mealDTO.description(), mealDTO.price(), mealDTO.image());
 
         Optional<Menu> optionalMenu = menuRepository.findById(mealDTO.menuId());
 

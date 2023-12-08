@@ -58,14 +58,15 @@ public class MapperDTO {
     }
 
     public MealDTO toMealDTO(Meal meal) {
-        return new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getMenu().getId());
+        return new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getImage(),
+                meal.getMenu().getId());
     }
 
     public Iterable<MealDTO> toMealDTOs(Iterable<Meal> meals) {
         List<MealDTO> mealDTOs = new ArrayList<>();
 
         meals.forEach(meal -> mealDTOs.add(
-                new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(),
+                new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getImage(),
                         meal.getMenu().getId()))
         );
 
