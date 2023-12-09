@@ -1,4 +1,5 @@
 import EditMealForm from "@/components/menu/EditMealForm";
+import { Role } from "@/types/Role";
 import { TokenData } from "@/types/TokenData";
 import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
 import { redirect } from "next/navigation";
@@ -8,7 +9,7 @@ const EditMealPage = async ({ params }: { params: { id: number } }) => {
   const token: string = (await getTokenFromCookies()) as string;
   const tokenData: TokenData = await getTokenData(token);
   const role: string = tokenData.role;
-  if (role != "ADMIN") {
+  if (role != Role.ADMIN) {
     redirect("/");
   }
 

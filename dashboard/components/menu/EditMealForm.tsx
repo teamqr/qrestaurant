@@ -30,7 +30,7 @@ const EditMealForm = async (props: Props) => {
 
   return (
     <form
-      id="addMealForm"
+      id="editMealForm"
       className="flex flex-col justify-start items-start m-5"
       action={editMealAction}
     >
@@ -55,7 +55,7 @@ const EditMealForm = async (props: Props) => {
       <h2>Opis (opcjonalnie)</h2>
       <ReactiveTextArea
         name="description"
-        form="addMealForm"
+        form="editMealForm"
         placeholder="Opis dania"
         cols={48}
         rows={5}

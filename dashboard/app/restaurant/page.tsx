@@ -7,6 +7,7 @@ import RestaurantPage from "@/components/restaurant/RestaurantPage";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
 import { TokenData } from "@/types/TokenData";
+import { Role } from "@/types/Role";
 
 const RestaurantManagement = async () => {
   revalidatePath("/restaurant");
@@ -14,15 +15,8 @@ const RestaurantManagement = async () => {
   const tokenData: TokenData = await getTokenData(token);
   const role: string = tokenData.role;
 
-  let workersData;
-  let restaurantName;
-  try {
-    workersData = await fetchWorkersData(token);
-    const restaurantData = await fetchRestaurantData(token);
-    restaurantName = restaurantData.name;
-  } catch (err) {
-    console.error(err);
-  }
+  const workersData = await fetchWorkersData(token);
+  const restaurantData = await fetchRestaurantData(token);
 
   const addNewWorker = async (formData: FormData) => {
     "use server";
@@ -42,11 +36,11 @@ const RestaurantManagement = async () => {
   return (
     <div>
       <RestaurantPage
-        restaurantName={restaurantName}
+        restaurantData={restaurantData}
         workersData={workersData}
         token={token}
       />
-      {token && role == "ADMIN" ? (
+      {token && role == Role.ADMIN ? (
         <div className="m-5">
           <h1 className="text-2xl py-2">Dodaj pracownika</h1>
           <form

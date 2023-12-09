@@ -6,6 +6,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { WorkerData } from "@/types/WorkerData";
 import { MenuData } from "@/types/MenuData";
 import { MealData } from "@/types/MealData";
+import { RestaurantData } from "@/types/RestaurantData";
 
 export async function decodeToken(token: string | null): Promise<TokenData> {
   if (token) {
@@ -20,7 +21,9 @@ export async function decodeToken(token: string | null): Promise<TokenData> {
   return {} as TokenData;
 }
 
-export async function fetchRestaurantData(token: string | null) {
+export async function fetchRestaurantData(
+  token: string | null
+): Promise<RestaurantData> {
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/restaurant`;
     const res = await fetch(reqUrl, {
@@ -33,7 +36,7 @@ export async function fetchRestaurantData(token: string | null) {
       return json.restaurant;
     }
   }
-  return null;
+  return {} as RestaurantData;
 }
 
 export async function fetchWorkersData(
@@ -84,13 +87,11 @@ export async function addWorker(
     revalidatePath("/restaurant");
   }
 }
-export async function changeRestaurantName(
-  newName: string,
-  token?: string | null
-) {
+export async function editRestaurant(name: string, token?: string | null) {
+  "use server";
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/restaurant`;
-    const reqBody = { name: newName };
+    const reqBody = { name };
     fetch(reqUrl, {
       method: "PUT",
       headers: {
@@ -98,18 +99,8 @@ export async function changeRestaurantName(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reqBody),
-      next: { tags: ["restaurant"], revalidate: 5 },
-    })
-      .then(async (res) => {
-        if (res.ok) {
-          const json = await res.json();
-          const name = json?.restaurant?.name;
-          console.log(`Poprawnie zmieniono nazwę restauracji na ${name}`);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    });
+    revalidatePath("/restaurant");
   }
 }
 

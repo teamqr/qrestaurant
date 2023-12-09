@@ -1,5 +1,6 @@
 import MenuPage from "@/components/menu/MenuPage";
 import { MealData } from "@/types/MealData";
+import { Role } from "@/types/Role";
 import { TokenData } from "@/types/TokenData";
 import { fetchMealsData, fetchMenuData } from "@/utils/apiUtils";
 import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
@@ -28,7 +29,7 @@ const MenuManagement = async () => {
   return (
     <div>
       <MenuPage token={token} mealsData={mealsData} />
-      {token && role == "ADMIN" ? (
+      {token && role == Role.ADMIN ? (
         <Link
           className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 w-max m-5"
           href="/menu/meal/add"

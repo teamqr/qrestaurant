@@ -1,22 +1,21 @@
 "use client";
 import Worker from "@/components/restaurant/Worker";
-import React, { useState } from "react";
-import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
-import { changeRestaurantName } from "@/utils/apiUtils";
+import React from "react";
 import { WorkerData } from "@/types/WorkerData";
+import { RestaurantData } from "@/types/RestaurantData";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type Props = {
-  restaurantName: string;
-  workersData: any;
+  restaurantData: RestaurantData;
+  workersData: WorkerData[];
   token: string | null;
 };
 
 const RestaurantPage = (props: Props) => {
-  const [restaurantName, setRestaurantName] = useState(props.restaurantName);
-  const token = props.token;
-
-  const router = useRouter();
+  const restaurantName = props.restaurantData.name;
+  const restaurantPrefix = props.restaurantData.prefix;
 
   const { data: session, status } = useSession({
     required: true,
@@ -29,11 +28,6 @@ const RestaurantPage = (props: Props) => {
   if (session?.user.role != "ADMIN" || !props.token) {
     redirect("/");
   }
-
-  const handleChange = async (e: any) => {
-    let copy = e.target.value;
-    setRestaurantName(copy);
-  };
 
   props.workersData.sort((a: any, b: any) => {
     if (a.id > b.id) {
@@ -53,21 +47,24 @@ const RestaurantPage = (props: Props) => {
         </h1>
         <h1 className="text-2xl py-2">Informacje o restauracji</h1>
         <input
-          className="bg-transparent border-0 text-l"
+          className="bg-transparent border-1 text-l"
           type="text"
-          value={restaurantName}
           name="name"
-          onChange={handleChange}
         />
-        <button
-          className="block rounded-md border-0 my-2 py-1 px-5 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-green-500 "
-          onClick={() => {
-            changeRestaurantName(restaurantName, token);
-            router.refresh();
-          }}
+        <p>
+          <span className="font-bold ">Nazwa restauracji: </span>
+          {restaurantName}
+        </p>
+        <p>
+          <span className="font-bold ">Kod restauracji: </span>
+          {restaurantPrefix}
+        </p>
+        <Link
+          href={`/restaurant/edit`}
+          className="block rounded-md border-0 my-2 py-1 px-5 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 w-max"
         >
-          Zmień nazwę
-        </button>
+          Edytuj dane
+        </Link>
       </div>
       <div className="p-5">
         <h1 className="text-2xl py-2">Pracownicy</h1>
