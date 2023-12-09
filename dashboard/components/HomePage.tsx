@@ -40,6 +40,12 @@ const HomePage = (props: Props) => {
             >
               Zarządzaj menu
             </Link>
+            <Link
+              className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 m-5"
+              href="/tables"
+            >
+              Zarządzaj stolikami
+            </Link>
           </div>
         ) : (
           <></>

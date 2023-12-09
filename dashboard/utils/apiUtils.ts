@@ -2,11 +2,12 @@
 import { TokenData } from "@/types/TokenData";
 import { jwtDecode } from "jwt-decode";
 import { serverUrl } from "@/config/serverConfig";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { WorkerData } from "@/types/WorkerData";
 import { MenuData } from "@/types/MenuData";
 import { MealData } from "@/types/MealData";
 import { RestaurantData } from "@/types/RestaurantData";
+import { TableData } from "@/types/TableData";
 
 export async function decodeToken(token: string | null): Promise<TokenData> {
   if (token) {
@@ -235,4 +236,22 @@ export async function editMeal(
     });
     revalidatePath("/menu");
   }
+}
+
+export async function fetchTablesData(
+  token: string | null
+): Promise<TableData[]> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/table`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["tables"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.tables;
+    }
+  }
+  return [];
 }
