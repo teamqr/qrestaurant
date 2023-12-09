@@ -1,11 +1,8 @@
-"use client";
 import Worker from "@/components/restaurant/Worker";
 import React from "react";
 import { WorkerData } from "@/types/WorkerData";
 import { RestaurantData } from "@/types/RestaurantData";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { useSession } from "next-auth/react";
 
 type Props = {
   restaurantData: RestaurantData;
@@ -14,21 +11,6 @@ type Props = {
 };
 
 const RestaurantPage = (props: Props) => {
-  const restaurantName = props.restaurantData.name;
-  const restaurantPrefix = props.restaurantData.prefix;
-
-  const { data: session, status } = useSession({
-    required: true,
-  });
-
-  if (status != "authenticated") {
-    return <></>;
-  }
-
-  if (session?.user.role != "ADMIN" || !props.token) {
-    redirect("/");
-  }
-
   props.workersData.sort((a: any, b: any) => {
     if (a.id > b.id) {
       return 1;
@@ -53,11 +35,11 @@ const RestaurantPage = (props: Props) => {
         />
         <p>
           <span className="font-bold ">Nazwa restauracji: </span>
-          {restaurantName}
+          {props.restaurantData.name}
         </p>
         <p>
           <span className="font-bold ">Kod restauracji: </span>
-          {restaurantPrefix}
+          {props.restaurantData.prefix}
         </p>
         <Link
           href={`/restaurant/edit`}

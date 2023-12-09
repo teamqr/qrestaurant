@@ -1,9 +1,6 @@
 import { MealData } from "@/types/MealData";
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import React from "react";
 import Meal from "./Meal";
-import { Role } from "@/types/Role";
 
 type Props = {
   token: string;
@@ -11,17 +8,6 @@ type Props = {
 };
 
 const MenuPage = (props: Props) => {
-  /*const { data: session, status } = useSession({
-    required: true,
-  });
-
-  if (status != "authenticated") {
-    return <></>;
-  }
-
-  if (session?.user.role != Role.ADMIN || !props.token) {
-    redirect("/");
-  }*/
   return (
     <div>
       <div className="m-5">

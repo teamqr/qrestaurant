@@ -28,7 +28,8 @@ export async function fetchRestaurantData(
     const reqUrl = `${serverUrl}/api/dashboard/restaurant`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["restaurant"], revalidate: 1 },
+      next: { tags: ["restaurant"] },
+      cache: "no-store",
     });
     if (res.ok) {
       const json = await res.json();
@@ -46,7 +47,8 @@ export async function fetchWorkersData(
     const reqUrl = `${serverUrl}/api/dashboard/worker`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["workers"], revalidate: 1 },
+      next: { tags: ["workers"] },
+      cache: "no-store",
     });
     if (res.ok) {
       const json = await res.json();
@@ -62,6 +64,8 @@ export async function deleteWorker(id: number, token?: string | null) {
     await fetch(reqUrl, {
       method: "DELETE",
       headers: { Authorization: "Bearer " + token },
+      next: { tags: ["workers"] },
+      cache: "no-store",
     });
     revalidatePath("/restaurant");
   }
@@ -83,6 +87,8 @@ export async function addWorker(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reqBody),
+      next: { tags: ["workers"] },
+      cache: "no-store",
     });
     revalidatePath("/restaurant");
   }
@@ -92,13 +98,15 @@ export async function editRestaurant(name: string, token?: string | null) {
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/restaurant`;
     const reqBody = { name };
-    fetch(reqUrl, {
+    await fetch(reqUrl, {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reqBody),
+      next: { tags: ["restaurant"] },
+      cache: "no-store",
     });
     revalidatePath("/restaurant");
   }
@@ -110,7 +118,8 @@ export async function createMenu(token: string) {
     const res = await fetch(reqUrl, {
       method: "POST",
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["menu"], revalidate: 1 },
+      next: { tags: ["menu"] },
+      cache: "no-store",
     });
     if (res.ok) {
       const json = await res.json();
@@ -127,7 +136,8 @@ export async function fetchMenuData(
     const reqUrl = `${serverUrl}/api/dashboard/menu`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["menu"], revalidate: 1 },
+      next: { tags: ["menu"] },
+      cache: "no-store",
     });
 
     if (res.ok) {
@@ -148,7 +158,8 @@ export async function fetchMealsData(
     const reqUrl = `${serverUrl}/api/dashboard/meal`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["meals"], revalidate: 1 },
+      next: { tags: ["meals"] },
+      cache: "no-store",
     });
     if (res.ok) {
       const json = await res.json();
@@ -166,7 +177,8 @@ export async function fetchMealData(
     const reqUrl = `${serverUrl}/api/dashboard/meal/${id}`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["meals"], revalidate: 1 },
+      next: { tags: ["meals"] },
+      cache: "no-store",
     });
     if (res.ok) {
       const json = await res.json();
@@ -193,6 +205,8 @@ export async function addMeal(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reqBody),
+      next: { tags: ["meals"] },
+      cache: "no-store",
     });
     revalidatePath("/menu");
   }
@@ -216,6 +230,8 @@ export async function editMeal(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reqBody),
+      next: { tags: ["meals"] },
+      cache: "no-store",
     });
     revalidatePath("/menu");
   }
