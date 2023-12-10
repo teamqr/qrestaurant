@@ -14,7 +14,7 @@ const formatter = new Intl.NumberFormat("pl-PL", {
 const Meal = (props: Props) => {
   return (
     <tr className="odd:bg-gray-800 even:bg-gray-900">
-      <td>{props.data.id}</td>
+      <td>#{props.data.id}</td>
       <td>{props.data.name}</td>
       <td>{props.data.description}</td>
       <td>{formatter.format(props.data.price)}</td>

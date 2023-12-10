@@ -8,7 +8,7 @@ type Props = {
 };
 
 const AddMealForm = (props: Props) => {
-  const addNewMeal = async (formData: FormData) => {
+  const addMealAction = async (formData: FormData) => {
     "use server";
     const name = formData.get("name") as string;
     const description = formData.get("description") as string | null;
@@ -22,7 +22,7 @@ const AddMealForm = (props: Props) => {
     <form
       id="addMealForm"
       className="flex flex-col justify-start items-start m-5"
-      action={addNewMeal}
+      action={addMealAction}
     >
       <h2>Nazwa</h2>
       <input

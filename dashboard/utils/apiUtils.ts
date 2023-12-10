@@ -255,3 +255,81 @@ export async function fetchTablesData(
   }
   return [];
 }
+
+export async function fetchTableData(
+  id: number,
+  token: string | null
+): Promise<TableData> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/table/${id}`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["tables"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.table;
+    }
+  }
+  return {} as TableData;
+}
+
+export async function addTable(
+  number: number,
+  prefix: string,
+  token?: string | null
+) {
+  "use server";
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/table`;
+    const reqBody = { number, prefix };
+    await fetch(reqUrl, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+      next: { tags: ["tables"] },
+      cache: "no-store",
+    });
+    revalidatePath("/tables");
+  }
+}
+
+export async function editTable(
+  id: number,
+  number: number,
+  token?: string | null
+) {
+  "use server";
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/table`;
+    const reqBody = { id, number };
+    await fetch(reqUrl, {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+      next: { tags: ["tables"] },
+      cache: "no-store",
+    });
+    revalidatePath("/tables");
+  }
+}
+
+export async function deleteTable(id: number, token?: string | null) {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/table/${id}`;
+    await fetch(reqUrl, {
+      method: "DELETE",
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["tables"] },
+      cache: "no-store",
+    });
+    revalidatePath("/tables");
+  }
+}

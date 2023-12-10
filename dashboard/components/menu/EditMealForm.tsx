@@ -48,6 +48,7 @@ const EditMealForm = async (props: Props) => {
         type="number"
         name="price"
         required={true}
+        step="0.01"
         value={initialPrice}
         placeholder="Cena"
       />

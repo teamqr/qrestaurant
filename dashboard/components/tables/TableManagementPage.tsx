@@ -1,6 +1,7 @@
 import { TableData } from "@/types/TableData";
 import React from "react";
 import Table from "./Table";
+import Link from "next/link";
 
 type Props = {
   tablesData: TableData[];
@@ -9,7 +10,7 @@ type Props = {
 const TableManagementPage = (props: Props) => {
   return (
     <div className="m-5">
-      <h1 className="text-4xl flex flex-col justify-center items-center">
+      <h1 className="text-4xl flex flex-col justify-center items-center m-5">
         Zarządzanie stolikami
       </h1>
       <table>
@@ -19,9 +20,7 @@ const TableManagementPage = (props: Props) => {
             <th>Numer stolika</th>
             <th>Prefix</th>
             <th>Kod</th>
-            <th>Szczegóły</th>
             <th>Edytuj</th>
-            <th>Usuń</th>
           </tr>
         </thead>
         <tbody>
@@ -34,6 +33,12 @@ const TableManagementPage = (props: Props) => {
           )}
         </tbody>
       </table>
+      <Link
+        className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 w-max"
+        href="/tables/add"
+      >
+        Dodaj stolik
+      </Link>
     </div>
   );
 };
