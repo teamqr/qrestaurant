@@ -34,6 +34,16 @@ public class RestaurantController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/featured")
+    public ResponseEntity<Map<String, Iterable<RestaurantDTO>>> getFeaturedRestaurants() {
+        Iterable<Restaurant> restaurants = restaurantService.getFeaturedRestaurants();
+
+        Map<String, Iterable<RestaurantDTO>> response = new HashMap<>();
+        response.put("restaurants", mapperDTO.toRestaurantDTOs(restaurants));
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, RestaurantDTO>> getRestaurant(@PathVariable Long id) {
         Restaurant restaurant = restaurantService.getRestaurant(id);

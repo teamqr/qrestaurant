@@ -5,6 +5,7 @@ public record RestaurantDTO(
         String name,
         String prefix,
         String image,
+        Boolean featured,
         Long menuId,
         Iterable<Long> tableIds
 ) {}
