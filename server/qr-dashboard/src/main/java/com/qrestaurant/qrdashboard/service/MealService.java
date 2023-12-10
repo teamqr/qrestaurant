@@ -59,7 +59,8 @@ public class MealService {
         if (optionalMenu.isPresent()) {
             Menu menu = optionalMenu.get();
 
-            Meal meal = new Meal(newMealRequest.name(), newMealRequest.description(), newMealRequest.price());
+            Meal meal = new Meal(
+                    newMealRequest.name(), newMealRequest.description(), newMealRequest.price(), newMealRequest.image());
             meal.setMenu(menu);
 
             meal = mealRepository.save(meal);
@@ -85,6 +86,7 @@ public class MealService {
             meal.setName(updateMealRequest.name());
             meal.setDescription(updateMealRequest.description());
             meal.setPrice(updateMealRequest.price());
+            meal.setImage(updateMealRequest.image());
 
             meal = mealRepository.save(meal);
 

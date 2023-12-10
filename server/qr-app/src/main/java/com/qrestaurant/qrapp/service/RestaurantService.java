@@ -36,6 +36,7 @@ public class RestaurantService {
             Restaurant restaurant = optionalRestaurant.get();
 
             restaurant.setName(restaurantDTO.name());
+            restaurant.setImage(restaurantDTO.image());
 
             restaurantRepository.save(restaurant);
         }

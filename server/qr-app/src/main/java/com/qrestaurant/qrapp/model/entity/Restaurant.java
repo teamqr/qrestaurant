@@ -17,6 +17,8 @@ public class Restaurant {
     @NotNull
     @Size(min = 2, max = 2)
     private String prefix;
+    @Lob
+    private String image;
     @OneToOne(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
     private Menu menu;
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
@@ -24,10 +26,11 @@ public class Restaurant {
 
     public Restaurant() {}
 
-    public Restaurant(Long id, String name, String prefix) {
+    public Restaurant(Long id, String name, String prefix, String image) {
         this.id = id;
         this.name = name;
         this.prefix = prefix;
+        this.image = image;
     }
 
     public Long getId() {
@@ -52,6 +55,14 @@ public class Restaurant {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Menu getMenu() {
