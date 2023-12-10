@@ -18,7 +18,7 @@ const EditRestaurantForm = async (props: Props) => {
     "use server";
     const name = formData.get("name") as string;
 
-    await editRestaurant(name, props.token);
+    await editRestaurant(name, restaurantData.image, props.token);
     redirect("/restaurant");
   };
   return (

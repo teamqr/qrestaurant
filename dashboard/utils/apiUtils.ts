@@ -34,7 +34,6 @@ export async function fetchRestaurantData(
     });
     if (res.ok) {
       const json = await res.json();
-
       return json.restaurant;
     }
   }
@@ -94,11 +93,15 @@ export async function addWorker(
     revalidatePath("/restaurant");
   }
 }
-export async function editRestaurant(name: string, token?: string | null) {
+export async function editRestaurant(
+  name: string,
+  image: string,
+  token?: string | null
+) {
   "use server";
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/restaurant`;
-    const reqBody = { name };
+    const reqBody = { name, image };
     await fetch(reqUrl, {
       method: "PUT",
       headers: {

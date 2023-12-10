@@ -3,11 +3,13 @@ import React from "react";
 import { WorkerData } from "@/types/WorkerData";
 import { RestaurantData } from "@/types/RestaurantData";
 import Link from "next/link";
+import Image from "next/image";
+import EditRestaurantLogoForm from "./EditRestaurantLogoForm";
 
 type Props = {
   restaurantData: RestaurantData;
   workersData: WorkerData[];
-  token: string | null;
+  token: string;
 };
 
 const RestaurantPage = (props: Props) => {
@@ -41,12 +43,33 @@ const RestaurantPage = (props: Props) => {
           <span className="font-bold ">Kod restauracji: </span>
           {props.restaurantData.prefix}
         </p>
+
         <Link
           href={`/restaurant/edit`}
           className="block rounded-md border-0 my-2 py-1 px-5 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 w-max"
         >
           Edytuj dane
         </Link>
+
+        {props.restaurantData.image ? (
+          <p>
+            <span className="font-bold ">Logo restauracji: </span>
+            <Image
+              className="border-4 border-black my-5"
+              src={`${props.restaurantData.image}`}
+              width={300}
+              height={400}
+              alt="Logo restauracji"
+            />
+          </p>
+        ) : (
+          <></>
+        )}
+
+        <EditRestaurantLogoForm
+          restaurantData={props.restaurantData}
+          token={props.token}
+        />
       </div>
       <div className="p-5">
         <h1 className="text-2xl py-2">Pracownicy</h1>
