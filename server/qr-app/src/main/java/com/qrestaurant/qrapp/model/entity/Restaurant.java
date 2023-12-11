@@ -17,6 +17,11 @@ public class Restaurant {
     @NotNull
     @Size(min = 2, max = 2)
     private String prefix;
+    @Lob
+    private String image;
+    @NotNull
+    @Column(columnDefinition = "boolean default false")
+    private Boolean featured;
     @OneToOne(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
     private Menu menu;
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
@@ -24,10 +29,12 @@ public class Restaurant {
 
     public Restaurant() {}
 
-    public Restaurant(Long id, String name, String prefix) {
+    public Restaurant(Long id, String name, String prefix, String image, Boolean featured) {
         this.id = id;
         this.name = name;
         this.prefix = prefix;
+        this.image = image;
+        this.featured = featured;
     }
 
     public Long getId() {
@@ -52,6 +59,22 @@ public class Restaurant {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Boolean getFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(Boolean featured) {
+        this.featured = featured;
     }
 
     public Menu getMenu() {

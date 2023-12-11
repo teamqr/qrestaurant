@@ -1,8 +1,12 @@
 package com.qrestaurant.qrapp.repository;
 
 import com.qrestaurant.qrapp.model.entity.Restaurant;
+import jakarta.transaction.Transactional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {}
+@Transactional
+public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
+    Iterable<Restaurant> findAllByFeatured(Boolean featured);
+}

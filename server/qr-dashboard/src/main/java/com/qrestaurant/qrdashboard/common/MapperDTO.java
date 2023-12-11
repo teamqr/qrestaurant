@@ -2,6 +2,7 @@ package com.qrestaurant.qrdashboard.common;
 
 import com.qrestaurant.qrdashboard.model.dto.*;
 import com.qrestaurant.qrdashboard.model.entity.*;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -26,8 +27,8 @@ public class MapperDTO {
                 .map(Table::getId)
                 .toList();
 
-        return new RestaurantDTO(
-                restaurant.getId(), restaurant.getName(), restaurant.getPrefix(), userIds, menuId, tableIds);
+        return new RestaurantDTO(restaurant.getId(), restaurant.getName(), restaurant.getPrefix(), restaurant.getImage(),
+                userIds, menuId, tableIds);
     }
 
     public UserDTO toUserDTO(User user) {
@@ -44,6 +45,7 @@ public class MapperDTO {
         return userDTOs;
     }
 
+    @Transactional
     public MenuDTO toMenuDTO(Menu menu) {
         Iterable<Long> mealIds = new ArrayList<>();
 
@@ -58,14 +60,15 @@ public class MapperDTO {
     }
 
     public MealDTO toMealDTO(Meal meal) {
-        return new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getMenu().getId());
+        return new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getImage(),
+                meal.getMenu().getId());
     }
 
     public Iterable<MealDTO> toMealDTOs(Iterable<Meal> meals) {
         List<MealDTO> mealDTOs = new ArrayList<>();
 
         meals.forEach(meal -> mealDTOs.add(
-                new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(),
+                new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getImage(),
                         meal.getMenu().getId()))
         );
 

@@ -21,6 +21,10 @@ public class RestaurantService {
         return restaurantRepository.findAll();
     }
 
+    public Iterable<Restaurant> getFeaturedRestaurants() {
+        return restaurantRepository.findAllByFeatured(true);
+    }
+
     public Restaurant getRestaurant(Long id) throws EntityNotFoundException {
         return restaurantRepository
                 .findById(id)
@@ -36,6 +40,7 @@ public class RestaurantService {
             Restaurant restaurant = optionalRestaurant.get();
 
             restaurant.setName(restaurantDTO.name());
+            restaurant.setImage(restaurantDTO.image());
 
             restaurantRepository.save(restaurant);
         }
