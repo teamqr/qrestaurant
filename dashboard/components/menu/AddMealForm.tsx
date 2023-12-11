@@ -14,8 +14,9 @@ const AddMealForm = (props: Props) => {
     const name = formData.get("name") as string;
     const description = formData.get("description") as string | null;
     const price = formData.get("price")?.valueOf() as number;
+    const image = formData.get("image") as string;
 
-    await addMeal(name, description, price, props.token);
+    await addMeal(name, description, price, image, props.token);
     redirect("/menu");
   };
 
