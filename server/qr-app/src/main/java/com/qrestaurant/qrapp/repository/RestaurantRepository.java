@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Transactional
-public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {}
+public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
+    Iterable<Restaurant> findAllByFeatured(Boolean featured);
+}
