@@ -20,6 +20,9 @@ public class Restaurant {
     private String prefix;
     @Lob
     private String image;
+    @NotNull
+    @Column(columnDefinition = "boolean default false")
+    private Boolean featured;
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
     private List<User> users;
     @OneToOne(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
@@ -65,6 +68,14 @@ public class Restaurant {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Boolean getFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(Boolean featured) {
+        this.featured = featured;
     }
 
     public List<User> getUsers() {

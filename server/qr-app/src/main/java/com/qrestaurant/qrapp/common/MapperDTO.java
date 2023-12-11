@@ -27,7 +27,7 @@ public class MapperDTO {
                 .toList();
 
         return new RestaurantDTO(restaurant.getId(), restaurant.getName(), restaurant.getPrefix(), restaurant.getImage(),
-                menuId, tableIds);
+                restaurant.getFeatured(), menuId, tableIds);
     }
 
     public Iterable<RestaurantDTO> toRestaurantDTOs(Iterable<Restaurant> restaurants) {
@@ -46,7 +46,7 @@ public class MapperDTO {
                     .toList();
 
             restaurantDTOs.add(new RestaurantDTO(restaurant.getId(), restaurant.getName(), restaurant.getPrefix(),
-                    restaurant.getImage(), menuId, tableIds));
+                    restaurant.getImage(), restaurant.getFeatured(), menuId, tableIds));
         });
 
         return restaurantDTOs;
@@ -70,9 +70,8 @@ public class MapperDTO {
     public Iterable<MealDTO> toMealDTOs(Iterable<Meal> meals) {
         List<MealDTO> mealDTOs = new ArrayList<>();
 
-        meals.forEach(meal -> mealDTOs.add(new MealDTO(
-                meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getImage(),
-                meal.getMenu().getId()
+        meals.forEach(meal -> mealDTOs.add(new MealDTO(meal.getId(), meal.getName(), meal.getDescription(),
+                meal.getPrice(), meal.getImage(), meal.getMenu().getId()
         )));
 
         return mealDTOs;
