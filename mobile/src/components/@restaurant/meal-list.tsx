@@ -1,11 +1,24 @@
+import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
-import { Text, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 
+import { AppText } from "../text";
+
+import { theme } from "@/common/theme";
+import { Meal } from "@/common/types";
 import axios from "@/services/axios";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
+import { IconButton } from "../icon-button";
+import { Receipt } from "../icons";
 
 const getMeals = async (id: string) => {
-  const { data } = await axios.get(`api/app/meal`, {
+  const { data } = await axios.get<{ meals: Meal[] }>(`api/app/meal`, {
     params: {
       restaurantId: id,
     },
@@ -15,6 +28,7 @@ const getMeals = async (id: string) => {
 
 export const MealList = () => {
   const { restaurant } = useRestaurantSessionStore();
+  const { width } = useWindowDimensions();
 
   const query = useQuery({
     queryKey: ["restaurant", restaurant?.id, "meals"],
@@ -26,17 +40,78 @@ export const MealList = () => {
     return null;
   }
 
-  console.log(query.data);
+  // width - screen padding - item padding
+  const estimatedSize = 96;
 
   return (
-    <View>
-      <Text
-        style={{
-          color: "white",
-        }}
-      >
-        {restaurant?.name}
-      </Text>
-    </View>
+    <FlashList
+      data={query.data?.meals}
+      showsVerticalScrollIndicator={false}
+      renderItem={({ item, index }) => (
+        <Pressable onPress={() => {}} style={[styles.card]}>
+          <View style={styles.cardContent}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "flex-start",
+                gap: theme.spacing(1),
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <AppText
+                  style={{
+                    color: "white",
+                    fontSize: 18,
+                  }}
+                  numberOfLines={1}
+                  weight="bold"
+                >
+                  {item.name}
+                </AppText>
+                <AppText
+                  style={{
+                    fontSize: 10,
+                    color: "white",
+                  }}
+                  numberOfLines={1}
+                >
+                  {item.description}
+                </AppText>
+                <AppText
+                  style={{
+                    marginTop: theme.spacing(2),
+                    color: "white",
+                  }}
+                  numberOfLines={1}
+                  weight="bold"
+                >
+                  {item.price.toFixed(2)} zł
+                </AppText>
+              </View>
+              <IconButton onPress={() => {}} icon={<Receipt />} />
+            </View>
+          </View>
+        </Pressable>
+      )}
+      estimatedItemSize={estimatedSize}
+    />
   );
 };
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: theme.colors.card,
+    borderWidth: 1,
+    borderColor: theme.colors.secondary,
+    // flex: 1,
+    borderRadius: theme.radii.medium,
+    marginBottom: theme.spacing(2),
+    overflow: "hidden",
+    width: "100%",
+  },
+  cardContent: {
+    marginTop: "auto",
+    padding: theme.spacing(2),
+    gap: theme.spacing(0.5),
+  },
+});
