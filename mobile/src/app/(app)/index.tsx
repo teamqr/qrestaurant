@@ -13,7 +13,7 @@ import axios from "@/services/axios";
 
 const getRestaurants = async () => {
   const response = await axios.get<{ restaurants: Restaurant[] }>(
-    "api/app/restaurant",
+    "api/app/restaurant/featured",
   );
   return response.data;
 };

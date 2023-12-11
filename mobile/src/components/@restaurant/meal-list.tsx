@@ -8,14 +8,15 @@ import {
   useWindowDimensions,
 } from "react-native";
 
+import { IconButton } from "../icon-button";
+import { Receipt, ShoppingCardPlus } from "../icons";
 import { AppText } from "../text";
 
 import { theme } from "@/common/theme";
 import { Meal } from "@/common/types";
 import axios from "@/services/axios";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
-import { IconButton } from "../icon-button";
-import { Receipt } from "../icons";
+import { useFixedInsets } from "@/hooks/useFixedInsets";
 
 const getMeals = async (id: string) => {
   const { data } = await axios.get<{ meals: Meal[] }>(`api/app/meal`, {
@@ -28,6 +29,7 @@ const getMeals = async (id: string) => {
 
 export const MealList = () => {
   const { restaurant } = useRestaurantSessionStore();
+  const { bottom } = useFixedInsets();
   const { width } = useWindowDimensions();
 
   const query = useQuery({
@@ -47,6 +49,9 @@ export const MealList = () => {
     <FlashList
       data={query.data?.meals}
       showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingBottom: bottom,
+      }}
       renderItem={({ item, index }) => (
         <Pressable onPress={() => {}} style={[styles.card]}>
           <View style={styles.cardContent}>
@@ -88,7 +93,11 @@ export const MealList = () => {
                   {item.price.toFixed(2)} zł
                 </AppText>
               </View>
-              <IconButton onPress={() => {}} icon={<Receipt />} />
+              <IconButton
+                onPress={() => {}}
+                icon={<ShoppingCardPlus color="white" width={16} height={16} />}
+                variant="xs"
+              />
             </View>
           </View>
         </Pressable>

@@ -30,7 +30,7 @@ export default function AppLayout() {
       <Stack.Screen
         name="index"
         options={{
-          header: () => <AppHeader title="Polecane w pobliżu " />,
+          header: () => <AppHeader title={`Polecane\nprzez nas`} />,
         }}
       />
       <Stack.Screen
