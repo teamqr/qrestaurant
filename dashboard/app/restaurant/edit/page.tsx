@@ -1,17 +1,17 @@
-import AddMealForm from "@/components/menu/AddMealForm";
+import EditRestaurantForm from "@/components/restaurant/EditRestaurantForm";
 import { checkAdminAccess } from "@/utils/tokenUtils";
 import React from "react";
 
-const AddMealPage = async () => {
+const EditRestaurant = async () => {
   const token: string = await checkAdminAccess();
   return (
     <div>
       <h1 className="text-4xl flex flex-col justify-center items-center m-5">
-        Dodaj danie do menu
+        Edytuj dane restauracji
       </h1>
-      <AddMealForm token={token} />
+      <EditRestaurantForm token={token} />
     </div>
   );
 };
 
-export default AddMealPage;
+export default EditRestaurant;

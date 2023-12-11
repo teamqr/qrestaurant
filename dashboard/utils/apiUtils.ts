@@ -2,10 +2,12 @@
 import { TokenData } from "@/types/TokenData";
 import { jwtDecode } from "jwt-decode";
 import { serverUrl } from "@/config/serverConfig";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { WorkerData } from "@/types/WorkerData";
 import { MenuData } from "@/types/MenuData";
 import { MealData } from "@/types/MealData";
+import { RestaurantData } from "@/types/RestaurantData";
+import { TableData } from "@/types/TableData";
 
 export async function decodeToken(token: string | null): Promise<TokenData> {
   if (token) {
@@ -20,12 +22,15 @@ export async function decodeToken(token: string | null): Promise<TokenData> {
   return {} as TokenData;
 }
 
-export async function fetchRestaurantData(token: string | null) {
+export async function fetchRestaurantData(
+  token: string | null
+): Promise<RestaurantData> {
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/restaurant`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["restaurant"], revalidate: 1 },
+      next: { tags: ["restaurant"] },
+      cache: "no-store",
     });
     if (res.ok) {
       const json = await res.json();
@@ -33,7 +38,7 @@ export async function fetchRestaurantData(token: string | null) {
       return json.restaurant;
     }
   }
-  return null;
+  return {} as RestaurantData;
 }
 
 export async function fetchWorkersData(
@@ -43,7 +48,8 @@ export async function fetchWorkersData(
     const reqUrl = `${serverUrl}/api/dashboard/worker`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["workers"], revalidate: 1 },
+      next: { tags: ["workers"] },
+      cache: "no-store",
     });
     if (res.ok) {
       const json = await res.json();
@@ -59,6 +65,8 @@ export async function deleteWorker(id: number, token?: string | null) {
     await fetch(reqUrl, {
       method: "DELETE",
       headers: { Authorization: "Bearer " + token },
+      next: { tags: ["workers"] },
+      cache: "no-store",
     });
     revalidatePath("/restaurant");
   }
@@ -80,36 +88,28 @@ export async function addWorker(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reqBody),
+      next: { tags: ["workers"] },
+      cache: "no-store",
     });
     revalidatePath("/restaurant");
   }
 }
-export async function changeRestaurantName(
-  newName: string,
-  token?: string | null
-) {
+export async function editRestaurant(name: string, token?: string | null) {
+  "use server";
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/restaurant`;
-    const reqBody = { name: newName };
-    fetch(reqUrl, {
+    const reqBody = { name };
+    await fetch(reqUrl, {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reqBody),
-      next: { tags: ["restaurant"], revalidate: 5 },
-    })
-      .then(async (res) => {
-        if (res.ok) {
-          const json = await res.json();
-          const name = json?.restaurant?.name;
-          console.log(`Poprawnie zmieniono nazwę restauracji na ${name}`);
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      next: { tags: ["restaurant"] },
+      cache: "no-store",
+    });
+    revalidatePath("/restaurant");
   }
 }
 
@@ -119,7 +119,8 @@ export async function createMenu(token: string) {
     const res = await fetch(reqUrl, {
       method: "POST",
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["menu"], revalidate: 1 },
+      next: { tags: ["menu"] },
+      cache: "no-store",
     });
     if (res.ok) {
       const json = await res.json();
@@ -136,7 +137,8 @@ export async function fetchMenuData(
     const reqUrl = `${serverUrl}/api/dashboard/menu`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["menu"], revalidate: 1 },
+      next: { tags: ["menu"] },
+      cache: "no-store",
     });
 
     if (res.ok) {
@@ -157,7 +159,8 @@ export async function fetchMealsData(
     const reqUrl = `${serverUrl}/api/dashboard/meal`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["meals"], revalidate: 1 },
+      next: { tags: ["meals"] },
+      cache: "no-store",
     });
     if (res.ok) {
       const json = await res.json();
@@ -175,7 +178,8 @@ export async function fetchMealData(
     const reqUrl = `${serverUrl}/api/dashboard/meal/${id}`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
-      next: { tags: ["meals"], revalidate: 1 },
+      next: { tags: ["meals"] },
+      cache: "no-store",
     });
     if (res.ok) {
       const json = await res.json();
@@ -202,6 +206,8 @@ export async function addMeal(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reqBody),
+      next: { tags: ["meals"] },
+      cache: "no-store",
     });
     revalidatePath("/menu");
   }
@@ -225,7 +231,105 @@ export async function editMeal(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reqBody),
+      next: { tags: ["meals"] },
+      cache: "no-store",
     });
     revalidatePath("/menu");
+  }
+}
+
+export async function fetchTablesData(
+  token: string | null
+): Promise<TableData[]> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/table`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["tables"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.tables;
+    }
+  }
+  return [];
+}
+
+export async function fetchTableData(
+  id: number,
+  token: string | null
+): Promise<TableData> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/table/${id}`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["tables"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.table;
+    }
+  }
+  return {} as TableData;
+}
+
+export async function addTable(
+  number: number,
+  prefix: string,
+  token?: string | null
+) {
+  "use server";
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/table`;
+    const reqBody = { number, prefix };
+    await fetch(reqUrl, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+      next: { tags: ["tables"] },
+      cache: "no-store",
+    });
+    revalidatePath("/tables");
+  }
+}
+
+export async function editTable(
+  id: number,
+  number: number,
+  token?: string | null
+) {
+  "use server";
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/table`;
+    const reqBody = { id, number };
+    await fetch(reqUrl, {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+      next: { tags: ["tables"] },
+      cache: "no-store",
+    });
+    revalidatePath("/tables");
+  }
+}
+
+export async function deleteTable(id: number, token?: string | null) {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/table/${id}`;
+    await fetch(reqUrl, {
+      method: "DELETE",
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["tables"] },
+      cache: "no-store",
+    });
+    revalidatePath("/tables");
   }
 }

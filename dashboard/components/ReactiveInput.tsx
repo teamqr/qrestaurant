@@ -6,6 +6,7 @@ type Props = {
   name: string;
   required: boolean;
   value: any;
+  step?: string;
   placeholder: string;
 };
 
@@ -29,7 +30,7 @@ const ReactiveInput = (props: Props) => {
       className="block rounded-md border-0 my-1 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 text-black"
       type={props.type}
       name={props.name}
-      step="0.01"
+      step={props?.step}
       required={props.required}
       value={inputValue}
       placeholder={props.placeholder}

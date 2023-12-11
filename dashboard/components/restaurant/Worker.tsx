@@ -9,7 +9,7 @@ type Props = {
 const Worker = (props: Props) => {
   return (
     <tr className="odd:bg-gray-800 even:bg-gray-900">
-      <td>{props.data.id}</td>
+      <td>#{props.data.id}</td>
       <td>{props.data.email}</td>
 
       <td>
