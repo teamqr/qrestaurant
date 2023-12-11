@@ -4,7 +4,6 @@ import { WorkerData } from "@/types/WorkerData";
 import { RestaurantData } from "@/types/RestaurantData";
 import Link from "next/link";
 import Image from "next/image";
-import EditRestaurantLogoForm from "./EditRestaurantLogoForm";
 import AddWorkerForm from "./AddWorkerForm";
 
 type Props = {
@@ -57,7 +56,7 @@ const RestaurantPage = (props: Props) => {
             <p>
               <span className="font-bold ">Logo restauracji: </span>
               <Image
-                className="border-4 border-black my-5"
+                className="border-4 border-black my-2"
                 src={`${props.restaurantData.image}`}
                 width={300}
                 height={400}
@@ -67,11 +66,6 @@ const RestaurantPage = (props: Props) => {
           ) : (
             <></>
           )}
-
-          <EditRestaurantLogoForm
-            restaurantData={props.restaurantData}
-            token={props.token}
-          />
         </div>
         <div className="p-5 w-max">
           <h2 className="text-2xl py-2">Pracownicy</h2>

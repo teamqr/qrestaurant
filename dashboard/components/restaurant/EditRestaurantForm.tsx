@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import React from "react";
 import ReactiveInput from "../ReactiveInput";
 import Link from "next/link";
+import ReactiveFileInput from "../ReactiveFileInput";
+import Image from "next/image";
 
 type Props = {
   token: string;
@@ -13,12 +15,14 @@ const EditRestaurantForm = async (props: Props) => {
   revalidateTag("restaurant");
   const restaurantData = await fetchRestaurantData(props.token);
   let initialName = restaurantData.name;
+  let initialImage = restaurantData.image;
 
   const editRestaurantAction = async (formData: FormData) => {
     "use server";
     const name = formData.get("name") as string;
+    const image = formData.get("image") as string;
 
-    await editRestaurant(name, restaurantData.image, props.token);
+    await editRestaurant(name, image, props.token);
     redirect("/restaurant");
   };
   return (
@@ -36,6 +40,19 @@ const EditRestaurantForm = async (props: Props) => {
           value={initialName}
           placeholder="Nazwa restauracji"
         />
+        <h2>Logo</h2>
+        {restaurantData.image ? (
+          <Image
+            className="border-4 border-black my-2"
+            src={`${restaurantData.image}`}
+            width={400}
+            height={300}
+            alt="Aktualne logo restauracji"
+          />
+        ) : (
+          <></>
+        )}
+        <ReactiveFileInput initialImage={initialImage} name="image" />
         <div className="flex flex-row justify-between">
           <button
             className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-green-500"

@@ -28,16 +28,20 @@ const ReactiveFileInput = (props: Props) => {
     if (!e.target.files) {
       return;
     }
-
-    let value = await convertToBase64(e.target.files[0]);
-    setInputValue(value);
+    const file = e.target.files[0];
+    const fileBase64 = await convertToBase64(file);
+    setInputValue(fileBase64);
   };
 
   return (
     <div>
-      <input type="file" accept="image/*" onChange={handleChange} />
       <input
-        className="text-black hidden"
+        type="file"
+        accept="image/jpeg, image/png"
+        onChange={handleChange}
+      />
+      <input
+        className="hidden"
         type="text"
         name={props.name}
         value={inputValue}
