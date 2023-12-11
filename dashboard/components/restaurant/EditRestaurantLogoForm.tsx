@@ -44,6 +44,7 @@ const EditRestaurantLogoForm = (props: Props) => {
 
   return (
     <div>
+      <h2 className="text-2xl py-2">Zaktualizuj logo</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="file"
@@ -56,13 +57,13 @@ const EditRestaurantLogoForm = (props: Props) => {
             className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-green-500 mr-5"
             type="submit"
           >
-            Zaktualizuj logo
+            Zapisz
           </button>
           <button
             className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-red-500"
             type="reset"
           >
-            Wyczyść formularz
+            Anuluj
           </button>
         </div>
       </form>

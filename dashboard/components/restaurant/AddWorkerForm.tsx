@@ -17,7 +17,7 @@ const AddWorkerForm = async (props: Props) => {
   };
   return (
     <div className="m-5">
-      <h1 className="text-2xl py-2">Dodaj pracownika</h1>
+      <h2 className="text-2xl py-2">Dodaj pracownika</h2>
       <form
         className="flex flex-col justify-start items-start"
         action={addWorkerAction}

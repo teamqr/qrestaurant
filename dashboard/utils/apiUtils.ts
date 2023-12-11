@@ -221,12 +221,13 @@ export async function editMeal(
   name: string,
   description: string | null,
   price: number,
+  image: string,
   token?: string | null
 ) {
   "use server";
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/meal`;
-    const reqBody = { id, name, description, price };
+    const reqBody = { id, name, description, price, image };
     await fetch(reqUrl, {
       method: "PUT",
       headers: {

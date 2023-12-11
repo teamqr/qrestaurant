@@ -3,5 +3,5 @@ export type MealData = {
   name: string;
   description: string;
   price: number;
-  menuId: number;
+  image: string;
 };
