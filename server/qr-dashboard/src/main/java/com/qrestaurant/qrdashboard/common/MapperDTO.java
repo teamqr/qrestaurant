@@ -27,8 +27,13 @@ public class MapperDTO {
                 .map(Table::getId)
                 .toList();
 
+        Iterable<Long> mealCategoryIds = restaurant.getMealCategories()
+                .stream()
+                .map(MealCategory::getId)
+                .toList();
+
         return new RestaurantDTO(restaurant.getId(), restaurant.getName(), restaurant.getPrefix(), restaurant.getImage(),
-                userIds, menuId, tableIds);
+                userIds, menuId, tableIds, mealCategoryIds);
     }
 
     public UserDTO toUserDTO(User user) {
@@ -60,17 +65,27 @@ public class MapperDTO {
     }
 
     public MealDTO toMealDTO(Meal meal) {
+        Iterable<Long> mealCategoryIds = meal.getMealCategories()
+                .stream()
+                .map(MealCategory::getId)
+                .toList();
+
         return new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getImage(),
-                meal.getMenu().getId());
+                meal.getMenu().getId(), mealCategoryIds);
     }
 
     public Iterable<MealDTO> toMealDTOs(Iterable<Meal> meals) {
         List<MealDTO> mealDTOs = new ArrayList<>();
 
-        meals.forEach(meal -> mealDTOs.add(
-                new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getImage(),
-                        meal.getMenu().getId()))
-        );
+        meals.forEach(meal -> {
+            Iterable<Long> mealCategoryIds = meal.getMealCategories()
+                    .stream()
+                    .map(MealCategory::getId)
+                    .toList();
+
+            mealDTOs.add(new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(),
+                    meal.getImage(), meal.getMenu().getId(), mealCategoryIds));
+        });
 
         return mealDTOs;
     }

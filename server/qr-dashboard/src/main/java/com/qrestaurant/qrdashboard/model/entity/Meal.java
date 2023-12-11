@@ -5,6 +5,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "meals")
@@ -22,6 +23,11 @@ public class Meal {
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
+    @ManyToMany
+    @JoinTable(name = "meal_category",
+            joinColumns = @JoinColumn(name = "meal_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
+    private List<MealCategory> mealCategories;
 
     public Meal() {}
 
@@ -78,5 +84,13 @@ public class Meal {
 
     public void setMenu(Menu menu) {
         this.menu = menu;
+    }
+
+    public List<MealCategory> getMealCategories() {
+        return mealCategories;
+    }
+
+    public void setMealCategories(List<MealCategory> mealCategories) {
+        this.mealCategories = mealCategories;
     }
 }

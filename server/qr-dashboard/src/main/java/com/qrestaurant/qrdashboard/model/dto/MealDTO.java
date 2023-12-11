@@ -8,5 +8,6 @@ public record MealDTO(
         String description,
         BigDecimal price,
         String image,
-        Long menuId
+        Long menuId,
+        Iterable<Long> mealCategoryIds
 ) {}
