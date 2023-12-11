@@ -1,22 +1,16 @@
 import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import { IconButton } from "../icon-button";
-import { Receipt, ShoppingCardPlus } from "../icons";
+import { ShoppingCardPlus } from "../icons";
 import { AppText } from "../text";
 
 import { theme } from "@/common/theme";
 import { Meal } from "@/common/types";
+import { useFixedInsets } from "@/hooks/useFixedInsets";
 import axios from "@/services/axios";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
-import { useFixedInsets } from "@/hooks/useFixedInsets";
 
 const getMeals = async (id: string) => {
   const { data } = await axios.get<{ meals: Meal[] }>(`api/app/meal`, {
@@ -30,7 +24,6 @@ const getMeals = async (id: string) => {
 export const MealList = () => {
   const { restaurant } = useRestaurantSessionStore();
   const { bottom } = useFixedInsets();
-  const { width } = useWindowDimensions();
 
   const query = useQuery({
     queryKey: ["restaurant", restaurant?.id, "meals"],
