@@ -1,9 +1,6 @@
 package com.qrestaurant.qrapp.configuration;
 
-import com.qrestaurant.qrapp.model.dto.MealDTO;
-import com.qrestaurant.qrapp.model.dto.MenuDTO;
-import com.qrestaurant.qrapp.model.dto.RestaurantDTO;
-import com.qrestaurant.qrapp.model.dto.TableDTO;
+import com.qrestaurant.qrapp.model.dto.*;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -48,5 +45,11 @@ public class KafkaConsumerFactoryConfiguration {
     public ConsumerFactory<String, TableDTO> tableConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(kafkaConsumerConfiguration.configs(), new StringDeserializer(),
                 new JsonDeserializer<>(TableDTO.class, false));
+    }
+
+    @Bean
+    public ConsumerFactory<String, MealCategoryDTO> mealCategoryConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(kafkaConsumerConfiguration.configs(), new StringDeserializer(),
+                new JsonDeserializer<>(MealCategoryDTO.class, false));
     }
 }

@@ -10,7 +10,6 @@ import java.util.List;
 @Table(name = "meal_categories")
 public class MealCategory {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
     private String name;
@@ -22,7 +21,8 @@ public class MealCategory {
 
     public MealCategory() {}
 
-    public MealCategory(String name) {
+    public MealCategory(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 

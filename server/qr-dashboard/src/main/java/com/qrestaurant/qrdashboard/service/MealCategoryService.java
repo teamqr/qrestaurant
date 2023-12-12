@@ -1,14 +1,17 @@
 package com.qrestaurant.qrdashboard.service;
 
 import com.qrestaurant.qrdashboard.common.JWTUtil;
+import com.qrestaurant.qrdashboard.common.MapperDTO;
 import com.qrestaurant.qrdashboard.exception.EntityAlreadyExistsException;
 import com.qrestaurant.qrdashboard.exception.EntityNotFoundException;
+import com.qrestaurant.qrdashboard.model.dto.MealCategoryDTO;
 import com.qrestaurant.qrdashboard.model.entity.MealCategory;
 import com.qrestaurant.qrdashboard.model.entity.Restaurant;
 import com.qrestaurant.qrdashboard.model.request.NewMealCategoryRequest;
 import com.qrestaurant.qrdashboard.model.request.UpdateMealCategoryRequest;
 import com.qrestaurant.qrdashboard.repository.MealCategoryRepository;
 import com.qrestaurant.qrdashboard.repository.RestaurantRepository;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +21,20 @@ import java.util.Optional;
 public class MealCategoryService {
     private final MealCategoryRepository mealCategoryRepository;
     private final RestaurantRepository restaurantRepository;
+    private final KafkaTemplate<String, MealCategoryDTO> mealCategoryKafkaTemplate;
+    private final KafkaTemplate<String, Long> deleteKafkaTemplate;
     private final JWTUtil jwtUtil;
+    private final MapperDTO mapperDTO;
 
     public MealCategoryService(MealCategoryRepository mealCategoryRepository, RestaurantRepository restaurantRepository,
-                               JWTUtil jwtUtil) {
+                               KafkaTemplate<String, MealCategoryDTO> mealCategoryKafkaTemplate,
+                               KafkaTemplate<String, Long> deleteKafkaTemplate, JWTUtil jwtUtil, MapperDTO mapperDTO) {
         this.mealCategoryRepository = mealCategoryRepository;
         this.restaurantRepository = restaurantRepository;
+        this.mealCategoryKafkaTemplate = mealCategoryKafkaTemplate;
+        this.deleteKafkaTemplate = deleteKafkaTemplate;
         this.jwtUtil = jwtUtil;
+        this.mapperDTO = mapperDTO;
     }
 
     public Iterable<MealCategory> getMealCategories(String authorizationHeader) {
@@ -66,6 +76,8 @@ public class MealCategoryService {
 
             mealCategory = mealCategoryRepository.save(mealCategory);
 
+            mealCategoryKafkaTemplate.send("dashboard-meal-category", mapperDTO.toMealCategoryDTO(mealCategory));
+
             return mealCategory;
         } else {
             throw new EntityNotFoundException("Restaurant with id:" + restaurantId + " does not exists.");
@@ -93,6 +105,8 @@ public class MealCategoryService {
 
                 mealCategory = mealCategoryRepository.save(mealCategory);
 
+                mealCategoryKafkaTemplate.send("dashboard-meal-category", mapperDTO.toMealCategoryDTO(mealCategory));
+
                 return mealCategory;
             } else {
                 throw new EntityNotFoundException("Meal category with id: " + updateMealCategoryRequest.id() +
@@ -109,6 +123,8 @@ public class MealCategoryService {
 
         if (optionalMealCategory.isPresent()) {
             mealCategoryRepository.deleteById(id);
+
+            deleteKafkaTemplate.send("dashboard-meal-category-delete", id);
 
             return optionalMealCategory.get();
         } else {

@@ -1,9 +1,6 @@
 package com.qrestaurant.qrdashboard.configuration;
 
-import com.qrestaurant.qrdashboard.model.dto.MealDTO;
-import com.qrestaurant.qrdashboard.model.dto.MenuDTO;
-import com.qrestaurant.qrdashboard.model.dto.RestaurantDTO;
-import com.qrestaurant.qrdashboard.model.dto.TableDTO;
+import com.qrestaurant.qrdashboard.model.dto.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -39,6 +36,11 @@ public class KafkaProducerFactoryConfiguration {
 
     @Bean
     public ProducerFactory<String, TableDTO> tableProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(kafkaProducerConfiguration.configs());
+    }
+
+    @Bean
+    public ProducerFactory<String, MealCategoryDTO> mealCategoryProducerFactory() {
         return new DefaultKafkaProducerFactory<>(kafkaProducerConfiguration.configs());
     }
 }
