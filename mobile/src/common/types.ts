@@ -1,5 +1,13 @@
 export type Restaurant = {
-  id: number;
+  id: string;
   name: string;
   menuId: number | null;
+};
+
+export type Meal = {
+  id: number;
+  menuId: number;
+  name: string;
+  price: number;
+  description: string;
 };
