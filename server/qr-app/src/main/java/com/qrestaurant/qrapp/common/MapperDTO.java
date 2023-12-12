@@ -72,6 +72,7 @@ public class MapperDTO {
         return new MenuDTO(menu.getId(), menu.getRestaurant().getId(), mealIds);
     }
 
+    @Transactional
     public MealDTO toMealDTO(Meal meal) {
         Iterable<Long> mealCategoryIds = meal.getMealCategories()
                 .stream()
@@ -82,6 +83,7 @@ public class MapperDTO {
                 meal.getMenu().getId(), mealCategoryIds);
     }
 
+    @Transactional
     public Iterable<MealDTO> toMealDTOs(Iterable<Meal> meals) {
         List<MealDTO> mealDTOs = new ArrayList<>();
 

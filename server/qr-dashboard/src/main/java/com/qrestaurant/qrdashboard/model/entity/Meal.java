@@ -23,7 +23,7 @@ public class Meal {
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "meal_category",
             joinColumns = @JoinColumn(name = "meal_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))

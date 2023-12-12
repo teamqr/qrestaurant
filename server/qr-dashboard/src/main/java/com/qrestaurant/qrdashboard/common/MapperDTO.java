@@ -65,10 +65,14 @@ public class MapperDTO {
     }
 
     public MealDTO toMealDTO(Meal meal) {
-        Iterable<Long> mealCategoryIds = meal.getMealCategories()
-                .stream()
-                .map(MealCategory::getId)
-                .toList();
+        List<Long> mealCategoryIds = new ArrayList<>();
+
+        if (meal.getMealCategories() != null) {
+            mealCategoryIds = meal.getMealCategories()
+                    .stream()
+                    .map(MealCategory::getId)
+                    .toList();
+        }
 
         return new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getImage(),
                 meal.getMenu().getId(), mealCategoryIds);
@@ -78,10 +82,14 @@ public class MapperDTO {
         List<MealDTO> mealDTOs = new ArrayList<>();
 
         meals.forEach(meal -> {
-            Iterable<Long> mealCategoryIds = meal.getMealCategories()
-                    .stream()
-                    .map(MealCategory::getId)
-                    .toList();
+            List<Long> mealCategoryIds = new ArrayList<>();
+
+            if (meal.getMealCategories() != null) {
+                mealCategoryIds = meal.getMealCategories()
+                        .stream()
+                        .map(MealCategory::getId)
+                        .toList();
+            }
 
             mealDTOs.add(new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(),
                     meal.getImage(), meal.getMenu().getId(), mealCategoryIds));
