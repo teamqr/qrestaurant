@@ -9,7 +9,7 @@ const AddTablePage = async () => {
 
   return (
     <div>
-      <h1 className="text-4xl flex flex-col justify-center items-center m-5">
+      <h1 className="flex flex-col justify-center items-center m-5">
         Dodaj stolik
       </h1>
       <AddTableForm token={token} tables={tables} />

@@ -87,7 +87,9 @@ const WorkerManagePage = (props: Props) => {
           >
             Powrót
           </button>
-          <h1 className="text-3xl">Zarządzaj kontem pracownika</h1>
+          <h1 className="flex flex-col justify-center items-center">
+            Zarządzaj kontem pracownika
+          </h1>
           <p>ID: {workerData.id}</p>
           <p>e-mail: {workerData.email}</p>
           <button

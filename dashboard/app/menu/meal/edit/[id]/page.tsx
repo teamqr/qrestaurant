@@ -7,7 +7,7 @@ const EditMealPage = async ({ params }: { params: { id: number } }) => {
 
   return (
     <div>
-      <h1 className="text-4xl flex flex-col justify-center items-center m-5">
+      <h1 className="flex flex-col justify-center items-center m-5">
         Edytuj danie
       </h1>
       <EditMealForm id={params.id} token={token} />

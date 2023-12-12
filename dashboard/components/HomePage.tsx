@@ -1,14 +1,19 @@
 "use client";
 import React from "react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { Role } from "@/types/Role";
 
 type Props = {
-  restaurantName: string | undefined;
+  restaurantName: string | null;
+  token: string | null;
 };
 
 const HomePage = (props: Props) => {
+  if (!props.token) {
+    signOut({ redirect: false });
+  }
+
   const { data: session, status } = useSession({
     required: true,
   });
