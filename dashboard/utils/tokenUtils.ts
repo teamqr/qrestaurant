@@ -2,6 +2,9 @@
 import { unsealData } from "iron-session";
 import { cookies } from "next/headers";
 import { decodeToken } from "./apiUtils";
+import { TokenData } from "@/types/TokenData";
+import { Role } from "@/types/Role";
+import { redirect } from "next/navigation";
 
 export async function removeTokenFromCookies() {
   const cookieStore = cookies();
@@ -22,4 +25,14 @@ export async function getTokenFromCookies() {
 export async function getTokenData(token: string) {
   const decodedToken = await decodeToken(token);
   return decodedToken;
+}
+
+export async function checkAdminAccess() {
+  const token: string = (await getTokenFromCookies()) as string;
+  const tokenData: TokenData = await getTokenData(token);
+  const role: string = tokenData.role;
+  if (role != Role.ADMIN) {
+    redirect("/");
+  }
+  return token;
 }

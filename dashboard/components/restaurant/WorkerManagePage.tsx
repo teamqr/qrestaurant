@@ -1,4 +1,5 @@
 "use client";
+import { Role } from "@/types/Role";
 import { WorkerData } from "@/types/WorkerData";
 import { deleteWorker } from "@/utils/apiUtils";
 import { useSession } from "next-auth/react";
@@ -45,7 +46,7 @@ const WorkerManagePage = (props: Props) => {
     return <></>;
   }
 
-  if (session?.user.role != "ADMIN" || !props.token) {
+  if (session?.user.role != Role.ADMIN || !props.token) {
     redirect("/");
   }
 
