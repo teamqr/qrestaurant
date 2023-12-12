@@ -30,6 +30,11 @@ const _Button = instyle(Pressable, {
     backgroundColor: theme.colors.background,
   },
   variants: {
+    xs: {
+      width: 48,
+      height: 48,
+      borderRadius: theme.radii.small,
+    },
     small: {
       width: 56,
       height: 56,
