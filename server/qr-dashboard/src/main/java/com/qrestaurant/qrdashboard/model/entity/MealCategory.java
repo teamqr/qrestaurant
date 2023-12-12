@@ -17,7 +17,7 @@ public class MealCategory {
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-    @ManyToMany(mappedBy = "mealCategories")
+    @ManyToMany(mappedBy = "mealCategories", fetch = FetchType.EAGER)
     private List<Meal> meals;
 
     public MealCategory() {}
