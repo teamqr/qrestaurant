@@ -34,7 +34,6 @@ export async function fetchRestaurantData(
     });
     if (res.ok) {
       const json = await res.json();
-
       return json.restaurant;
     }
   }
@@ -94,11 +93,15 @@ export async function addWorker(
     revalidatePath("/restaurant");
   }
 }
-export async function editRestaurant(name: string, token?: string | null) {
+export async function editRestaurant(
+  name: string,
+  image: string,
+  token?: string | null
+) {
   "use server";
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/restaurant`;
-    const reqBody = { name };
+    const reqBody = { name, image };
     await fetch(reqUrl, {
       method: "PUT",
       headers: {
@@ -193,12 +196,13 @@ export async function addMeal(
   name: string,
   description: string | null,
   price: number,
+  image: string,
   token?: string | null
 ) {
   "use server";
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/meal`;
-    const reqBody = { name, description, price };
+    const reqBody = { name, description, price, image };
     await fetch(reqUrl, {
       method: "POST",
       headers: {
@@ -218,12 +222,13 @@ export async function editMeal(
   name: string,
   description: string | null,
   price: number,
+  image: string,
   token?: string | null
 ) {
   "use server";
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/meal`;
-    const reqBody = { id, name, description, price };
+    const reqBody = { id, name, description, price, image };
     await fetch(reqUrl, {
       method: "PUT",
       headers: {

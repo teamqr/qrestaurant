@@ -18,7 +18,6 @@ const RestaurantManagement = async () => {
         workersData={workersData}
         token={token}
       />
-      <AddWorkerForm token={token} />
     </div>
   );
 };
