@@ -7,10 +7,11 @@ import { ShoppingCardPlus } from "../icons";
 import { AppText } from "../text";
 
 import { theme } from "@/common/theme";
-import { Meal } from "@/common/types";
+import { Meal, Table } from "@/common/types";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import axios from "@/services/axios";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
+import { useRestaurant } from "@/hooks/query/useRestaurant";
 
 const getMeals = async (id: string) => {
   const { data } = await axios.get<{ meals: Meal[] }>(`api/app/meal`, {
@@ -21,9 +22,16 @@ const getMeals = async (id: string) => {
   return data;
 };
 
-export const MealList = () => {
-  const { restaurant } = useRestaurantSessionStore();
+type Props = {
+  table?: Table;
+};
+
+export const MealList = ({ table }: Props) => {
+  const { restaurantId } = useRestaurantSessionStore();
+  const restaurantQuery = useRestaurant(restaurantId!);
   const { bottom } = useFixedInsets();
+
+  const restaurant = restaurantQuery.data?.restaurant;
 
   const query = useQuery({
     queryKey: ["restaurant", restaurant?.id, "meals"],
@@ -86,11 +94,15 @@ export const MealList = () => {
                   {item.price.toFixed(2)} zł
                 </AppText>
               </View>
-              <IconButton
-                onPress={() => {}}
-                icon={<ShoppingCardPlus color="white" width={16} height={16} />}
-                variant="xs"
-              />
+              {table && (
+                <IconButton
+                  onPress={() => {}}
+                  icon={
+                    <ShoppingCardPlus color="white" width={16} height={16} />
+                  }
+                  variant="xs"
+                />
+              )}
             </View>
           </View>
         </Pressable>

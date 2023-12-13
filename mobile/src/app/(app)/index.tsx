@@ -10,6 +10,7 @@ import { Input } from "@/components/input";
 import { AppText } from "@/components/text";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import axios from "@/services/axios";
+import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 
 const getRestaurants = async () => {
   const response = await axios.get<{ restaurants: Restaurant[] }>(
@@ -19,6 +20,8 @@ const getRestaurants = async () => {
 };
 
 export default function RestaurantsPage() {
+  const { beginSession } = useRestaurantSessionStore();
+
   const { bottom } = useFixedInsets();
   const restaurants = useQuery({
     queryKey: ["restaurants"],
@@ -26,6 +29,11 @@ export default function RestaurantsPage() {
   });
 
   const router = useRouter();
+
+  const handleRestaurantPress = (restaurant: Restaurant) => {
+    beginSession({ restaurantId: restaurant.id });
+    router.push(`/(app)/${restaurant.id}`);
+  };
 
   return (
     <View
@@ -70,9 +78,7 @@ export default function RestaurantsPage() {
           {restaurants.data?.restaurants.map((restaurant) => (
             <Pressable
               key={restaurant.id}
-              onPress={() => {
-                router.push(`/(app)/${restaurant.id}`);
-              }}
+              onPress={() => handleRestaurantPress(restaurant)}
             >
               <View
                 style={{
