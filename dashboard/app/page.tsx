@@ -7,12 +7,11 @@ import React from "react";
 const Home = async () => {
   revalidatePath("/");
   const token = await getTokenFromCookies();
-
   const restaurantData = await fetchRestaurantData(token);
 
   return (
     <div>
-      <HomePage restaurantName={restaurantData?.name} />
+      <HomePage restaurantName={restaurantData?.name} token={token} />
     </div>
   );
 };

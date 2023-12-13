@@ -25,12 +25,12 @@ const RestaurantPage = (props: Props) => {
 
   return (
     <div>
-      <h1 className="text-4xl flex flex-col justify-center items-center">
+      <h1 className="flex flex-col justify-center items-center">
         Zarządzanie restauracją
       </h1>
       <div className="flex flex-row justify-around">
         <div className="p-5 w-max">
-          <h2 className="text-2xl py-2">Informacje o restauracji</h2>
+          <h2 className="py-2">Informacje o restauracji</h2>
           <input
             className="bg-transparent border-1 text-l"
             type="text"
@@ -68,7 +68,7 @@ const RestaurantPage = (props: Props) => {
           )}
         </div>
         <div className="p-5 w-max">
-          <h2 className="text-2xl py-2">Pracownicy</h2>
+          <h2 className="py-2">Pracownicy</h2>
           <table>
             <thead>
               <tr>

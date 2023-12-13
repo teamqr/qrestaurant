@@ -10,7 +10,7 @@ type Props = {
 const TableManagementPage = (props: Props) => {
   return (
     <div className="m-5">
-      <h1 className="text-4xl flex flex-col justify-center items-center m-5">
+      <h1 className="flex flex-col justify-center items-center m-5">
         Zarządzanie stolikami
       </h1>
       <table>
@@ -20,6 +20,7 @@ const TableManagementPage = (props: Props) => {
             <th>Numer stolika</th>
             <th>Prefix</th>
             <th>Kod</th>
+            <th>Szczegóły</th>
             <th>Edytuj</th>
           </tr>
         </thead>

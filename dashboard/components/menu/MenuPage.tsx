@@ -11,7 +11,7 @@ const MenuPage = (props: Props) => {
   return (
     <div>
       <div className="m-5">
-        <h1 className="text-4xl flex flex-col justify-center items-center m-5">
+        <h1 className="flex flex-col justify-center items-center m-5">
           Zarządzanie menu
         </h1>
         <table>

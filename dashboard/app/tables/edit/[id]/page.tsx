@@ -1,11 +1,21 @@
 import EditTableForm from "@/components/tables/EditTableForm";
-import { deleteTable } from "@/utils/apiUtils";
+import { TableData } from "@/types/TableData";
+import { deleteTable, fetchTablesData } from "@/utils/apiUtils";
 import { checkAdminAccess } from "@/utils/tokenUtils";
 import { redirect } from "next/navigation";
 import React from "react";
 
 const EditTablePage = async ({ params }: { params: { id: number } }) => {
   const token: string = await checkAdminAccess();
+  const tablesData = await fetchTablesData(token);
+
+  const isIdInList = async (id: number, tables: TableData[]) => {
+    return !!tables.find((table: TableData) => table.id == id);
+  };
+
+  if (!(await isIdInList(params.id, tablesData))) {
+    redirect(`/tables`);
+  }
 
   const deleteTableAction = async () => {
     "use server";

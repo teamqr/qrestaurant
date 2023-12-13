@@ -10,7 +10,7 @@ const NavBar = () => {
   return (
     <div>
       <header className="flex justify-center bg-gray-900 px-5 p-5 mb-5">
-        <div className="flex text-5xl justify-center items-center w-full">
+        <div className="flex text-6xl justify-center items-center w-full">
           <Link href="/">
             <strong>QR</strong>estaurant
           </Link>
