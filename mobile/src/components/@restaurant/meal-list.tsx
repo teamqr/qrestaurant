@@ -8,10 +8,10 @@ import { AppText } from "../text";
 
 import { theme } from "@/common/theme";
 import { Meal, Table } from "@/common/types";
+import { useRestaurant } from "@/hooks/query/useRestaurant";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import axios from "@/services/axios";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
-import { useRestaurant } from "@/hooks/query/useRestaurant";
 
 const getMeals = async (id: string) => {
   const { data } = await axios.get<{ meals: Meal[] }>(`api/app/meal`, {

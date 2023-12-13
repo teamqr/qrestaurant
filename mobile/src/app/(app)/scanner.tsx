@@ -1,6 +1,6 @@
 import { Canvas, Rect, Shadow } from "@shopify/react-native-skia";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Redirect, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";

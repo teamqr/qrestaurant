@@ -8,8 +8,8 @@ import { QrCode, Search } from "@/components/icons";
 import { Input } from "@/components/input";
 import { AppText } from "@/components/text";
 import { useRestaurant } from "@/hooks/query/useRestaurant";
-import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 import { useTable } from "@/hooks/query/useTable";
+import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 
 export default function RestaurantPage() {
   const router = useRouter();
