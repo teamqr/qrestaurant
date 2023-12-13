@@ -1,4 +1,6 @@
 import { MealCategoryData } from "@/types/MealCategoryData";
+import IonIcon from "@reacticons/ionicons";
+import Link from "next/link";
 import React from "react";
 
 type Props = {
@@ -6,16 +8,15 @@ type Props = {
 };
 
 const Category = (props: Props) => {
-  const deleteCategoryAction = async () => {
-    "use server";
-    console.log(`deleteCategory with id: ${props.data.id}`);
-  };
   return (
-    <div className="flex flex-row justify-around w-max mr-2 my-2 bg-white rounded-md text-black">
-      <div className="p-1 mr-2">{props.data.name}</div>
-      <form action={deleteCategoryAction}>
-        <button className="flex hover:bg-red-400 rounded-md p-1">X</button>
-      </form>
+    <div className="flex flex-row justify-around items-center w-max mr-2 my-2 bg-white rounded-md text-black text-m">
+      <div className="p-2 mr-2">{props.data.name}</div>
+      <Link
+        href={`/menu/category/edit/${props.data.id}`}
+        className="flex hover:bg-blue-400 py-3 px-2 text-xl rounded-md h-max "
+      >
+        <IonIcon name="create-outline" />
+      </Link>
     </div>
   );
 };

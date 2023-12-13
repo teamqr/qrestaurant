@@ -342,7 +342,7 @@ export async function deleteTable(id: number, token?: string | null) {
   }
 }
 
-export async function fetchMealCategoriesData(
+export async function fetchCategoriesData(
   token: string | null
 ): Promise<MealCategoryData[]> {
   if (token) {
@@ -360,7 +360,7 @@ export async function fetchMealCategoriesData(
   return {} as MealData[];
 }
 
-export async function fetchMealCategoryData(
+export async function fetchCategoryData(
   id: number,
   token: string | null
 ): Promise<MealCategoryData> {
@@ -391,6 +391,42 @@ export async function addCategory(name: string, token?: string | null) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reqBody),
+      next: { tags: ["categories"] },
+      cache: "no-store",
+    });
+    revalidatePath("/menu");
+  }
+}
+
+export async function editCategory(
+  id: number,
+  name: string,
+  token?: string | null
+) {
+  "use server";
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/meal-category`;
+    const reqBody = { id, name };
+    await fetch(reqUrl, {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+      next: { tags: ["categories"] },
+      cache: "no-store",
+    });
+    revalidatePath("/menu");
+  }
+}
+
+export async function deleteCategory(id: number, token?: string | null) {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/meal-category/${id}`;
+    await fetch(reqUrl, {
+      method: "DELETE",
+      headers: { Authorization: "Bearer " + token },
       next: { tags: ["categories"] },
       cache: "no-store",
     });

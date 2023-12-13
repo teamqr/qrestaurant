@@ -2,13 +2,12 @@ import MenuPage from "@/components/menu/MenuPage";
 import { MealCategoryData } from "@/types/MealCategoryData";
 import { MealData } from "@/types/MealData";
 import {
-  fetchMealCategoriesData,
+  fetchCategoriesData,
   fetchMealsData,
   fetchMenuData,
 } from "@/utils/apiUtils";
 import { checkAdminAccess } from "@/utils/tokenUtils";
 import { revalidatePath } from "next/cache";
-import Link from "next/link";
 import React from "react";
 
 const MenuManagement = async () => {
@@ -27,9 +26,7 @@ const MenuManagement = async () => {
     }
   });
 
-  const categoriesData: MealCategoryData[] = await fetchMealCategoriesData(
-    token
-  );
+  const categoriesData: MealCategoryData[] = await fetchCategoriesData(token);
 
   return (
     <div>
