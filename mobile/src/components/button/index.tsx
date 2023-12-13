@@ -150,6 +150,10 @@ const _Button = instyle(Pressable, {
     outlined: {
       backgroundColor: theme.colors.background,
     },
+    text: {
+      backgroundColor: "transparent",
+      borderWidth: 0,
+    },
   },
   defaultVariant: "contained",
 });

@@ -23,3 +23,4 @@ export { default as Location } from "./location";
 export { default as Bell } from "./bell";
 export { default as Ad } from "./ad";
 export { default as Trash } from "./trash";
+export { default as ShoppingCardPlus } from "./shopping-card-plus";
