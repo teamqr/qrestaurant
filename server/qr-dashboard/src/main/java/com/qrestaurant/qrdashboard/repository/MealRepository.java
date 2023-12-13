@@ -11,5 +11,6 @@ import java.util.Optional;
 @Transactional
 public interface MealRepository extends CrudRepository<Meal, Long> {
     Iterable<Meal> getAllByMenu_Restaurant_Id(Long restaurantId);
+    Iterable<Meal> getAllByMenu_Restaurant_IdAndMealCategories_Id(Long restaurantId, Long mealCategoryId);
     Optional<Meal> findByIdAndMenu_Restaurant_Id(Long id, Long restaurantId);
 }

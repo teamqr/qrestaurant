@@ -46,6 +46,13 @@ public class KafkaTopicConfiguration {
     }
 
     @Bean
+    public NewTopic mealDeleteTopic() {
+        return TopicBuilder
+                .name("dashboard-meal-delete")
+                .build();
+    }
+
+    @Bean
     public NewTopic tableTopic() {
         return TopicBuilder
                 .name("dashboard-table")
@@ -56,6 +63,20 @@ public class KafkaTopicConfiguration {
     public NewTopic tableDeleteTopic() {
         return TopicBuilder
                 .name("dashboard-table-delete")
+                .build();
+    }
+
+    @Bean
+    public NewTopic mealCategoryTopic() {
+        return TopicBuilder
+                .name("dashboard-meal-category")
+                .build();
+    }
+
+    @Bean
+    public NewTopic mealCategoryDeleteTopic() {
+        return TopicBuilder
+                .name("dashboard-meal-category-delete")
                 .build();
     }
 }

@@ -29,6 +29,8 @@ public class Restaurant {
     private Menu menu;
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
     private List<com.qrestaurant.qrdashboard.model.entity.Table> tables;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
+    private List<MealCategory> mealCategories;
 
     public Restaurant() {}
 
@@ -100,5 +102,13 @@ public class Restaurant {
 
     public void setTables(List<com.qrestaurant.qrdashboard.model.entity.Table> tables) {
         this.tables = tables;
+    }
+
+    public List<MealCategory> getMealCategories() {
+        return mealCategories;
+    }
+
+    public void setMealCategories(List<MealCategory> mealCategories) {
+        this.mealCategories = mealCategories;
     }
 }

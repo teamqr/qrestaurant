@@ -36,6 +36,17 @@ public class MealController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/category/{id}")
+    public ResponseEntity<Map<String, Iterable<MealDTO>>> getMealsByCategory(
+            @RequestHeader("Authorization") String authorizationHeader, @PathVariable Long id) {
+        Iterable<Meal> meals = mealService.getMealsByCategory(authorizationHeader, id);
+
+        Map<String, Iterable<MealDTO>> response = new HashMap<>();
+        response.put("meals", mapperDTO.toMealDTOs(meals));
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, MealDTO>> getMeal(@RequestHeader("Authorization") String authorizationHeader,
                                                      @PathVariable Long id) {
@@ -64,6 +75,18 @@ public class MealController {
     public ResponseEntity<Map<String, MealDTO>> updateMeal(@RequestHeader("Authorization") String authorizationHeader,
                                                         @Valid @RequestBody UpdateMealRequest updateMealRequest) {
         Meal meal = mealService.updateMeal(authorizationHeader, updateMealRequest);
+
+        Map<String, MealDTO> response = new HashMap<>();
+        response.put("meal", mapperDTO.toMealDTO(meal));
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize(value = "hasAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<Map<String, MealDTO>> deleteMeal(@RequestHeader("Authorization") String authorizationHeader,
+                                                           @PathVariable Long id) {
+        Meal meal = mealService.deleteMeal(authorizationHeader, id);
 
         Map<String, MealDTO> response = new HashMap<>();
         response.put("meal", mapperDTO.toMealDTO(meal));

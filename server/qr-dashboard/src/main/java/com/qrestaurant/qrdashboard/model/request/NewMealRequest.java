@@ -10,5 +10,6 @@ public record NewMealRequest(
         String description,
         @NotNull
         BigDecimal price,
-        String image
+        String image,
+        Iterable<Long> mealCategoryIds
 ) {}

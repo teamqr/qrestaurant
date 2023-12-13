@@ -7,5 +7,6 @@ public record RestaurantDTO(
         String image,
         Iterable<Long> userIds,
         Long menuId,
-        Iterable<Long> tableIds
+        Iterable<Long> tableIds,
+        Iterable<Long> mealCategoryIds
 ) {}

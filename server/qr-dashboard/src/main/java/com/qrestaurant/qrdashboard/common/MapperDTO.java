@@ -27,8 +27,13 @@ public class MapperDTO {
                 .map(Table::getId)
                 .toList();
 
+        Iterable<Long> mealCategoryIds = restaurant.getMealCategories()
+                .stream()
+                .map(MealCategory::getId)
+                .toList();
+
         return new RestaurantDTO(restaurant.getId(), restaurant.getName(), restaurant.getPrefix(), restaurant.getImage(),
-                userIds, menuId, tableIds);
+                userIds, menuId, tableIds, mealCategoryIds);
     }
 
     public UserDTO toUserDTO(User user) {
@@ -60,17 +65,35 @@ public class MapperDTO {
     }
 
     public MealDTO toMealDTO(Meal meal) {
+        List<Long> mealCategoryIds = new ArrayList<>();
+
+        if (meal.getMealCategories() != null) {
+            mealCategoryIds = meal.getMealCategories()
+                    .stream()
+                    .map(MealCategory::getId)
+                    .toList();
+        }
+
         return new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getImage(),
-                meal.getMenu().getId());
+                meal.getMenu().getId(), mealCategoryIds);
     }
 
     public Iterable<MealDTO> toMealDTOs(Iterable<Meal> meals) {
         List<MealDTO> mealDTOs = new ArrayList<>();
 
-        meals.forEach(meal -> mealDTOs.add(
-                new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(), meal.getImage(),
-                        meal.getMenu().getId()))
-        );
+        meals.forEach(meal -> {
+            List<Long> mealCategoryIds = new ArrayList<>();
+
+            if (meal.getMealCategories() != null) {
+                mealCategoryIds = meal.getMealCategories()
+                        .stream()
+                        .map(MealCategory::getId)
+                        .toList();
+            }
+
+            mealDTOs.add(new MealDTO(meal.getId(), meal.getName(), meal.getDescription(), meal.getPrice(),
+                    meal.getImage(), meal.getMenu().getId(), mealCategoryIds));
+        });
 
         return mealDTOs;
     }
@@ -88,5 +111,35 @@ public class MapperDTO {
                         table.getRestaurant().getId())));
 
         return tableDTOs;
+    }
+
+    public MealCategoryDTO toMealCategoryDTO(MealCategory mealCategory) {
+        Iterable<Long> mealIds = new ArrayList<>();
+
+        if (mealCategory.getMeals() != null) {
+            mealIds = mealCategory.getMeals()
+                    .stream()
+                    .map(Meal::getId)
+                    .toList();
+        }
+
+        return new MealCategoryDTO(
+                mealCategory.getId(), mealCategory.getName(), mealCategory.getRestaurant().getId(), mealIds);
+    }
+
+    public Iterable<MealCategoryDTO> toMealCategoryDTOs(Iterable<MealCategory> mealCategories) {
+        List<MealCategoryDTO> mealCategoryDTOs = new ArrayList<>();
+
+        mealCategories.forEach(mealCategory -> {
+            Iterable<Long> mealIds = mealCategory.getMeals()
+                    .stream()
+                    .map(Meal::getId)
+                    .toList();
+
+            mealCategoryDTOs.add(new MealCategoryDTO(mealCategory.getId(), mealCategory.getName(),
+                    mealCategory.getRestaurant().getId(), mealIds));
+        });
+
+        return mealCategoryDTOs;
     }
 }

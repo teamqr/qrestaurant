@@ -31,6 +31,17 @@ public class MealController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/category/{id}")
+    public ResponseEntity<Map<String, Iterable<MealDTO>>> getMealsByCategory(@PathVariable Long id,
+                                                                             @RequestParam Long restaurantId) {
+        Iterable<Meal> meals = mealService.getMealsByCategory(restaurantId, id);
+
+        Map<String, Iterable<MealDTO>> response = new HashMap<>();
+        response.put("meals", mapperDTO.toMealDTOs(meals));
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, MealDTO>> getMeal(@PathVariable Long id, @RequestParam Long restaurantId) {
         Meal meal = mealService.getMeal(id, restaurantId);
