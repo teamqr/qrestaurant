@@ -9,13 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@reacticons/ionicons": "^7.1.0",
     "iron-session": "^8.0.1",
     "jwt-decode": "^4.0.0",
     "next": "14.0.2",
     "next-auth": "^4.24.5",
     "next-qrcode": "^2.5.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-select": "^5.8.0"
   },
   "devDependencies": {
     "@types/node": "^20",

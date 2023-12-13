@@ -4,4 +4,5 @@ export type MealData = {
   description: string;
   price: number;
   image: string;
+  mealCategoryIds: number[];
 };

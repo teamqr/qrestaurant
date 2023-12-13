@@ -1,4 +1,4 @@
-import { editMeal, fetchMealData } from "@/utils/apiUtils";
+import { editMeal, fetchCategoriesData, fetchMealData } from "@/utils/apiUtils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -7,6 +7,7 @@ import { revalidateTag } from "next/cache";
 import ReactiveTextArea from "../ReactiveTextArea";
 import ReactiveFileInput from "../ReactiveFileInput";
 import Image from "next/image";
+import ReactiveCategorySelect from "../ReactiveCategorySelect";
 
 type Props = {
   id: number;
@@ -20,6 +21,8 @@ const EditMealForm = async (props: Props) => {
   let initialDesc = mealData.description;
   let initialPrice = mealData.price;
   let initialImage = mealData.image;
+  const selectedCategories = mealData.mealCategoryIds;
+  const allCategories = await fetchCategoriesData(props.token);
 
   const editMealAction = async (formData: FormData) => {
     "use server";
@@ -27,8 +30,17 @@ const EditMealForm = async (props: Props) => {
     const description = formData.get("description") as string | null;
     const price = formData.get("price")?.valueOf() as number;
     const image = formData.get("image") as string;
+    const categories = formData.getAll("categories") as any[];
 
-    await editMeal(props.id, name, description, price, image, props.token);
+    await editMeal(
+      props.id,
+      name,
+      description,
+      price,
+      image,
+      categories,
+      props.token
+    );
     redirect("/menu");
   };
 
@@ -57,6 +69,12 @@ const EditMealForm = async (props: Props) => {
             step="0.01"
             value={initialPrice}
             placeholder="Cena"
+          />
+
+          <h2>Kategorie</h2>
+          <ReactiveCategorySelect
+            allCategories={allCategories}
+            selectedCategories={selectedCategories}
           />
 
           <h2>Opis (opcjonalnie)</h2>
