@@ -8,6 +8,7 @@ import { MenuData } from "@/types/MenuData";
 import { MealData } from "@/types/MealData";
 import { RestaurantData } from "@/types/RestaurantData";
 import { TableData } from "@/types/TableData";
+import { MealCategoryData } from "@/types/MealCategoryData";
 
 export async function decodeToken(token: string | null): Promise<TokenData> {
   if (token) {
@@ -197,12 +198,13 @@ export async function addMeal(
   description: string | null,
   price: number,
   image: string,
+  mealCategoryIds: number[],
   token?: string | null
 ) {
   "use server";
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/meal`;
-    const reqBody = { name, description, price, image };
+    const reqBody = { name, description, price, image, mealCategoryIds };
     await fetch(reqUrl, {
       method: "POST",
       headers: {
@@ -223,12 +225,13 @@ export async function editMeal(
   description: string | null,
   price: number,
   image: string,
+  mealCategoryIds: number[],
   token?: string | null
 ) {
   "use server";
   if (token) {
     const reqUrl = `${serverUrl}/api/dashboard/meal`;
-    const reqBody = { id, name, description, price, image };
+    const reqBody = { id, name, description, price, image, mealCategoryIds };
     await fetch(reqUrl, {
       method: "PUT",
       headers: {
@@ -336,5 +339,61 @@ export async function deleteTable(id: number, token?: string | null) {
       cache: "no-store",
     });
     revalidatePath("/tables");
+  }
+}
+
+export async function fetchMealCategoriesData(
+  token: string | null
+): Promise<MealCategoryData[]> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/meal-category`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["categories"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.mealCategories;
+    }
+  }
+  return {} as MealData[];
+}
+
+export async function fetchMealCategoryData(
+  id: number,
+  token: string | null
+): Promise<MealCategoryData> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/meal-category/${id}`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["categories"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.mealCategory;
+    }
+  }
+  return {} as MealData;
+}
+
+export async function addCategory(name: string, token?: string | null) {
+  "use server";
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/meal-category`;
+    const reqBody = { name };
+    await fetch(reqUrl, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+      next: { tags: ["categories"] },
+      cache: "no-store",
+    });
+    revalidatePath("/menu");
   }
 }

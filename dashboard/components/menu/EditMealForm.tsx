@@ -28,7 +28,7 @@ const EditMealForm = async (props: Props) => {
     const price = formData.get("price")?.valueOf() as number;
     const image = formData.get("image") as string;
 
-    await editMeal(props.id, name, description, price, image, props.token);
+    await editMeal(props.id, name, description, price, image, [], props.token);
     redirect("/menu");
   };
 
