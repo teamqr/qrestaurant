@@ -22,8 +22,6 @@ export default function RestaurantPage() {
     code: tableCode,
   });
 
-  console.log(tableQuery.data);
-
   if (query.isLoading) {
     return (
       <View
