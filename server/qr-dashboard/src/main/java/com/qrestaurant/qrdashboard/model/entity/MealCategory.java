@@ -57,4 +57,11 @@ public class MealCategory {
     public void setMeals(List<Meal> meals) {
         this.meals = meals;
     }
+
+    @PreRemove
+    private void removeMealAssociations() {
+        for (Meal meal : this.meals) {
+            meal.getMealCategories().remove(this);
+        }
+    }
 }
