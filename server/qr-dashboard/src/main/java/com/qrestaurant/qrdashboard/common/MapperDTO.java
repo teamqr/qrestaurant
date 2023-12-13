@@ -10,6 +10,7 @@ import java.util.List;
 
 @Component
 public class MapperDTO {
+    @Transactional
     public RestaurantDTO toRestaurantDTO(Restaurant restaurant) {
         Iterable<Long> userIds = restaurant.getUsers()
                 .stream()
@@ -36,10 +37,12 @@ public class MapperDTO {
                 userIds, menuId, tableIds, mealCategoryIds);
     }
 
+    @Transactional
     public UserDTO toUserDTO(User user) {
         return new UserDTO(user.getId(), user.getUsername(), user.getRole(), user.getRestaurant().getId());
     }
 
+    @Transactional
     public Iterable<UserDTO> toUserDTOs(Iterable<User> users) {
         List<UserDTO> userDTOs = new ArrayList<>();
 
@@ -64,6 +67,7 @@ public class MapperDTO {
         return new MenuDTO(menu.getId(), menu.getRestaurant().getId(), mealIds);
     }
 
+    @Transactional
     public MealDTO toMealDTO(Meal meal) {
         List<Long> mealCategoryIds = new ArrayList<>();
 
@@ -78,6 +82,7 @@ public class MapperDTO {
                 meal.getMenu().getId(), mealCategoryIds);
     }
 
+    @Transactional
     public Iterable<MealDTO> toMealDTOs(Iterable<Meal> meals) {
         List<MealDTO> mealDTOs = new ArrayList<>();
 
@@ -98,6 +103,7 @@ public class MapperDTO {
         return mealDTOs;
     }
 
+    @Transactional
     public TableDTO toTableDTO(Table table) {
         return new TableDTO(
                 table.getId(), table.getNumber(), table.getPrefix(), table.getCode(), table.getRestaurant().getId());
@@ -113,6 +119,7 @@ public class MapperDTO {
         return tableDTOs;
     }
 
+    @Transactional
     public MealCategoryDTO toMealCategoryDTO(MealCategory mealCategory) {
         Iterable<Long> mealIds = new ArrayList<>();
 
@@ -127,6 +134,7 @@ public class MapperDTO {
                 mealCategory.getId(), mealCategory.getName(), mealCategory.getRestaurant().getId(), mealIds);
     }
 
+    @Transactional
     public Iterable<MealCategoryDTO> toMealCategoryDTOs(Iterable<MealCategory> mealCategories) {
         List<MealCategoryDTO> mealCategoryDTOs = new ArrayList<>();
 
