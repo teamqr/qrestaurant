@@ -10,10 +10,12 @@ import java.util.List;
 
 @Component
 public class MapperDTO {
+    @Transactional
     public UserDTO toUserDTO(User user) {
         return new UserDTO(user.getId(), user.getUsername(), user.getFirstname(), user.getLastname());
     }
 
+    @Transactional
     public RestaurantDTO toRestaurantDTO(Restaurant restaurant) {
         Long menuId = null;
 
@@ -35,6 +37,7 @@ public class MapperDTO {
                 restaurant.getFeatured(), menuId, tableIds, mealCategoryIds);
     }
 
+    @Transactional
     public Iterable<RestaurantDTO> toRestaurantDTOs(Iterable<Restaurant> restaurants) {
         List<RestaurantDTO> restaurantDTOs = new ArrayList<>();
 
@@ -100,6 +103,7 @@ public class MapperDTO {
         return mealDTOs;
     }
 
+    @Transactional
     public TableDTO toTableDTO(Table table) {
         return new TableDTO(
                 table.getId(), table.getNumber(), table.getPrefix(), table.getCode(), table.getRestaurant().getId());
@@ -119,6 +123,7 @@ public class MapperDTO {
                 mealCategory.getId(), mealCategory.getName(), mealCategory.getRestaurant().getId(), mealIds);
     }
 
+    @Transactional
     public Iterable<MealCategoryDTO> toMealCategoryDTOs(Iterable<MealCategory> mealCategories) {
         List<MealCategoryDTO> mealCategoryDTOs = new ArrayList<>();
 
