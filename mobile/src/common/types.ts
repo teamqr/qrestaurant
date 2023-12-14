@@ -10,6 +10,8 @@ export type Meal = {
   name: string;
   price: number;
   description: string;
+  image: string;
+  mealCategoryIds: number[];
 };
 
 export type Table = {
@@ -18,4 +20,11 @@ export type Table = {
   prefix: string;
   number: number;
   code: string;
+};
+
+export type MealCategory = {
+  id: number;
+  name: string;
+  restaurantId: number;
+  mealIds: number[];
 };
