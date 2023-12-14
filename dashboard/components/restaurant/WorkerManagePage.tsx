@@ -3,6 +3,7 @@ import { Role } from "@/types/Role";
 import { WorkerData } from "@/types/WorkerData";
 import { deleteWorker } from "@/utils/apiUtils";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -57,7 +58,7 @@ const WorkerManagePage = (props: Props) => {
       <div>
         <div className={`${showDialog}`}>
           <div className="m-10">
-            <h1>Czy na pewno usunąć pracownika {workerData.email}?</h1>
+            <h2>Czy na pewno usunąć pracownika {workerData.email}?</h2>
             <div className="flex flex-row">
               <button
                 className="block rounded-md border-0 m-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-red-500"
@@ -79,14 +80,6 @@ const WorkerManagePage = (props: Props) => {
           </div>
         </div>
         <div className={`p-5 pt-0 ${showContent}`}>
-          <button
-            className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500"
-            onClick={async () => {
-              router.back();
-            }}
-          >
-            Powrót
-          </button>
           <h1 className="flex flex-col justify-center items-center">
             Zarządzaj kontem pracownika
           </h1>
@@ -98,6 +91,12 @@ const WorkerManagePage = (props: Props) => {
           >
             Usuń konto pracownika
           </button>
+          <Link
+            href="/restaurant"
+            className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 w-max"
+          >
+            Anuluj
+          </Link>
         </div>
       </div>
     );

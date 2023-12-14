@@ -1,9 +1,13 @@
 import MenuPage from "@/components/menu/MenuPage";
+import { MealCategoryData } from "@/types/MealCategoryData";
 import { MealData } from "@/types/MealData";
-import { fetchMealsData, fetchMenuData } from "@/utils/apiUtils";
+import {
+  fetchCategoriesData,
+  fetchMealsData,
+  fetchMenuData,
+} from "@/utils/apiUtils";
 import { checkAdminAccess } from "@/utils/tokenUtils";
 import { revalidatePath } from "next/cache";
-import Link from "next/link";
 import React from "react";
 
 const MenuManagement = async () => {
@@ -22,16 +26,15 @@ const MenuManagement = async () => {
     }
   });
 
+  const categoriesData: MealCategoryData[] = await fetchCategoriesData(token);
+
   return (
     <div>
-      <MenuPage token={token} mealsData={mealsData} />
-
-      <Link
-        className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 w-max m-5"
-        href="/menu/meal/add"
-      >
-        Dodaj danie do menu
-      </Link>
+      <MenuPage
+        token={token}
+        mealsData={mealsData}
+        categoriesData={categoriesData}
+      />
     </div>
   );
 };

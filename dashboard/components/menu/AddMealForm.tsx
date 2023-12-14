@@ -1,22 +1,26 @@
-import { addMeal } from "@/utils/apiUtils";
+import { addMeal, fetchCategoriesData } from "@/utils/apiUtils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import ReactiveFileInput from "../ReactiveFileInput";
+import ReactiveCategorySelect from "../ReactiveCategorySelect";
 
 type Props = {
   token: string;
 };
 
-const AddMealForm = (props: Props) => {
+const AddMealForm = async (props: Props) => {
+  const allCategories = await fetchCategoriesData(props.token);
+
   const addMealAction = async (formData: FormData) => {
     "use server";
     const name = formData.get("name") as string;
     const description = formData.get("description") as string | null;
     const price = formData.get("price")?.valueOf() as number;
     const image = formData.get("image") as string;
+    const categories = formData.getAll("categories") as any[];
 
-    await addMeal(name, description, price, image, props.token);
+    await addMeal(name, description, price, image, categories, props.token);
     redirect("/menu");
   };
 
@@ -45,6 +49,12 @@ const AddMealForm = (props: Props) => {
             name="price"
             required={true}
             placeholder="Cena"
+          />
+
+          <h2>Kategorie</h2>
+          <ReactiveCategorySelect
+            selectedCategories={[]}
+            allCategories={allCategories}
           />
 
           <h2>Opis (opcjonalnie)</h2>
