@@ -156,13 +156,13 @@ public class MapperDTO {
 
     @Transactional
     public OrderDTO toOrderDTO(Order order) {
-        Iterable<Long> mealIds = order.getMeals()
+        Iterable<Long> mealOrderIds = order.getMealOrders()
                 .stream()
-                .map(Meal::getId)
+                .map(MealOrder::getId)
                 .toList();
 
         return new OrderDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
                 order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(),
-                order.getUser().getId(), mealIds);
+                order.getUser().getId(), mealOrderIds);
     }
 }

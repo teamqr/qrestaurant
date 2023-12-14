@@ -25,6 +25,8 @@ public class Order {
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date completionDate;
+    @OneToMany(mappedBy = "order")
+    private List<MealOrder> mealOrders;
     @ManyToOne
     @JoinColumn(name = "table_id")
     private com.qrestaurant.qrdashboard.model.entity.Table table;
@@ -34,8 +36,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "worker_id")
     private User worker;
-    @ManyToMany(mappedBy = "orders")
-    private List<Meal> meals;
 
     public Order() {}
 
@@ -86,6 +86,14 @@ public class Order {
         this.completionDate = completionDate;
     }
 
+    public List<MealOrder> getMealOrders() {
+        return mealOrders;
+    }
+
+    public void setMealOrders(List<MealOrder> mealOrders) {
+        this.mealOrders = mealOrders;
+    }
+
     public com.qrestaurant.qrdashboard.model.entity.Table getTable() {
         return table;
     }
@@ -108,13 +116,5 @@ public class Order {
 
     public void setWorker(User worker) {
         this.worker = worker;
-    }
-
-    public List<Meal> getMeals() {
-        return meals;
-    }
-
-    public void setMeals(List<Meal> meals) {
-        this.meals = meals;
     }
 }

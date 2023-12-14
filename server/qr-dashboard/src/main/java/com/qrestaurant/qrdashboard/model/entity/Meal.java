@@ -20,6 +20,8 @@ public class Meal {
     private BigDecimal price;
     @Lob
     private String image;
+    @OneToMany(mappedBy = "meal")
+    private List<MealOrder> mealOrders;
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
@@ -28,11 +30,6 @@ public class Meal {
             joinColumns = @JoinColumn(name = "meal_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
     private List<MealCategory> mealCategories;
-    @ManyToMany
-    @JoinTable(name = "meal_order",
-            joinColumns = @JoinColumn(name = "meal_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"))
-    private List<Order> orders;
 
     public Meal() {}
 
@@ -83,6 +80,14 @@ public class Meal {
         this.image = image;
     }
 
+    public List<MealOrder> getMealOrders() {
+        return mealOrders;
+    }
+
+    public void setMealOrders(List<MealOrder> mealOrders) {
+        this.mealOrders = mealOrders;
+    }
+
     public Menu getMenu() {
         return menu;
     }
@@ -97,13 +102,5 @@ public class Meal {
 
     public void setMealCategories(List<MealCategory> mealCategories) {
         this.mealCategories = mealCategories;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 }

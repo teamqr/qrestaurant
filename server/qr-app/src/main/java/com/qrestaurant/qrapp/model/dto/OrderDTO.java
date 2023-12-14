@@ -14,5 +14,5 @@ public record OrderDTO(
         Long tableId,
         Long restaurantId,
         Long userId,
-        Iterable<Long> mealIds
+        Iterable<Long> mealOrderIds
 ) {}
