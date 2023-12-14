@@ -189,4 +189,22 @@ public class MapperDTO {
                 order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(),
                 order.getWorker().getId(), mealOrderIds);
     }
+
+    @Transactional
+    public Iterable<OrderDTO> toOrderDTOs(Iterable<Order> orders) {
+        List<OrderDTO> orderDTOs = new ArrayList<>();
+
+        orders.forEach(order -> {
+            Iterable<Long> mealOrderIds = order.getMealOrders()
+                    .stream()
+                    .map(MealOrder::getId)
+                    .toList();
+
+            orderDTOs.add(new OrderDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
+                    order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(),
+                    order.getWorker().getId(), mealOrderIds));
+        });
+
+        return orderDTOs;
+    }
 }

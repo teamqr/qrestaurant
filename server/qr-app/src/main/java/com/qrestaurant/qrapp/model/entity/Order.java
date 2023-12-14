@@ -40,10 +40,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Order() {}
-
-    public Order(BigDecimal price) {
-        this.price = price;
+    public Order() {
         this.status = OrderStatus.CREATED;
     }
 
