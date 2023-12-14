@@ -1,6 +1,6 @@
-import { FlashList } from "@shopify/flash-list";
 import { useQuery } from "@tanstack/react-query";
 import { Pressable, StyleSheet, View } from "react-native";
+import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
 import { IconButton } from "../icon-button";
 import { ShoppingCardPlus } from "../icons";
@@ -13,6 +13,8 @@ import { useFixedInsets } from "@/hooks/useFixedInsets";
 import axios from "@/services/axios";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 const getMeals = async (id: string) => {
   const { data } = await axios.get<{ meals: Meal[] }>(`api/app/meal`, {
     params: {
@@ -24,9 +26,10 @@ const getMeals = async (id: string) => {
 
 type Props = {
   table?: Table;
+  category?: number;
 };
 
-export const MealList = ({ table }: Props) => {
+export const MealList = ({ table, category }: Props) => {
   const { restaurantId } = useRestaurantSessionStore();
   const restaurantQuery = useRestaurant(restaurantId!);
   const { bottom } = useFixedInsets();
@@ -43,19 +46,29 @@ export const MealList = ({ table }: Props) => {
     return null;
   }
 
-  // width - screen padding - item padding
-  const estimatedSize = 96;
+  const filteredData = category
+    ? query.data?.meals.filter((meal) =>
+        meal.mealCategoryIds.includes(category!),
+      )
+    : query.data?.meals;
 
   return (
-    <FlashList
-      data={query.data?.meals}
+    <Animated.FlatList
+      data={filteredData}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
         paddingBottom: bottom,
       }}
+      keyExtractor={(item) => item.id.toString()}
+      itemLayoutAnimation={Layout.springify()}
       renderItem={({ item, index }) => (
-        <Pressable onPress={() => {}} style={[styles.card]}>
-          <View style={styles.cardContent}>
+        <AnimatedPressable
+          onPress={() => {}}
+          style={[styles.card]}
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
+          <Animated.View style={styles.cardContent}>
             <View
               style={{
                 flexDirection: "row",
@@ -104,10 +117,10 @@ export const MealList = ({ table }: Props) => {
                 />
               )}
             </View>
-          </View>
-        </Pressable>
+          </Animated.View>
+        </AnimatedPressable>
       )}
-      estimatedItemSize={estimatedSize}
+      // estimatedItemSize={estimatedSize}
     />
   );
 };
