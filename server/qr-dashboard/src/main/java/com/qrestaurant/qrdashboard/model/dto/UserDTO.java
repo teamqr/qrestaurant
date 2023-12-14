@@ -6,5 +6,6 @@ public record UserDTO(
         Long id,
         String email,
         Role role,
-        Long restaurantId
+        Long restaurantId,
+        Iterable<Long> orderIds
 ) {}

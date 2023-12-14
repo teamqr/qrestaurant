@@ -8,5 +8,6 @@ public record RestaurantDTO(
         Iterable<Long> userIds,
         Long menuId,
         Iterable<Long> tableIds,
-        Iterable<Long> mealCategoryIds
+        Iterable<Long> mealCategoryIds,
+        Iterable<Long> orderIds
 ) {}
