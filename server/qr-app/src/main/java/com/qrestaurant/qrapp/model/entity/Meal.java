@@ -27,6 +27,11 @@ public class Meal {
             joinColumns = @JoinColumn(name = "meal_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
     private List<MealCategory> mealCategories;
+    @ManyToMany
+    @JoinTable(name = "meal_order",
+            joinColumns = @JoinColumn(name = "meal_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"))
+    private List<Order> orders;
 
     public Meal() {}
 
@@ -92,5 +97,13 @@ public class Meal {
 
     public void setMealCategories(List<MealCategory> mealCategories) {
         this.mealCategories = mealCategories;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

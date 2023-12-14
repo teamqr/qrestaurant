@@ -12,7 +12,12 @@ import java.util.List;
 public class MapperDTO {
     @Transactional
     public UserDTO toUserDTO(User user) {
-        return new UserDTO(user.getId(), user.getUsername(), user.getFirstname(), user.getLastname());
+        Iterable<Long> orderIds = user.getOrders()
+                .stream()
+                .map(Order::getId)
+                .toList();
+
+        return new UserDTO(user.getId(), user.getUsername(), user.getFirstname(), user.getLastname(), orderIds);
     }
 
     @Transactional
@@ -105,8 +110,17 @@ public class MapperDTO {
 
     @Transactional
     public TableDTO toTableDTO(Table table) {
-        return new TableDTO(
-                table.getId(), table.getNumber(), table.getPrefix(), table.getCode(), table.getRestaurant().getId());
+        List<Long> orderIds =  new ArrayList<>();
+
+        if (table.getOrders() != null) {
+            orderIds = table.getOrders()
+                    .stream()
+                    .map(Order::getId)
+                    .toList();
+        }
+
+        return new TableDTO(table.getId(), table.getNumber(), table.getPrefix(), table.getCode(),
+                table.getRestaurant().getId(), orderIds);
     }
 
     public MealCategoryDTO toMealCategoryDTO(MealCategory mealCategory) {
@@ -138,5 +152,17 @@ public class MapperDTO {
         });
 
         return mealCategoryDTOs;
+    }
+
+    @Transactional
+    public OrderDTO toOrderDTO(Order order) {
+        Iterable<Long> mealIds = order.getMeals()
+                .stream()
+                .map(Meal::getId)
+                .toList();
+
+        return new OrderDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
+                order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(),
+                order.getUser().getId(), mealIds);
     }
 }
