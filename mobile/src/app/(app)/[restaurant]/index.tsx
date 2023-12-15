@@ -1,7 +1,9 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { theme } from "@/common/theme";
+import { CategoryList } from "@/components/@restaurant/category-list";
 import { MealList } from "@/components/@restaurant/meal-list";
 import { IconButton } from "@/components/icon-button";
 import { QrCode, Search } from "@/components/icons";
@@ -13,6 +15,7 @@ import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 
 export default function RestaurantPage() {
   const router = useRouter();
+  const [category, setCategory] = useState<number>();
   const tableCode = useRestaurantSessionStore((state) => state.tableCode);
   const { restaurant: id } = useLocalSearchParams<{ restaurant: string }>();
 
@@ -93,7 +96,18 @@ export default function RestaurantPage() {
       </View>
       <Input prefix={<Search />} placeholder="na co masz ochotę?" />
 
-      <MealList table={table} />
+      <CategoryList
+        onCategoryChange={(c) => {
+          if (category === c) {
+            setCategory(undefined);
+          } else {
+            setCategory(c);
+          }
+        }}
+        category={category}
+      />
+
+      <MealList table={table} category={category} />
     </View>
   );
 }
