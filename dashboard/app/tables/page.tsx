@@ -1,11 +1,14 @@
 import TableManagementPage from "@/components/tables/TableManagementPage";
 import { TableData } from "@/types/TableData";
+import { TokenData } from "@/types/TokenData";
 import { fetchTablesData } from "@/utils/apiUtils";
-import { checkAdminAccess } from "@/utils/tokenUtils";
+import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
 import React from "react";
 
 const TableManagement = async () => {
-  const token: string = await checkAdminAccess();
+  const token: string = (await getTokenFromCookies()) as string;
+  const tokenData: TokenData = await getTokenData(token);
+  const role: string = tokenData?.role;
 
   const tablesData: TableData[] = await fetchTablesData(token);
   tablesData.sort((a: TableData, b: TableData) => {
@@ -19,7 +22,7 @@ const TableManagement = async () => {
   });
   return (
     <div>
-      <TableManagementPage tablesData={tablesData} />
+      <TableManagementPage tablesData={tablesData} role={role} />
     </div>
   );
 };

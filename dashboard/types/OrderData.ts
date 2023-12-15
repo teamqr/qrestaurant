@@ -6,7 +6,7 @@ export type OrderData = {
   price: number;
   status: boolean;
   orderDate: Date;
-  completionDate: DateTime | null;
+  completionDate: Date | null;
   tableId: number;
   restaurantId: number;
   orderEntries: OrderEntry[];

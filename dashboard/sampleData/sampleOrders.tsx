@@ -37,8 +37,8 @@ export const completeOrder1: OrderData = {
   price: 25.8,
   status: true,
   orderDate: new Date(),
-  completionDate: Date.now().toLocaleString(),
-  tableId: 10,
+  completionDate: new Date(),
+  tableId: 20,
   restaurantId: 1,
   orderEntries: [
     { id: 7, mealId: 22, amount: 3 },
@@ -52,8 +52,8 @@ export const completeOrder2: OrderData = {
   price: 25.8,
   status: true,
   orderDate: new Date(),
-  completionDate: Date.now().toLocaleString(),
-  tableId: 15,
+  completionDate: new Date(),
+  tableId: 17,
   restaurantId: 1,
   orderEntries: [
     { id: 10, mealId: 22, amount: 1 },
@@ -73,7 +73,16 @@ export const sampleOrders: OrderData[] = [
   order2,
   order2,
 ];
-export const completeOrders: OrderData[] = [completeOrder1, completeOrder2];
+export const completeOrders: OrderData[] = [
+  completeOrder1,
+  completeOrder2,
+  completeOrder1,
+  completeOrder2,
+  completeOrder1,
+  completeOrder2,
+  completeOrder1,
+  completeOrder2,
+];
 
 export function getSampleOrders() {
   return sampleOrders;
