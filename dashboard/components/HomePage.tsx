@@ -32,7 +32,7 @@ const HomePage = (props: Props) => {
           <p>Restauracja: {restaurant} </p>
         </div>
         {session.user?.role == Role.ADMIN ? (
-          <div className="flex justify-center items-center ">
+          <div className="flex justify-center items-center flex-wrap ">
             <Link
               className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 m-5 "
               href="/restaurant"
@@ -50,6 +50,12 @@ const HomePage = (props: Props) => {
               href="/tables"
             >
               Zarządzaj stolikami
+            </Link>
+            <Link
+              className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 m-5 "
+              href="/orders"
+            >
+              Aktualne zamówienia
             </Link>
           </div>
         ) : (
