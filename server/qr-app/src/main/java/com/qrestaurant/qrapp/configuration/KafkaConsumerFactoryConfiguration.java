@@ -52,4 +52,10 @@ public class KafkaConsumerFactoryConfiguration {
         return new DefaultKafkaConsumerFactory<>(kafkaConsumerConfiguration.configs(), new StringDeserializer(),
                 new JsonDeserializer<>(MealCategoryDTO.class, false));
     }
+
+    @Bean
+    public ConsumerFactory<String, OrderDTO> orderConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(kafkaConsumerConfiguration.configs(), new StringDeserializer(),
+                new JsonDeserializer<>(OrderDTO.class, false));
+    }
 }

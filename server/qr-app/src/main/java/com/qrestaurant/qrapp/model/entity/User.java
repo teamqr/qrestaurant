@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +27,8 @@ public class User implements UserDetails {
     private String firstname;
     @NotNull
     private String lastname;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Order> orders;
 
     public User() {}
 
@@ -76,6 +79,14 @@ public class User implements UserDetails {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     @Override

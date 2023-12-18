@@ -19,6 +19,8 @@ public class Meal {
     private BigDecimal price;
     @Lob
     private String image;
+    @OneToMany(mappedBy = "meal")
+    private List<MealOrder> mealOrders;
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
@@ -76,6 +78,14 @@ public class Meal {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<MealOrder> getMealOrders() {
+        return mealOrders;
+    }
+
+    public void setMealOrders(List<MealOrder> mealOrders) {
+        this.mealOrders = mealOrders;
     }
 
     public Menu getMenu() {
