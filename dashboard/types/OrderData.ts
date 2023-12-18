@@ -9,5 +9,5 @@ export type OrderData = {
   completionDate: Date | null;
   tableId: number;
   restaurantId: number;
-  orderEntries: OrderEntry[];
+  mealOrderIds: number[];
 };

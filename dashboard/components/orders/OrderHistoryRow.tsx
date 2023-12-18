@@ -11,17 +11,19 @@ type Props = {
 
 const OrderHistoryRow = (props: Props) => {
   const order = props.data;
-  const orderDateTime = order.orderDate.toLocaleString("pl-PL").split(",");
-  const orderDate = orderDateTime[0];
-  const orderTime = orderDateTime[1].substring(0, 6);
+  const orderDateTime = new Date(order.orderDate);
+  const orderDate = orderDateTime.toLocaleDateString("pl-PL");
+  const orderTime = orderDateTime.toLocaleTimeString("pl-PL").substring(0, 5);
 
   let orderCompleteDateTime, orderCompleteDate, orderCompleteTime;
   if (order.completionDate) {
     orderCompleteDateTime = order?.completionDate
       .toLocaleString("pl-PL")
       .split(",");
-    orderCompleteDate = orderDateTime[0];
-    orderCompleteTime = orderDateTime[1].substring(0, 6);
+    orderCompleteDate = orderDateTime.toLocaleDateString("pl-PL");
+    orderCompleteTime = orderDateTime
+      .toLocaleTimeString("pl-PL")
+      .substring(0, 5);
   }
 
   function getTableNumberById(id: number) {
@@ -36,7 +38,7 @@ const OrderHistoryRow = (props: Props) => {
       <td>#{order.id}</td>
       <td>#{getTableNumberById(order.tableId)}</td>
       <td>{`${orderDate}, ${orderTime}`}</td>
-      <td>{`${orderCompleteDate}, ${orderCompleteTime}`}</td>
+      <td>{`${orderDate}, ${orderTime}`}</td>
       <td>{order.price.toPrecision(4)}zł</td>
       <td>
         <Link

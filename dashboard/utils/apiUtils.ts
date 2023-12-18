@@ -9,6 +9,8 @@ import { MealData } from "@/types/MealData";
 import { RestaurantData } from "@/types/RestaurantData";
 import { TableData } from "@/types/TableData";
 import { MealCategoryData } from "@/types/MealCategoryData";
+import { OrderData } from "@/types/OrderData";
+import { OrderEntry } from "@/types/OrderEntry";
 
 export async function decodeToken(token: string | null): Promise<TokenData> {
   if (token) {
@@ -357,7 +359,7 @@ export async function fetchCategoriesData(
       return json.mealCategories;
     }
   }
-  return {} as MealData[];
+  return [] as MealCategoryData[];
 }
 
 export async function fetchCategoryData(
@@ -376,7 +378,7 @@ export async function fetchCategoryData(
       return json.mealCategory;
     }
   }
-  return {} as MealData;
+  return {} as MealCategoryData;
 }
 
 export async function addCategory(name: string, token?: string | null) {
@@ -432,4 +434,60 @@ export async function deleteCategory(id: number, token?: string | null) {
     });
     revalidatePath("/menu");
   }
+}
+
+export async function fetchOrdersData(
+  token: string | null
+): Promise<OrderData[]> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/order`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["orders"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.orders;
+    }
+  }
+  return [] as OrderData[];
+}
+
+export async function fetchOrderData(
+  id: number,
+  token: string | null
+): Promise<OrderData> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/order/${id}`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["orders"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.order;
+    }
+  }
+  return {} as OrderData;
+}
+
+export async function fetchOrderEntriesByOrderId(
+  orderId: number,
+  token: string | null
+): Promise<OrderEntry[]> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/meal-order/${orderId}`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["orders"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.mealOrders;
+    }
+  }
+  return [] as OrderEntry[];
 }

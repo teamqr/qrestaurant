@@ -3,14 +3,18 @@ import { OrderData } from "@/types/OrderData";
 import { getTokenFromCookies } from "@/utils/tokenUtils";
 import React from "react";
 import Order from "./Order";
-import { fetchMealsData, fetchTablesData } from "@/utils/apiUtils";
+import {
+  fetchMealsData,
+  fetchOrdersData,
+  fetchTablesData,
+} from "@/utils/apiUtils";
 
 const OrdersPage = async () => {
   const token = (await getTokenFromCookies()) as string;
   const meals = await fetchMealsData(token);
   const tables = await fetchTablesData(token);
 
-  const orders = getSampleOrders();
+  const orders = await fetchOrdersData(token);
   const ordersCount = orders.length;
   return (
     <div>

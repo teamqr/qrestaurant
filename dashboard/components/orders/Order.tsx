@@ -2,7 +2,7 @@ import { MealData } from "@/types/MealData";
 import { OrderData } from "@/types/OrderData";
 import { OrderEntry } from "@/types/OrderEntry";
 import { TableData } from "@/types/TableData";
-import { fetchMealData } from "@/utils/apiUtils";
+import { fetchOrderEntriesByOrderId } from "@/utils/apiUtils";
 import React from "react";
 
 type Props = {
@@ -12,17 +12,16 @@ type Props = {
   token: string;
 };
 
-type OrderEntryData = {
-  id: number;
-  mealName: string;
-  amount: number;
-};
-
-const Order = (props: Props) => {
+const Order = async (props: Props) => {
   const order = props.data;
-  const orderDateTime = order.orderDate.toLocaleString("pl-PL").split(",");
-  const orderDate = orderDateTime[0];
-  const orderTime = orderDateTime[1].substring(0, 6);
+  const orderEntries: OrderEntry[] = await fetchOrderEntriesByOrderId(
+    order.id,
+    props.token
+  );
+
+  const orderDateTime = new Date(order.orderDate);
+  const orderDate = orderDateTime.toLocaleDateString("pl-PL");
+  const orderTime = orderDateTime.toLocaleTimeString("pl-PL").substring(0, 5);
 
   function getMealNameById(id: number) {
     const meal = props.mealsData.find((e) => e.id == id);
@@ -44,14 +43,13 @@ const Order = (props: Props) => {
     <div className="flex flex-col items-center flex-wrap m-4 p-2 bg-slate-700 rounded-lg w-72 ">
       <h2>Zamówienie #{order.id}</h2>
       <div className="w-full">Stolik #{getTableNumberById(order.tableId)}</div>
-      <div className="w-full">Zamówiono: </div>
       <div className="flex flex-row justify-between w-full">
         <div>{orderTime}</div>
         <div>{orderDate}</div>
       </div>
       <div className="flex flex-col justify-start items-start bg-white text-black rounded-lg w-full px-5 py-1">
-        {order.orderEntries ? (
-          order.orderEntries.map((orderEntry: OrderEntry, i: number) => (
+        {orderEntries ? (
+          orderEntries.map((orderEntry: OrderEntry, i: number) => (
             <p key={i}>
               {orderEntry.amount} x {getMealNameById(orderEntry.mealId)}
             </p>
