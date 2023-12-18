@@ -1,6 +1,7 @@
 package com.qrestaurant.qrdashboard.configuration;
 
 import com.qrestaurant.qrdashboard.model.dto.OrderDTO;
+import com.qrestaurant.qrdashboard.model.dto.OrderMealOrderDTO;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,5 +21,11 @@ public class KafkaConsumerFactoryConfiguration {
     public ConsumerFactory<String, OrderDTO> orderConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(kafkaConsumerConfiguration.configs(), new StringDeserializer(),
                 new JsonDeserializer<>(OrderDTO.class, false));
+    }
+
+    @Bean
+    public ConsumerFactory<String, OrderMealOrderDTO> orderMealOrderConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(kafkaConsumerConfiguration.configs(), new StringDeserializer(),
+                new JsonDeserializer<>(OrderMealOrderDTO.class, false));
     }
 }

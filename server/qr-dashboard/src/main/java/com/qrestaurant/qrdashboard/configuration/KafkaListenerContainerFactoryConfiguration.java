@@ -1,6 +1,7 @@
 package com.qrestaurant.qrdashboard.configuration;
 
 import com.qrestaurant.qrdashboard.model.dto.OrderDTO;
+import com.qrestaurant.qrdashboard.model.dto.OrderMealOrderDTO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -20,6 +21,16 @@ public class KafkaListenerContainerFactoryConfiguration {
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(kafkaConsumerFactoryConfiguration.orderConsumerFactory());
+
+        return factory;
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, OrderMealOrderDTO> orderMealOrderConcurrentKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, OrderMealOrderDTO> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+
+        factory.setConsumerFactory(kafkaConsumerFactoryConfiguration.orderMealOrderConsumerFactory());
 
         return factory;
     }

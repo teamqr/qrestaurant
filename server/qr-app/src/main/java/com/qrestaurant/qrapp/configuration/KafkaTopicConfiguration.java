@@ -30,4 +30,11 @@ public class KafkaTopicConfiguration {
                 .name("app-order")
                 .build();
     }
+
+    @Bean
+    public NewTopic orderMealOrderTopic() {
+        return TopicBuilder
+                .name("app-order-meal-order")
+                .build();
+    }
 }

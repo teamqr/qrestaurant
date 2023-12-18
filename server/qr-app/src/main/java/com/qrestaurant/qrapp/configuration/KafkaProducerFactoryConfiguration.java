@@ -1,6 +1,7 @@
 package com.qrestaurant.qrapp.configuration;
 
 import com.qrestaurant.qrapp.model.dto.OrderDTO;
+import com.qrestaurant.qrapp.model.dto.OrderMealOrderDTO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -16,6 +17,11 @@ public class KafkaProducerFactoryConfiguration {
 
     @Bean
     public ProducerFactory<String, OrderDTO> orderProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(kafkaProducerConfiguration.configs());
+    }
+
+    @Bean
+    public ProducerFactory<String, OrderMealOrderDTO> orderMealOrderProducerFactory() {
         return new DefaultKafkaProducerFactory<>(kafkaProducerConfiguration.configs());
     }
 }

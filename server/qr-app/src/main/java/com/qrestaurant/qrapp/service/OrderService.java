@@ -1,10 +1,13 @@
 package com.qrestaurant.qrapp.service;
 
 import com.qrestaurant.qrapp.common.JWTUtil;
+import com.qrestaurant.qrapp.common.MapperDTO;
 import com.qrestaurant.qrapp.exception.EntityNotFoundException;
+import com.qrestaurant.qrapp.model.dto.OrderMealOrderDTO;
 import com.qrestaurant.qrapp.model.entity.*;
 import com.qrestaurant.qrapp.model.request.NewOrderRequest;
 import com.qrestaurant.qrapp.repository.*;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +25,24 @@ public class OrderService {
     private final TableRepository tableRepository;
     private final MealRepository mealRepository;
     private final MealOrderRepository mealOrderRepository;
+    private final KafkaTemplate<String, OrderMealOrderDTO> orderMealOrderKafkaTemplate;
     private final JWTUtil jwtUtil;
+    private final MapperDTO mapperDTO;
 
     public OrderService(OrderRepository orderRepository, UserRepository userRepository,
                         RestaurantRepository restaurantRepository, TableRepository tableRepository,
-                        MealRepository mealRepository, MealOrderRepository mealOrderRepository, JWTUtil jwtUtil) {
+                        MealRepository mealRepository, MealOrderRepository mealOrderRepository,
+                        KafkaTemplate<String, OrderMealOrderDTO> orderMealOrderKafkaTemplate, JWTUtil jwtUtil,
+                        MapperDTO mapperDTO) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.restaurantRepository = restaurantRepository;
         this.tableRepository = tableRepository;
         this.mealRepository = mealRepository;
         this.mealOrderRepository = mealOrderRepository;
+        this.orderMealOrderKafkaTemplate = orderMealOrderKafkaTemplate;
         this.jwtUtil = jwtUtil;
+        this.mapperDTO = mapperDTO;
     }
 
     public Iterable<Order> getOrders(String authorizationHeader) {
@@ -124,6 +133,11 @@ public class OrderService {
 
             insertedMealOrders.add(mealOrderRepository.save(mealOrder));
         });
+
+        OrderMealOrderDTO orderMealOrderDTO =
+                new OrderMealOrderDTO(mapperDTO.toOrderDTO(order), mapperDTO.toMealOrderDTOs(insertedMealOrders));
+
+        orderMealOrderKafkaTemplate.send("app-order-meal-order", orderMealOrderDTO);
 
         return order;
     }

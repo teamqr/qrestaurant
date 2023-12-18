@@ -22,6 +22,11 @@ public class MealOrder {
 
     public MealOrder() {}
 
+    public MealOrder(Long id, Integer amount) {
+        this.id = id;
+        this.amount = amount;
+    }
+
     public Long getId() {
         return id;
     }
