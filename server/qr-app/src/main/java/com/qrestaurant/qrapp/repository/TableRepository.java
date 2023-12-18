@@ -11,4 +11,5 @@ import java.util.Optional;
 @Transactional
 public interface TableRepository extends CrudRepository<Table, Long> {
     Optional<Table> findByCode(String code);
+    Optional<Table> findByIdAndRestaurant_Id(Long id, Long restaurantId);
 }

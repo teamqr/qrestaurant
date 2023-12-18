@@ -23,7 +23,6 @@ public class Order {
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE NOT NULL")
     @NotNull
     @Temporal(value = TemporalType.TIMESTAMP)
-    @CreationTimestamp
     private Date orderDate;
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     @Temporal(value = TemporalType.TIMESTAMP)
@@ -41,7 +40,14 @@ public class Order {
     private User user;
 
     public Order() {
-        this.status = OrderStatus.CREATED;
+        this.status = OrderStatus.IN_PROGRESS;
+        this.orderDate = new Date();
+    }
+
+    public Order(BigDecimal price) {
+        this.price = price;
+        this.status = OrderStatus.IN_PROGRESS;
+        this.orderDate = new Date();
     }
 
     public Long getId() {
