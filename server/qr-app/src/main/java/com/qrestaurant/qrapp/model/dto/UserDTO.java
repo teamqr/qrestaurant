@@ -4,5 +4,6 @@ public record UserDTO(
         Long id,
         String email,
         String firstname,
-        String lastname
+        String lastname,
+        Iterable<Long> orderIds
 ) {}
