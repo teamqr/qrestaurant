@@ -33,16 +33,13 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-    @ManyToOne
-    @JoinColumn(name = "worker_id")
-    private User worker;
 
     public Order() {}
 
-    public Order(Long id, BigDecimal price, Date orderDate) {
+    public Order(Long id, BigDecimal price, OrderStatus orderStatus, Date orderDate) {
         this.id = id;
         this.price = price;
-        this.status = OrderStatus.CREATED;
+        this.status = orderStatus;
         this.orderDate = orderDate;
     }
 
@@ -108,13 +105,5 @@ public class Order {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
-    }
-
-    public User getWorker() {
-        return worker;
-    }
-
-    public void setWorker(User worker) {
-        this.worker = worker;
     }
 }

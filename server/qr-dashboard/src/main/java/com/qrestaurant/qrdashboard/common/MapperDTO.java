@@ -44,27 +44,15 @@ public class MapperDTO {
 
     @Transactional
     public UserDTO toUserDTO(User user) {
-        Iterable<Long> orderIds = user.getOrders()
-                .stream()
-                .map(Order::getId)
-                .toList();
-
-        return new UserDTO(user.getId(), user.getUsername(), user.getRole(), user.getRestaurant().getId(), orderIds);
+        return new UserDTO(user.getId(), user.getUsername(), user.getRole(), user.getRestaurant().getId());
     }
 
     @Transactional
     public Iterable<UserDTO> toUserDTOs(Iterable<User> users) {
         List<UserDTO> userDTOs = new ArrayList<>();
 
-        users.forEach(user -> {
-            Iterable<Long> orderIds = user.getOrders()
-                    .stream()
-                    .map(Order::getId)
-                    .toList();
-
-            userDTOs.add(new UserDTO(
-                    user.getId(), user.getUsername(), user.getRole(), user.getRestaurant().getId(), orderIds));
-        });
+        users.forEach(user -> userDTOs.add(
+                new UserDTO(user.getId(), user.getUsername(), user.getRole(), user.getRestaurant().getId())));
 
         return userDTOs;
     }
@@ -186,8 +174,7 @@ public class MapperDTO {
                 .toList();
 
         return new OrderDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
-                order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(),
-                order.getWorker().getId(), mealOrderIds);
+                order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(), mealOrderIds);
     }
 
     @Transactional
@@ -201,8 +188,7 @@ public class MapperDTO {
                     .toList();
 
             orderDTOs.add(new OrderDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
-                    order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(),
-                    order.getWorker().getId(), mealOrderIds));
+                    order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(), mealOrderIds));
         });
 
         return orderDTOs;

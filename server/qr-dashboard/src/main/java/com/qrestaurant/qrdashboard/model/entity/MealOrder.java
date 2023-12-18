@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "meal_order")
 public class MealOrder {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "meal_id")

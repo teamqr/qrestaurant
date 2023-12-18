@@ -31,8 +31,6 @@ public class User implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-    @OneToMany(mappedBy = "worker", cascade = CascadeType.REMOVE)
-    private List<Order> orders;
 
     public User() {}
 
@@ -111,13 +109,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 }
