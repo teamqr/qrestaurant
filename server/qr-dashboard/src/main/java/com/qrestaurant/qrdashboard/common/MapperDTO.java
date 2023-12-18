@@ -191,4 +191,18 @@ public class MapperDTO {
 
         return orderDTOs;
     }
+
+    public MealOrderDTO toMealOrderDTO(MealOrder mealOrder) {
+        return new MealOrderDTO(
+                mealOrder.getId(), mealOrder.getMeal().getId(), mealOrder.getOrder().getId(), mealOrder.getAmount());
+    }
+
+    public Iterable<MealOrderDTO> toMealOrderDTOs(Iterable<MealOrder> mealOrders) {
+        List<MealOrderDTO> mealOrderDTOs = new ArrayList<>();
+
+        mealOrders.forEach(mealOrder -> mealOrderDTOs.add(new MealOrderDTO(mealOrder.getId(),
+                mealOrder.getMeal().getId(), mealOrder.getOrder().getId(), mealOrder.getAmount())));
+
+        return mealOrderDTOs;
+    }
 }

@@ -1,8 +1,12 @@
 package com.qrestaurant.qrapp.repository;
 
 import com.qrestaurant.qrapp.model.entity.MealOrder;
+import jakarta.transaction.Transactional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MealOrderRepository extends CrudRepository<MealOrder, Long> {}
+@Transactional
+public interface MealOrderRepository extends CrudRepository<MealOrder, Long> {
+    Iterable<MealOrder> getAllByOrder_IdAndOrder_User_Id(Long orderId, Long userId);
+}
