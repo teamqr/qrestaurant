@@ -3,10 +3,12 @@ package com.qrestaurant.qrapp.service;
 import com.qrestaurant.qrapp.common.JWTUtil;
 import com.qrestaurant.qrapp.common.MapperDTO;
 import com.qrestaurant.qrapp.exception.EntityNotFoundException;
+import com.qrestaurant.qrapp.model.dto.OrderDTO;
 import com.qrestaurant.qrapp.model.dto.OrderMealOrderDTO;
 import com.qrestaurant.qrapp.model.entity.*;
 import com.qrestaurant.qrapp.model.request.NewOrderRequest;
 import com.qrestaurant.qrapp.repository.*;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -140,5 +142,20 @@ public class OrderService {
         orderMealOrderKafkaTemplate.send("app-order-meal-order", orderMealOrderDTO);
 
         return order;
+    }
+
+    @KafkaListener(topics = "dashboard-order", groupId = "qrestaurant",
+            containerFactory = "orderConcurrentKafkaListenerContainerFactory")
+    public void orderListener(OrderDTO orderDTO) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderDTO.id());
+
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+
+            order.setStatus(orderDTO.status());
+            order.setCompletionDate(orderDTO.completionDate());
+
+            orderRepository.save(order);
+        }
     }
 }
