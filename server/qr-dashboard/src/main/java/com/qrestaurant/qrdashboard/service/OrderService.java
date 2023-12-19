@@ -12,6 +12,7 @@ import com.qrestaurant.qrdashboard.model.request.UpdateOrderRequest;
 import com.qrestaurant.qrdashboard.repository.*;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -27,19 +28,21 @@ public class OrderService {
     private final MealOrderRepository mealOrderRepository;
     private final MealRepository mealRepository;
     private final KafkaTemplate<String, OrderDTO> orderKafkaTemplate;
+    private final SimpMessagingTemplate orderMessagingTemplate;
     private final JWTUtil jwtUtil;
     private final MapperDTO mapperDTO;
 
     public OrderService(OrderRepository orderRepository, RestaurantRepository restaurantRepository,
                         TableRepository tableRepository, MealOrderRepository mealOrderRepository,
                         MealRepository mealRepository, KafkaTemplate<String, OrderDTO> orderKafkaTemplate,
-                        JWTUtil jwtUtil, MapperDTO mapperDTO) {
+                        SimpMessagingTemplate orderMessagingTemplate, JWTUtil jwtUtil, MapperDTO mapperDTO) {
         this.orderRepository = orderRepository;
         this.restaurantRepository = restaurantRepository;
         this.tableRepository = tableRepository;
         this.mealOrderRepository = mealOrderRepository;
         this.mealRepository = mealRepository;
         this.orderKafkaTemplate = orderKafkaTemplate;
+        this.orderMessagingTemplate = orderMessagingTemplate;
         this.jwtUtil = jwtUtil;
         this.mapperDTO = mapperDTO;
     }
@@ -89,6 +92,12 @@ public class OrderService {
 
         orderKafkaTemplate.send("dashboard-order", mapperDTO.toOrderDTO(order));
 
+        Iterable<Order> ordersInProgress =
+                orderRepository.getAllByStatusAndRestaurant_Id(OrderStatus.IN_PROGRESS, restaurantId);
+
+        orderMessagingTemplate.convertAndSend(
+                "/topic/order/" + order.getRestaurant().getId(), mapperDTO.toOrderDTOs(ordersInProgress));
+
         return order;
     }
 
@@ -131,6 +140,12 @@ public class OrderService {
 
                 orderRepository.save(order);
                 mealOrderRepository.saveAll(mealOrders);
+
+                Iterable<Order> ordersInProgress = orderRepository.getAllByStatusAndRestaurant_Id(
+                        OrderStatus.IN_PROGRESS, order.getRestaurant().getId());
+
+                orderMessagingTemplate.convertAndSend(
+                        "/topic/order/" + order.getRestaurant().getId(), mapperDTO.toOrderDTOs(ordersInProgress));
             }
         }
     }
