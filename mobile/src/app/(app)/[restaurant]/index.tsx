@@ -1,20 +1,23 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import { theme } from "@/common/theme";
 import { CategoryList } from "@/components/@restaurant/category-list";
 import { MealList } from "@/components/@restaurant/meal-list";
 import { IconButton } from "@/components/icon-button";
-import { QrCode, Search } from "@/components/icons";
+import { QrCode, Search, ShoppingCart } from "@/components/icons";
 import { Input } from "@/components/input";
+import { ShadowContainer } from "@/components/shadow-container";
 import { AppText } from "@/components/text";
 import { useRestaurant } from "@/hooks/query/useRestaurant";
 import { useTable } from "@/hooks/query/useTable";
+import { useFixedInsets } from "@/hooks/useFixedInsets";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 
 export default function RestaurantPage() {
   const router = useRouter();
+  const { bottom } = useFixedInsets();
   const [category, setCategory] = useState<number>();
   const tableCode = useRestaurantSessionStore((state) => state.tableCode);
   const { restaurant: id } = useLocalSearchParams<{ restaurant: string }>();
@@ -108,6 +111,55 @@ export default function RestaurantPage() {
       />
 
       <MealList table={table} category={category} />
+
+      {table && (
+        <View
+          style={{
+            position: "absolute",
+            bottom: bottom + theme.spacing(3),
+            left: 0,
+            right: 0,
+            paddingHorizontal: theme.spacing(3),
+          }}
+        >
+          <ShadowContainer>
+            <Pressable style={styles.cartButton}>
+              <AppText
+                weight="bold"
+                style={{
+                  color: "white",
+                  flex: 1,
+                }}
+              >
+                Przejdź do koszyka
+              </AppText>
+
+              <ShoppingCart color="white" />
+
+              <View
+                style={{
+                  backgroundColor: theme.colors.secondaryLight,
+                  paddingHorizontal: theme.spacing(2),
+                  marginVertical: theme.spacing(0.5),
+                  borderRadius: theme.radii.medium - theme.spacing(0.5),
+                  justifyContent: "center",
+                  alignItems: "center",
+                  alignSelf: "stretch",
+                }}
+              >
+                <AppText
+                  weight="bold"
+                  style={{
+                    color: "white",
+                  }}
+                >
+                  38.99 zł
+                </AppText>
+              </View>
+            </Pressable>
+          </ShadowContainer>
+        </View>
+      )}
     </View>
   );
 }
@@ -120,6 +172,18 @@ const styles = StyleSheet.create({
   tableDetailsContainer: {
     flexDirection: "row",
     alignItems: "center",
+    gap: theme.spacing(2),
+  },
+  cartButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: theme.colors.secondary,
+    borderColor: theme.colors.secondaryLight,
+    borderWidth: 1,
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(0.5),
+    borderRadius: theme.radii.medium,
+    height: 56,
     gap: theme.spacing(2),
   },
 });

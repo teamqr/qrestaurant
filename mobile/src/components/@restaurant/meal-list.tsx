@@ -57,7 +57,7 @@ export const MealList = ({ table, category }: Props) => {
       data={filteredData}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
-        paddingBottom: bottom,
+        paddingBottom: bottom + theme.spacing(10),
       }}
       keyExtractor={(item) => item.id.toString()}
       itemLayoutAnimation={Layout.springify()}

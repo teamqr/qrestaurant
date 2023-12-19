@@ -14,7 +14,8 @@ type RestaurantSessionState = {
 
 export const useRestaurantSessionStore = create<RestaurantSessionState>(
   (set, get) => ({
-    restaurant: undefined,
+    restaurantId: undefined,
+    tableCode: undefined,
     beginSession: async ({ restaurantId, tableCode }) => {
       set({ restaurantId, tableCode });
     },
