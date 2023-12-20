@@ -5,14 +5,14 @@ import Animated, { Layout } from "react-native-reanimated";
 
 import { theme } from "@/common/theme";
 import { CartItem } from "@/components/@restaurant/cart-item";
-import { useFixedInsets } from "@/hooks/useFixedInsets";
-import { useRestaurantSessionStore } from "@/stores/restaurant-session";
-import { AppText } from "@/components/text";
-import { useTotalCartPrice } from "@/hooks/useTotalCartPrice";
-import { formatter } from "@/utils/formatter";
 import { Button } from "@/components/button";
-import { ShoppingCart, Wallet } from "@/components/icons";
+import { Wallet } from "@/components/icons";
 import { ShadowContainer } from "@/components/shadow-container";
+import { AppText } from "@/components/text";
+import { useFixedInsets } from "@/hooks/useFixedInsets";
+import { useTotalCartPrice } from "@/hooks/useTotalCartPrice";
+import { useRestaurantSessionStore } from "@/stores/restaurant-session";
+import { formatter } from "@/utils/formatter";
 
 export default function CartPage() {
   const restaurantId = useRestaurantSessionStore((state) => state.restaurantId);
