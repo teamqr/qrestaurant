@@ -43,4 +43,9 @@ public class KafkaProducerFactoryConfiguration {
     public ProducerFactory<String, MealCategoryDTO> mealCategoryProducerFactory() {
         return new DefaultKafkaProducerFactory<>(kafkaProducerConfiguration.configs());
     }
+
+    @Bean
+    public ProducerFactory<String, OrderDTO> orderProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(kafkaProducerConfiguration.configs());
+    }
 }

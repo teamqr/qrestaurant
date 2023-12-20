@@ -5,5 +5,6 @@ public record TableDTO(
         Integer number,
         String prefix,
         String code,
-        Long restaurantId
+        Long restaurantId,
+        Iterable<Long> orderIds
 ) {}

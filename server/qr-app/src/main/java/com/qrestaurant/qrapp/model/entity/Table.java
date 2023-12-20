@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 @Entity
 @jakarta.persistence.Table(name = "tables")
 public class Table {
@@ -22,6 +24,8 @@ public class Table {
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
+    @OneToMany(mappedBy = "table", cascade = CascadeType.REMOVE)
+    private List<Order> orders;
 
     public Table() {}
 
@@ -70,5 +74,13 @@ public class Table {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

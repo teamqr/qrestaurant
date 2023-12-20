@@ -42,4 +42,9 @@ public class KafkaTemplateConfiguration {
     public KafkaTemplate<String, MealCategoryDTO> mealCategoryKafkaTemplate() {
         return new KafkaTemplate<>(kafkaProducerFactoryConfiguration.mealCategoryProducerFactory());
     }
+
+    @Bean
+    public KafkaTemplate<String, OrderDTO> orderKafkaTemplate() {
+        return new KafkaTemplate<>(kafkaProducerFactoryConfiguration.orderProducerFactory());
+    }
 }

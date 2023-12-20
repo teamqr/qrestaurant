@@ -79,4 +79,11 @@ public class KafkaTopicConfiguration {
                 .name("dashboard-meal-category-delete")
                 .build();
     }
+
+    @Bean
+    public NewTopic orderTopic() {
+        return TopicBuilder
+                .name("dashboard-order")
+                .build();
+    }
 }
