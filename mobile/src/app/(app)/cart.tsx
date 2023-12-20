@@ -7,12 +7,20 @@ import { theme } from "@/common/theme";
 import { CartItem } from "@/components/@restaurant/cart-item";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
+import { AppText } from "@/components/text";
+import { useTotalCartPrice } from "@/hooks/useTotalCartPrice";
+import { formatter } from "@/utils/formatter";
+import { Button } from "@/components/button";
+import { ShoppingCart, Wallet } from "@/components/icons";
+import { ShadowContainer } from "@/components/shadow-container";
 
 export default function CartPage() {
   const restaurantId = useRestaurantSessionStore((state) => state.restaurantId);
   const cart = useRestaurantSessionStore((state) => state.cart);
   const addToCart = useRestaurantSessionStore((state) => state.addToCart);
   const remove = useRestaurantSessionStore((state) => state.removeFromCart);
+
+  const total = useTotalCartPrice();
 
   const { bottom } = useFixedInsets();
 
@@ -47,16 +55,20 @@ export default function CartPage() {
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          paddingBottom: bottom + theme.spacing(3),
+        },
+      ]}
+    >
       <Animated.FlatList
         data={cart}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={renderSeparator}
         itemLayoutAnimation={Layout.springify()}
-        contentContainerStyle={{
-          paddingBottom: bottom + theme.spacing(3),
-        }}
         renderItem={({ item }) => {
           return (
             <CartItem
@@ -68,6 +80,33 @@ export default function CartPage() {
           );
         }}
       />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: theme.spacing(3),
+          marginBottom: theme.spacing(3),
+          paddingHorizontal: theme.spacing(3),
+        }}
+      >
+        <AppText style={styles.text}>Do zapłaty</AppText>
+        <AppText
+          weight="bold"
+          style={[
+            styles.text,
+            {
+              fontSize: 24,
+            },
+          ]}
+        >
+          {formatter.format(total)}
+        </AppText>
+      </View>
+
+      <ShadowContainer>
+        <Button label="Zapłać za zamówienie" icon={<Wallet />} />
+      </ShadowContainer>
     </View>
   );
 }

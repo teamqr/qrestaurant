@@ -10,9 +10,8 @@ import { ShadowContainer } from "../shadow-container";
 import { AppText } from "../text";
 
 import { theme } from "@/common/theme";
-import { useMeals } from "@/hooks/query/useMeals";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
-import { useRestaurantSessionStore } from "@/stores/restaurant-session";
+import { useTotalCartPrice } from "@/hooks/useTotalCartPrice";
 import { formatter } from "@/utils/formatter";
 
 const BUTTON_OFFSET = theme.spacing(3);
@@ -23,19 +22,9 @@ type Props = {
 
 export const CartButton = ({ restaurantId }: Props) => {
   const { bottom } = useFixedInsets();
-  const meals = useMeals(restaurantId);
-  const cart = useRestaurantSessionStore((state) => state.cart);
   const router = useRouter();
 
-  const total = cart.reduce((acc, item) => {
-    const meal = meals.data?.meals.find((m) => m.id === item.id);
-
-    if (!meal) {
-      return acc;
-    }
-
-    return acc + meal.price * item.quantity;
-  }, 0);
+  const total = useTotalCartPrice();
 
   const rStyles = useAnimatedStyle(() => {
     return {
