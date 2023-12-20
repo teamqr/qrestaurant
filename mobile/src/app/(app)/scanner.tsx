@@ -48,8 +48,7 @@ export default function ScannerPage() {
   useEffect(() => {
     if (!table.data) return;
 
-    const { code, restaurantId: restaurantIdNumber } = table.data.table;
-    const restaurantId = restaurantIdNumber.toString();
+    const { code, restaurantId } = table.data.table;
 
     queryClient.setQueryData(["restaurant", restaurantId, "table", code], {
       table: table.data.table,

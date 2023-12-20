@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { Pressable, StyleSheet, View } from "react-native";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
@@ -7,22 +6,13 @@ import { ShoppingCardPlus } from "../icons";
 import { AppText } from "../text";
 
 import { theme } from "@/common/theme";
-import { Meal, Table } from "@/common/types";
+import { Table } from "@/common/types";
+import { useMeals } from "@/hooks/query/useMeals";
 import { useRestaurant } from "@/hooks/query/useRestaurant";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
-import axios from "@/services/axios";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
-const getMeals = async (id: string) => {
-  const { data } = await axios.get<{ meals: Meal[] }>(`api/app/meal`, {
-    params: {
-      restaurantId: id,
-    },
-  });
-  return data;
-};
 
 type Props = {
   table?: Table;
@@ -30,27 +20,25 @@ type Props = {
 };
 
 export const MealList = ({ table, category }: Props) => {
-  const { restaurantId } = useRestaurantSessionStore();
+  const restaurantId = useRestaurantSessionStore((state) => state.restaurantId);
+  const addToCart = useRestaurantSessionStore((state) => state.addToCart);
+
   const restaurantQuery = useRestaurant(restaurantId!);
   const { bottom } = useFixedInsets();
 
   const restaurant = restaurantQuery.data?.restaurant;
 
-  const query = useQuery({
-    queryKey: ["restaurant", restaurant?.id, "meals"],
-    queryFn: () => getMeals(restaurant?.id!),
-    enabled: !!restaurant,
-  });
+  const meals = useMeals(restaurant?.id);
 
-  if (query.isLoading) {
+  if (meals.isLoading) {
     return null;
   }
 
   const filteredData = category
-    ? query.data?.meals.filter((meal) =>
+    ? meals.data?.meals.filter((meal) =>
         meal.mealCategoryIds.includes(category!),
       )
-    : query.data?.meals;
+    : meals.data?.meals;
 
   return (
     <Animated.FlatList
@@ -109,7 +97,12 @@ export const MealList = ({ table, category }: Props) => {
               </View>
               {table && (
                 <IconButton
-                  onPress={() => {}}
+                  onPress={() => {
+                    addToCart({
+                      id: item.id,
+                      quantity: 1,
+                    });
+                  }}
                   icon={
                     <ShoppingCardPlus color="white" width={16} height={16} />
                   }
