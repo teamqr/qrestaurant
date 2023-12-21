@@ -8,7 +8,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
   },
   "jest": {
     "preset": "jest-expo"
@@ -20,6 +21,7 @@
     "@react-navigation/native": "^6.0.2",
     "@shopify/flash-list": "1.4.3",
     "@shopify/react-native-skia": "0.1.196",
+    "@stripe/stripe-react-native": "0.28.0",
     "@tanstack/react-query": "^5.8.4",
     "axios": "^1.6.2",
     "burnt": "^0.12.1",
