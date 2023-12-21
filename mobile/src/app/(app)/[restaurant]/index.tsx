@@ -3,6 +3,7 @@ import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { theme } from "@/common/theme";
+import { CartButton } from "@/components/@restaurant/cart-button";
 import { CategoryList } from "@/components/@restaurant/category-list";
 import { MealList } from "@/components/@restaurant/meal-list";
 import { IconButton } from "@/components/icon-button";
@@ -19,7 +20,7 @@ export default function RestaurantPage() {
   const tableCode = useRestaurantSessionStore((state) => state.tableCode);
   const { restaurant: id } = useLocalSearchParams<{ restaurant: string }>();
 
-  const query = useRestaurant(id!);
+  const query = useRestaurant(+id!);
   const tableQuery = useTable({
     restaurantId: id!,
     code: tableCode,
@@ -108,6 +109,8 @@ export default function RestaurantPage() {
       />
 
       <MealList table={table} category={category} />
+
+      {table && <CartButton restaurantId={restaurant?.id} />}
     </View>
   );
 }

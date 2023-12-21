@@ -24,3 +24,7 @@ export { default as Bell } from "./bell";
 export { default as Ad } from "./ad";
 export { default as Trash } from "./trash";
 export { default as ShoppingCardPlus } from "./shopping-card-plus";
+export { default as ShoppingCart } from "./shopping-cart";
+export { default as Plus } from "./plus";
+export { default as Minus } from "./minus";
+export { default as Wallet } from "./wallet";

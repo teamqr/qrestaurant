@@ -46,6 +46,12 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
+        name="cart"
+        options={{
+          header: () => <AppHeader title="Koszyk" />,
+        }}
+      />
+      <Stack.Screen
         name="settings/index"
         options={{
           header: () => <AppHeader title="Ustawienia" />,

@@ -1,5 +1,5 @@
 export type Restaurant = {
-  id: string;
+  id: number;
   name: string;
   menuId: number | null;
 };
@@ -15,7 +15,7 @@ export type Meal = {
 };
 
 export type Table = {
-  id: string;
+  id: number;
   restaurantId: number;
   prefix: string;
   number: number;
