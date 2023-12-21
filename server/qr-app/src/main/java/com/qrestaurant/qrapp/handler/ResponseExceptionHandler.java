@@ -2,6 +2,7 @@ package com.qrestaurant.qrapp.handler;
 
 import com.qrestaurant.qrapp.exception.EntityAlreadyExistsException;
 import com.qrestaurant.qrapp.exception.EntityNotFoundException;
+import com.qrestaurant.qrapp.exception.StripePaymentException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -20,8 +21,8 @@ import java.util.Map;
 @ControllerAdvice
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     // 400 - BAD_REQUEST
-    @ExceptionHandler(value = AuthenticationException.class)
-    public ResponseEntity<Object> handleAuthenticationException(RuntimeException e, WebRequest webRequest) {
+    @ExceptionHandler(value = { AuthenticationException.class, StripePaymentException.class})
+    public ResponseEntity<Object> handleBadRequest(RuntimeException e, WebRequest webRequest) {
         Map<String, Object> response = new HashMap<>();
         response.put("message", e.getMessage());
 
@@ -30,7 +31,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
     // 404 - NOT_FOUND
     @ExceptionHandler(value = EntityNotFoundException.class)
-    public ResponseEntity<Object> handleEntityNotFoundException(RuntimeException e, WebRequest webRequest) {
+    public ResponseEntity<Object> handleNotFound(RuntimeException e, WebRequest webRequest) {
         Map<String, Object> response = new HashMap<>();
         response.put("message", e.getMessage());
 
@@ -39,7 +40,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
     // 409 - CONFLICT
     @ExceptionHandler(value = EntityAlreadyExistsException.class)
-    public ResponseEntity<Object> handleEntityAlreadyExistsException(RuntimeException e, WebRequest webRequest) {
+    public ResponseEntity<Object> handleConflict(RuntimeException e, WebRequest webRequest) {
         Map<String, Object> response = new HashMap<>();
         response.put("message", e.getMessage());
 
