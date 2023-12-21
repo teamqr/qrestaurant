@@ -51,7 +51,7 @@ export default function CartPage() {
     });
 
     router.push(`/(app)/order/${order.id}`);
-  }, []);
+  }, [cart, createOrder, restaurantId, table.data]);
 
   const handleAddToCart = useCallback(
     (id: number) => (quantity: number) => {
