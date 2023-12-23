@@ -40,7 +40,7 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
-        name="[restaurant]"
+        name="restaurant"
         options={{
           headerShown: false,
         }}
@@ -55,6 +55,12 @@ export default function AppLayout() {
         name="settings/index"
         options={{
           header: () => <AppHeader title="Ustawienia" />,
+        }}
+      />
+      <Stack.Screen
+        name="order/[order]"
+        options={{
+          header: () => <AppHeader title="Zamówienie" />,
         }}
       />
     </Stack>

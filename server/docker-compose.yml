@@ -57,6 +57,8 @@ services:
 
   app:
     container_name: qr-app
+    depends_on:
+      - kafka
     build: 
       context: qr-app
       dockerfile: Dockerfile
@@ -65,6 +67,8 @@ services:
 
   dashboard:
     container_name: qr-dashboard
+    depends_on:
+      - kafka
     build: 
       context: qr-dashboard
       dockerfile: Dockerfile

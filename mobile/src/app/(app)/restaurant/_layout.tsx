@@ -6,7 +6,7 @@ export default function RestaurantLayout() {
   return (
     <Stack>
       <Stack.Screen
-        name="index"
+        name="[restaurant]"
         options={{
           header: () => <AppHeader />,
         }}

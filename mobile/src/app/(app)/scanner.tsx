@@ -55,7 +55,7 @@ export default function ScannerPage() {
     });
     beginSession({ restaurantId, tableCode: code });
 
-    router.replace(`/(app)/${restaurantId}`);
+    router.replace(`/(app)/restaurant/${restaurantId}`);
   }, [table.data]);
 
   const device = useCameraDevice("back", {
