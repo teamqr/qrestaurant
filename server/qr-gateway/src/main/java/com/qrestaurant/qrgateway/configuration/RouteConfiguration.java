@@ -33,7 +33,7 @@ public class RouteConfiguration {
                 )
                 .route(predicateSpec -> predicateSpec
                         .path("/ws-dashboard/**")
-                        .uri("ws://qr-dashboard:8081")
+                        .uri("ws://qr-dashboard:8082")
                 )
                 .build();
     }
