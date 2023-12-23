@@ -1,4 +1,4 @@
-import { Redirect } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, { Layout } from "react-native-reanimated";
@@ -9,20 +9,49 @@ import { Button } from "@/components/button";
 import { Wallet } from "@/components/icons";
 import { ShadowContainer } from "@/components/shadow-container";
 import { AppText } from "@/components/text";
+import { useCreateOrder } from "@/hooks/mutation/useCreateOrder";
+import { useTable } from "@/hooks/query/useTable";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import { useTotalCartPrice } from "@/hooks/useTotalCartPrice";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 import { formatter } from "@/utils/formatter";
 
 export default function CartPage() {
-  const restaurantId = useRestaurantSessionStore((state) => state.restaurantId);
+  const restaurantId = useRestaurantSessionStore(
+    (state) => state.restaurantId,
+  )!;
+  const tableCode = useRestaurantSessionStore((state) => state.tableCode);
   const cart = useRestaurantSessionStore((state) => state.cart);
   const addToCart = useRestaurantSessionStore((state) => state.addToCart);
   const remove = useRestaurantSessionStore((state) => state.removeFromCart);
 
+  const table = useTable({ restaurantId, code: tableCode });
+  const router = useRouter();
+
+  const createOrder = useCreateOrder({
+    onSuccess: () => {
+      console.log("Order created");
+    },
+  });
+
   const total = useTotalCartPrice();
 
   const { bottom } = useFixedInsets();
+
+  const handleCreateOrder = useCallback(async () => {
+    const orderProducts = cart.map((item) => ({
+      id: item.id,
+      amount: item.quantity,
+    }));
+
+    const { order } = await createOrder.mutateAsync({
+      restaurantId,
+      tableId: table.data!.table.id,
+      orderProducts,
+    });
+
+    router.push(`/(app)/order/${order.id}`);
+  }, [cart, createOrder, restaurantId, table.data]);
 
   const handleAddToCart = useCallback(
     (id: number) => (quantity: number) => {
@@ -105,7 +134,12 @@ export default function CartPage() {
       </View>
 
       <ShadowContainer>
-        <Button label="Zapłać za zamówienie" icon={<Wallet />} />
+        <Button
+          onPress={() => handleCreateOrder?.()}
+          label="Zapłać za zamówienie"
+          icon={<Wallet />}
+          loading={createOrder.isPending}
+        />
       </ShadowContainer>
     </View>
   );

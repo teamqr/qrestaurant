@@ -22,7 +22,7 @@ export default function RestaurantPage() {
 
   const query = useRestaurant(+id!);
   const tableQuery = useTable({
-    restaurantId: id!,
+    restaurantId: +id!,
     code: tableCode,
   });
 

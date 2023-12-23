@@ -32,7 +32,7 @@ export default function RestaurantsPage() {
 
   const handleRestaurantPress = (restaurant: Restaurant) => {
     beginSession({ restaurantId: restaurant.id });
-    router.push(`/(app)/${restaurant.id}`);
+    router.push(`/(app)/restaurant/${restaurant.id}`);
   };
 
   return (

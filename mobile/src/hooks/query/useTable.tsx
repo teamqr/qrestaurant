@@ -15,7 +15,7 @@ export const useTable = ({
   restaurantId,
   code,
 }: {
-  restaurantId: string;
+  restaurantId: number;
   code?: string;
 }) => {
   return useQuery({

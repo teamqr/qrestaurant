@@ -28,3 +28,15 @@ export type MealCategory = {
   restaurantId: number;
   mealIds: number[];
 };
+
+export type Order = {
+  id: number;
+  completionDate: string;
+  orderDate: string;
+  mealOrderIds: number[];
+  price: number;
+  restaurantId: number;
+  tableId: number;
+  userId: number;
+  status: string;
+};
