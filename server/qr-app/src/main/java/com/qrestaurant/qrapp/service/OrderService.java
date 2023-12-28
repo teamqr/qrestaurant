@@ -145,7 +145,8 @@ public class OrderService {
 
         orderMealOrderKafkaTemplate.send("app-order-meal-order", orderMealOrderDTO);
 
-        orderMessagingTemplate.convertAndSend("/topic/order/" + order.getId(), mapperDTO.toOrderDTO(order));
+        orderMessagingTemplate.convertAndSend(
+                "/topic/order/" + order.getId(), mapperDTO.toOrderSummaryDTO(order));
 
         return order;
     }
@@ -164,7 +165,7 @@ public class OrderService {
             orderRepository.save(order);
 
             orderMessagingTemplate.convertAndSend(
-                    "/topic/order/" + order.getId(), mapperDTO.toOrderDTO(order));
+                    "/topic/order/" + order.getId(), mapperDTO.toOrderSummaryDTO(order));
         }
     }
 }
