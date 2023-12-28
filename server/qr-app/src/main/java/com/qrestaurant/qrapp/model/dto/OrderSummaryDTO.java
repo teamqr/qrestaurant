@@ -8,7 +8,7 @@ import java.util.Date;
 public record OrderSummaryDTO(
         Long id,
         BigDecimal price,
-        OrderStatus orderStatus,
+        OrderStatus status,
         Date orderDate,
         Date completionDate,
         Long tableId,

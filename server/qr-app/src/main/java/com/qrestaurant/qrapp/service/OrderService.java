@@ -5,6 +5,7 @@ import com.qrestaurant.qrapp.common.MapperDTO;
 import com.qrestaurant.qrapp.exception.EntityNotFoundException;
 import com.qrestaurant.qrapp.model.dto.OrderDTO;
 import com.qrestaurant.qrapp.model.dto.OrderMealOrderDTO;
+import com.qrestaurant.qrapp.model.dto.OrderSummaryDTO;
 import com.qrestaurant.qrapp.model.entity.*;
 import com.qrestaurant.qrapp.model.request.NewOrderRequest;
 import com.qrestaurant.qrapp.repository.*;
@@ -15,9 +16,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -144,8 +143,10 @@ public class OrderService {
 
         orderMealOrderKafkaTemplate.send("app-order-meal-order", orderMealOrderDTO);
 
-        orderMessagingTemplate.convertAndSend(
-                "/topic/order/" + order.getId(), mapperDTO.toOrderSummaryDTO(order));
+        Map<String, OrderSummaryDTO> wsOrder = new HashMap<>();
+        wsOrder.put("order", mapperDTO.toOrderSummaryDTO(order));
+
+        orderMessagingTemplate.convertAndSend("/topic/order/" + order.getId(), wsOrder);
 
         return order;
     }
@@ -163,8 +164,10 @@ public class OrderService {
 
             orderRepository.save(order);
 
-            orderMessagingTemplate.convertAndSend(
-                    "/topic/order/" + order.getId(), mapperDTO.toOrderSummaryDTO(order));
+            Map<String, OrderSummaryDTO> wsOrder = new HashMap<>();
+            wsOrder.put("order", mapperDTO.toOrderSummaryDTO(order));
+
+            orderMessagingTemplate.convertAndSend("/topic/order/" + order.getId(), wsOrder);
         }
     }
 }
