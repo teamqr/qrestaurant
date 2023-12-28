@@ -1,23 +1,26 @@
-import { getSampleOrders } from "@/sampleData/sampleOrders";
 import { OrderData } from "@/types/OrderData";
-import { getTokenFromCookies } from "@/utils/tokenUtils";
+import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
 import React from "react";
 import Order from "./Order";
 import {
   fetchMealsData,
   fetchOrdersData,
+  fetchOrdersInProgressData,
   fetchTablesData,
 } from "@/utils/apiUtils";
+import WSConnection from "./WSConnection";
 
 const OrdersPage = async () => {
   const token = (await getTokenFromCookies()) as string;
+  const tokenData = await getTokenData(token);
   const meals = await fetchMealsData(token);
   const tables = await fetchTablesData(token);
 
-  const orders = await fetchOrdersData(token);
+  const orders = await fetchOrdersInProgressData(token);
   const ordersCount = orders.length;
   return (
     <div>
+      <WSConnection token={token} restaurantId={tokenData.restaurantId} />
       <h1 className="flex justify-center">
         Oczekujące zamówienia: {ordersCount}
       </h1>

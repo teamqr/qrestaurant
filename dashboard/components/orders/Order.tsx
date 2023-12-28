@@ -1,9 +1,11 @@
 import { MealData } from "@/types/MealData";
 import { OrderData } from "@/types/OrderData";
 import { OrderEntry } from "@/types/OrderEntry";
+import { OrderStatus } from "@/types/OrderStatus";
 import { TableData } from "@/types/TableData";
-import { fetchOrderEntriesByOrderId } from "@/utils/apiUtils";
+import { changeOrderState, fetchOrderEntriesByOrderId } from "@/utils/apiUtils";
 import React from "react";
+import WSConnection from "./WSConnection";
 
 type Props = {
   data: OrderData;
@@ -39,6 +41,17 @@ const Order = async (props: Props) => {
     return null;
   }
 
+  const changeOrderStateAction = async () => {
+    "use server";
+    await changeOrderState(
+      order.id,
+      OrderStatus.COMPLETED,
+      new Date(),
+      props.token
+    );
+    console.log("submit");
+  };
+
   return (
     <div className="flex flex-col items-center flex-wrap m-4 p-2 bg-slate-700 rounded-lg w-72 ">
       <h2>Zamówienie #{order.id}</h2>
@@ -58,7 +71,10 @@ const Order = async (props: Props) => {
           <></>
         )}
       </div>
-      <form className="flex flex-col justify-end mt-auto">
+      <form
+        className="flex flex-col justify-end mt-auto"
+        action={changeOrderStateAction}
+      >
         <button
           type="submit"
           className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-green-500"
