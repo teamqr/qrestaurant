@@ -16,9 +16,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -106,8 +104,10 @@ public class OrderService {
         Iterable<Order> ordersInProgress =
                 orderRepository.getAllByStatusAndRestaurant_Id(OrderStatus.IN_PROGRESS, restaurantId);
 
-        orderMessagingTemplate.convertAndSend(
-                "/topic/order/" + order.getRestaurant().getId(), mapperDTO.toOrderDTOs(ordersInProgress));
+        Map<String, Iterable<OrderDTO>> wsOrders = new HashMap<>();
+        wsOrders.put("orders", mapperDTO.toOrderDTOs(ordersInProgress));
+
+        orderMessagingTemplate.convertAndSend("/topic/order/" + order.getRestaurant().getId(), wsOrders);
 
         return order;
     }
@@ -155,8 +155,11 @@ public class OrderService {
                 Iterable<Order> ordersInProgress = orderRepository.getAllByStatusAndRestaurant_Id(
                         OrderStatus.IN_PROGRESS, order.getRestaurant().getId());
 
+                Map<String, Iterable<OrderDTO>> wsOrders = new HashMap<>();
+                wsOrders.put("orders", mapperDTO.toOrderDTOs(ordersInProgress));
+
                 orderMessagingTemplate.convertAndSend(
-                        "/topic/order/" + order.getRestaurant().getId(), mapperDTO.toOrderDTOs(ordersInProgress));
+                        "/topic/order/" + order.getRestaurant().getId(), wsOrders);
             }
         }
     }
