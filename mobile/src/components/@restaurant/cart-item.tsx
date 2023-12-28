@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { memo } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
@@ -8,19 +7,9 @@ import { Minus, Plus, Trash } from "../icons";
 import { AppText } from "../text";
 
 import { theme } from "@/common/theme";
-import { Meal } from "@/common/types";
-import axios from "@/services/axios";
+import { useMeal } from "@/hooks/query/useMeal";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 import { formatter } from "@/utils/formatter";
-
-const getMeal = async (id: number, restaurantId: number) => {
-  const { data } = await axios.get<{ meal: Meal }>(`/api/app/meal/${id}`, {
-    params: {
-      restaurantId,
-    },
-  });
-  return data;
-};
 
 type Props = {
   id: number;
@@ -35,11 +24,7 @@ export const CartItem = memo(
       state.cart.find((entry) => entry.id === id),
     );
 
-    const { data, isLoading } = useQuery({
-      queryKey: ["restaurant", restaurantId, "meals", id],
-      queryFn: () => getMeal(id, restaurantId!),
-      enabled: !!restaurantId && !!id,
-    });
+    const { data, isLoading } = useMeal(id, restaurantId!);
 
     if (isLoading) return null;
 
