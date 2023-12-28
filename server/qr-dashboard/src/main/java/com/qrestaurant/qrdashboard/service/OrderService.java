@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Service
 public class OrderService {
@@ -47,11 +50,19 @@ public class OrderService {
         this.mapperDTO = mapperDTO;
     }
 
-    public Iterable<Order> getOrders(String authorizationHeader) {
+    public Iterable<Order> getOrderHistory(String authorizationHeader) {
         Jwt jwtToken = jwtUtil.getJWTToken(authorizationHeader);
         Long restaurantId = jwtToken.getClaim("restaurantId");
 
-        return orderRepository.getAllByRestaurant_Id(restaurantId);
+        Iterable<Order> completedOrders =
+                orderRepository.getAllByStatusAndRestaurant_Id(OrderStatus.COMPLETED, restaurantId);
+        Iterable<Order> canceledOrders =
+                orderRepository.getAllByStatusAndRestaurant_Id(OrderStatus.CANCELED, restaurantId);
+
+        return Stream.concat(
+                StreamSupport.stream(completedOrders.spliterator(), false),
+                StreamSupport.stream(canceledOrders.spliterator(), false)
+        ).toList();
     }
 
     public Iterable<Order> getCurrentOrders(String authorizationHeader) {

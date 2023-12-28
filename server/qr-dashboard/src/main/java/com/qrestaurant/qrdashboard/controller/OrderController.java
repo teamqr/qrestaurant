@@ -23,10 +23,10 @@ public class OrderController {
         this.mapperDTO = mapperDTO;
     }
 
-    @GetMapping
-    public ResponseEntity<Map<String, Iterable<OrderDTO>>> getOrders(
+    @GetMapping("/history")
+    public ResponseEntity<Map<String, Iterable<OrderDTO>>> getOrderHistory(
             @RequestHeader("Authorization") String authorizationHeader) {
-        Iterable<Order> orders = orderService.getOrders(authorizationHeader);
+        Iterable<Order> orders = orderService.getOrderHistory(authorizationHeader);
 
         Map<String, Iterable<OrderDTO>> response = new HashMap<>();
         response.put("orders", mapperDTO.toOrderDTOs(orders));
