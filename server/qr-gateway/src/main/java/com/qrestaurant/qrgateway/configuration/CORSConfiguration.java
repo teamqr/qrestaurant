@@ -33,8 +33,10 @@ public class CORSConfiguration {
                 .registerCorsConfiguration("/api/dashboard/**", dashboardCorsConfiguration);
         urlBasedCorsConfigurationSource.registerCorsConfiguration("**/swagger-ui/**", swaggerCorsConfiguration);
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/app/**", swaggerCorsConfiguration);
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/ws-app", appCorsConfiguration);
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/ws-app/**", appCorsConfiguration);
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/dashboard/**", swaggerCorsConfiguration);
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/ws-dashboard", dashboardCorsConfiguration);
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/ws-dashboard/**", dashboardCorsConfiguration);
 
         return new CorsWebFilter(urlBasedCorsConfigurationSource);
