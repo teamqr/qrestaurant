@@ -3,11 +3,15 @@ package com.qrestaurant.qrapp.service;
 import com.qrestaurant.qrapp.common.JWTUtil;
 import com.qrestaurant.qrapp.common.MapperDTO;
 import com.qrestaurant.qrapp.exception.EntityNotFoundException;
+import com.qrestaurant.qrapp.model.dto.OrderDTO;
 import com.qrestaurant.qrapp.model.dto.OrderMealOrderDTO;
 import com.qrestaurant.qrapp.model.entity.*;
 import com.qrestaurant.qrapp.model.request.NewOrderRequest;
 import com.qrestaurant.qrapp.repository.*;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +30,15 @@ public class OrderService {
     private final MealRepository mealRepository;
     private final MealOrderRepository mealOrderRepository;
     private final KafkaTemplate<String, OrderMealOrderDTO> orderMealOrderKafkaTemplate;
+    private final SimpMessagingTemplate orderMessagingTemplate;
     private final JWTUtil jwtUtil;
     private final MapperDTO mapperDTO;
 
     public OrderService(OrderRepository orderRepository, UserRepository userRepository,
                         RestaurantRepository restaurantRepository, TableRepository tableRepository,
                         MealRepository mealRepository, MealOrderRepository mealOrderRepository,
-                        KafkaTemplate<String, OrderMealOrderDTO> orderMealOrderKafkaTemplate, JWTUtil jwtUtil,
-                        MapperDTO mapperDTO) {
+                        KafkaTemplate<String, OrderMealOrderDTO> orderMealOrderKafkaTemplate,
+                        SimpMessagingTemplate orderMessagingTemplate, JWTUtil jwtUtil, MapperDTO mapperDTO) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.restaurantRepository = restaurantRepository;
@@ -41,6 +46,7 @@ public class OrderService {
         this.mealRepository = mealRepository;
         this.mealOrderRepository = mealOrderRepository;
         this.orderMealOrderKafkaTemplate = orderMealOrderKafkaTemplate;
+        this.orderMessagingTemplate = orderMessagingTemplate;
         this.jwtUtil = jwtUtil;
         this.mapperDTO = mapperDTO;
     }
@@ -139,6 +145,26 @@ public class OrderService {
 
         orderMealOrderKafkaTemplate.send("app-order-meal-order", orderMealOrderDTO);
 
+        orderMessagingTemplate.convertAndSend("/topic/order/" + order.getId(), mapperDTO.toOrderDTO(order));
+
         return order;
+    }
+
+    @KafkaListener(topics = "dashboard-order", groupId = "qrestaurant",
+            containerFactory = "orderConcurrentKafkaListenerContainerFactory")
+    public void orderListener(OrderDTO orderDTO) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderDTO.id());
+
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+
+            order.setStatus(orderDTO.status());
+            order.setCompletionDate(orderDTO.completionDate());
+
+            orderRepository.save(order);
+
+            orderMessagingTemplate.convertAndSend(
+                    "/topic/order/" + order.getId(), mapperDTO.toOrderDTO(order));
+        }
     }
 }
