@@ -65,7 +65,7 @@ export default function CartPage() {
       paymentIntentClientSecret: clientSecret,
       allowsDelayedPaymentMethods: false,
       defaultBillingDetails: {
-        name: "Gunilla Haugeh",
+        name: "Test User",
       },
     });
 
