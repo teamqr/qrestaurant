@@ -1,5 +1,4 @@
 import OrdersPage from "@/components/orders/OrdersPage";
-import WSConnection from "@/components/orders/WSConnection";
 import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
 import React from "react";
 

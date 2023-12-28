@@ -5,7 +5,6 @@ import { OrderStatus } from "@/types/OrderStatus";
 import { TableData } from "@/types/TableData";
 import { changeOrderState, fetchOrderEntriesByOrderId } from "@/utils/apiUtils";
 import React from "react";
-import WSConnection from "./WSConnection";
 
 type Props = {
   data: OrderData;
