@@ -1,53 +1,55 @@
+"use client";
 import { OrderData } from "@/types/OrderData";
-import { getTokenData, getTokenFromCookies } from "@/utils/tokenUtils";
-import React from "react";
+import React, { useState } from "react";
 import Order from "./Order";
-import {
-  fetchMealsData,
-  fetchOrdersInProgressData,
-  fetchTablesData,
-} from "@/utils/apiUtils";
 import { getWebSocketClient } from "../../utils/webSocketUtils";
-import { revalidateTag } from "next/cache";
 import { StompSubscription } from "@stomp/stompjs";
+import { TokenData } from "@/types/TokenData";
+import { MealData } from "@/types/MealData";
+import { TableData } from "@/types/TableData";
 
-const OrdersPage = async () => {
-  const token = (await getTokenFromCookies()) as string;
-  const tokenData = await getTokenData(token);
-  const meals = await fetchMealsData(token);
-  const tables = await fetchTablesData(token);
+type Props = {
+  token: string;
+  tokenData: TokenData;
+  meals: MealData[];
+  tables: TableData[];
+  initialOrders: OrderData[];
+  initialOrderEntries: any[];
+};
 
-  let orders = await fetchOrdersInProgressData(token);
+const OrdersPage = (props: Props) => {
+  const [orders, setOrders] = useState(props.initialOrders);
   const ordersCount = orders.length;
-  const wsClient = getWebSocketClient(token, tokenData.restaurantId);
+  const wsClient = getWebSocketClient(
+    props.token,
+    props.tokenData.restaurantId
+  );
   let sub: StompSubscription | null = null;
 
   wsClient.onConnect = () => {
     sub = wsClient.subscribe(
-      `/topic/order/${tokenData.restaurantId}`,
+      `/topic/order/${props.tokenData.restaurantId}`,
       (message) => {
-        // Logika obsługi wiadomości
-        const msgBody = JSON.parse(message.body) as OrderData[];
-        orders = msgBody;
+        const receivedOrders = JSON.parse(message.body) as OrderData[];
+        receivedOrders.sort((o1, o2) => {
+          if (o1.orderDate > o2.orderDate) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
+        setOrders(receivedOrders);
       }
     );
   };
 
-  wsClient.onStompError = function (frame) {
-    // Logika obsługi błędów
-    console.error("Broker reported error: " + frame.headers["message"]);
-    console.error("Additional details: " + frame.body);
-  };
-
-  wsClient.onDisconnect = function (frame) {
-    console.log("Disconnected: " + frame);
+  wsClient.onDisconnect = function () {
     if (sub) {
       sub.unsubscribe();
     }
   };
 
-  wsClient.onWebSocketClose = function (frame) {
-    console.log("Closed: " + frame);
+  wsClient.onWebSocketClose = function () {
     if (sub) {
       sub.unsubscribe();
     }
@@ -66,9 +68,10 @@ const OrdersPage = async () => {
             <Order
               key={i}
               data={order}
-              mealsData={meals}
-              tablesData={tables}
-              token={token}
+              mealsData={props.meals}
+              tablesData={props.tables}
+              initialEntries={props.initialOrderEntries[order.id]}
+              token={props.token}
             />
           ))
         ) : (

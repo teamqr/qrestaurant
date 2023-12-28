@@ -9,9 +9,9 @@ export const getWebSocketClient = (token: string, restaurantId: number) => {
     connectHeaders: {
       Authorization: `Bearer ${token}`,
     },
-    debug: (msg) => {
+    /*debug: (msg) => {
       console.log(msg);
-    },
+    },*/
     reconnectDelay: 5000,
   });
   return stompClient;
