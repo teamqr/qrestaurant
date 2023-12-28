@@ -1,3 +1,5 @@
+import { useStripe } from "@stripe/stripe-react-native";
+import { useMutation } from "@tanstack/react-query";
 import { Redirect, useRouter } from "expo-router";
 import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
@@ -13,10 +15,23 @@ import { useCreateOrder } from "@/hooks/mutation/useCreateOrder";
 import { useTable } from "@/hooks/query/useTable";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import { useTotalCartPrice } from "@/hooks/useTotalCartPrice";
+import axios from "@/services/axios";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 import { formatter } from "@/utils/formatter";
 
+const fetchSheetParams = async (amount: number) => {
+  const { data } = await axios.post<{ clientSecret: string }>(
+    "/api/app/stripe",
+    {
+      amount,
+    },
+  );
+
+  return data;
+};
+
 export default function CartPage() {
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const restaurantId = useRestaurantSessionStore(
     (state) => state.restaurantId,
   )!;
@@ -24,6 +39,10 @@ export default function CartPage() {
   const cart = useRestaurantSessionStore((state) => state.cart);
   const addToCart = useRestaurantSessionStore((state) => state.addToCart);
   const remove = useRestaurantSessionStore((state) => state.removeFromCart);
+
+  const stripe = useMutation({
+    mutationFn: (amount: number) => fetchSheetParams(amount),
+  });
 
   const table = useTable({ restaurantId, code: tableCode });
   const router = useRouter();
@@ -39,6 +58,23 @@ export default function CartPage() {
   const { bottom } = useFixedInsets();
 
   const handleCreateOrder = useCallback(async () => {
+    const { clientSecret } = await stripe.mutateAsync(total * 100);
+
+    const { error } = await initPaymentSheet({
+      merchantDisplayName: "QRestaurant",
+      paymentIntentClientSecret: clientSecret,
+      allowsDelayedPaymentMethods: false,
+      defaultBillingDetails: {
+        name: "Test User",
+      },
+    });
+
+    if (error) return;
+
+    const { error: paymentError } = await presentPaymentSheet();
+
+    if (paymentError) return;
+
     const orderProducts = cart.map((item) => ({
       id: item.id,
       amount: item.quantity,
@@ -51,7 +87,7 @@ export default function CartPage() {
     });
 
     router.push(`/(app)/order/${order.id}`);
-  }, [cart, createOrder, restaurantId, table.data]);
+  }, [cart, createOrder, restaurantId, table.data, total]);
 
   const handleAddToCart = useCallback(
     (id: number) => (quantity: number) => {
