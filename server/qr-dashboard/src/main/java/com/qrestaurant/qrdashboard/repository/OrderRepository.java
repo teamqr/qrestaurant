@@ -11,7 +11,6 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface OrderRepository extends CrudRepository<Order, Long> {
-    Iterable<Order> getAllByRestaurant_Id(Long restaurantId);
     Iterable<Order> getAllByStatusAndRestaurant_Id(OrderStatus orderStatus, Long restaurantId);
     Optional<Order> findByIdAndRestaurant_Id(Long id, Long restaurantId);
 }

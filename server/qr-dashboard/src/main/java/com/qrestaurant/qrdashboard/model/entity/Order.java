@@ -25,7 +25,7 @@ public class Order {
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date completionDate;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order")
     private List<MealOrder> mealOrders;
     @ManyToOne
     @JoinColumn(name = "table_id")
