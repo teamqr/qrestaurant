@@ -20,12 +20,20 @@ public class RouteConfiguration {
                         .uri("http://qr-app:8081")
                 )
                 .route(predicateSpec -> predicateSpec
+                        .path("/ws-app/**")
+                        .uri("ws://qr-app:8081")
+                )
+                .route(predicateSpec -> predicateSpec
                         .path("/api/dashboard/**")
                         .uri("http://qr-dashboard:8082")
                 )
                 .route(predicateSpec -> predicateSpec
                         .path("/dashboard/**")
                         .uri("http://qr-dashboard:8082")
+                )
+                .route(predicateSpec -> predicateSpec
+                        .path("/ws-dashboard/**")
+                        .uri("ws://qr-dashboard:8082")
                 )
                 .build();
     }

@@ -48,15 +48,14 @@ export default function ScannerPage() {
   useEffect(() => {
     if (!table.data) return;
 
-    const { code, restaurantId: restaurantIdNumber } = table.data.table;
-    const restaurantId = restaurantIdNumber.toString();
+    const { code, restaurantId } = table.data.table;
 
     queryClient.setQueryData(["restaurant", restaurantId, "table", code], {
       table: table.data.table,
     });
     beginSession({ restaurantId, tableCode: code });
 
-    router.replace(`/(app)/${restaurantId}`);
+    router.replace(`/(app)/restaurant/${restaurantId}`);
   }, [table.data]);
 
   const device = useCameraDevice("back", {
