@@ -21,13 +21,12 @@ public class MealOrderController {
         this.mapperDTO = mapperDTO;
     }
 
-    @GetMapping("/{orderId}")
-    public ResponseEntity<Map<String, Iterable<MealOrderDTO>>> getAllByOrderId(
-            @RequestHeader(value = "Authorization") String authorizationHeader, @PathVariable Long orderId) {
-        Iterable<MealOrder> mealOrders = mealOrderService.getAllByOrderId(authorizationHeader, orderId);
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, MealOrderDTO>> getMealOrder(@PathVariable Long id) {
+        MealOrder mealOrder = mealOrderService.getMealOrder(id);
 
-        Map<String, Iterable<MealOrderDTO>> response = new HashMap<>();
-        response.put("mealOrders", mapperDTO.toMealOrderDTOs(mealOrders));
+        Map<String, MealOrderDTO> response = new HashMap<>();
+        response.put("mealOrder", mapperDTO.toMealOrderDTO(mealOrder));
 
         return ResponseEntity.ok(response);
     }
