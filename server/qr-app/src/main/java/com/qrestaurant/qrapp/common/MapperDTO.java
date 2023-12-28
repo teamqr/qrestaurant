@@ -205,12 +205,14 @@ public class MapperDTO {
     public OrderSummaryDTO toOrderSummaryDTO(Order order) {
         List<MealSummaryDTO> meals = new ArrayList<>();
 
-        order.getMealOrders().forEach(mealOrder -> {
-            Meal meal = mealOrder.getMeal();
+        if (order.getMealOrders() != null) {
+            order.getMealOrders().forEach(mealOrder -> {
+                Meal meal = mealOrder.getMeal();
 
-            meals.add(new MealSummaryDTO(meal.getId(), meal.getName(), meal.getDescription(),
-                    meal.getPrice().multiply(new BigDecimal(mealOrder.getAmount())), mealOrder.getAmount()));
-        });
+                meals.add(new MealSummaryDTO(meal.getId(), meal.getName(), meal.getDescription(),
+                        meal.getPrice().multiply(new BigDecimal(mealOrder.getAmount())), mealOrder.getAmount()));
+            });
+        }
 
         return new OrderSummaryDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
                 order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(),
@@ -223,12 +225,14 @@ public class MapperDTO {
         orders.forEach(order -> {
             List<MealSummaryDTO> meals = new ArrayList<>();
 
-            order.getMealOrders().forEach(mealOrder -> {
-                Meal meal = mealOrder.getMeal();
+            if (order.getMealOrders() != null) {
+                order.getMealOrders().forEach(mealOrder -> {
+                    Meal meal = mealOrder.getMeal();
 
-                meals.add(new MealSummaryDTO(meal.getId(), meal.getName(), meal.getDescription(),
-                        meal.getPrice().multiply(new BigDecimal(mealOrder.getAmount())), mealOrder.getAmount()));
-            });
+                    meals.add(new MealSummaryDTO(meal.getId(), meal.getName(), meal.getDescription(),
+                            meal.getPrice().multiply(new BigDecimal(mealOrder.getAmount())), mealOrder.getAmount()));
+                });
+            }
 
             orderSummaryDTOs.add(new OrderSummaryDTO(order.getId(), order.getPrice(), order.getStatus(),
                     order.getOrderDate(), order.getCompletionDate(), order.getTable().getId(),
