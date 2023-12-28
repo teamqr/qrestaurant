@@ -1,3 +1,4 @@
+import "text-encoding-polyfill";
 import {
   OpenSans_400Regular,
   OpenSans_700Bold,

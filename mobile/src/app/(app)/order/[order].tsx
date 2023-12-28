@@ -1,25 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { View } from "react-native";
 
 import { theme } from "@/common/theme";
-import { Order } from "@/common/types";
 import { AppText } from "@/components/text";
-import axios from "@/services/axios";
-
-const getOrder = async (id: number) => {
-  const { data } = await axios.get<{ order: Order }>(`/api/app/order/${id}`);
-  return data;
-};
+import { useOrder } from "@/hooks/query/useOrder";
+import { useEffect } from "react";
+import { useSubscribeWebSocket } from "@/hooks/useSubscribeWebSocket";
 
 export default function OrderPage() {
   const { order } = useLocalSearchParams<{ order: string }>();
 
-  const { data } = useQuery({
-    queryKey: ["order", order],
-    queryFn: () => getOrder(+order!),
-    enabled: !!order,
+  const { data } = useOrder(+order);
+
+  const { data: liveData } = useSubscribeWebSocket({
+    initialData: data,
+    topic: `/topic/order/${order}`,
   });
+
+  console.log({ liveData });
 
   return (
     <View
@@ -37,6 +35,7 @@ export default function OrderPage() {
       >
         Numer zamówienia:{" "}
         <AppText weight="extra-bold">#{data?.order?.id}</AppText>
+        <AppText>{JSON.stringify(liveData, null, 2)}</AppText>
       </AppText>
     </View>
   );
