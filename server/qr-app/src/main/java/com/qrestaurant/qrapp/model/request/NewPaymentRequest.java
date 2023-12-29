@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record NewPaymentRequest(
-        @NotNull
-        @Min(value = 1)
+        @NotNull(message = "{amount.notnull}")
+        @Min(value = 1, message = "{amount.min}")
         Long amount
 ) {}

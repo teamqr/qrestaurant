@@ -5,14 +5,14 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record RegisterRequest(
-        @NotNull
-        @Email
+        @NotNull(message = "{email.notnull}")
+        @Email(message = "{email}")
         String email,
-        @NotNull
-        @Size(min = 8)
+        @NotNull(message = "{password.notnull}")
+        @Size(min = 8, message = "{password.size}")
         String password,
-        @NotNull
+        @NotNull(message = "{firstname.notnull}")
         String firstname,
-        @NotNull
+        @NotNull(message = "{lastname.notnull}")
         String lastname
 ) {}

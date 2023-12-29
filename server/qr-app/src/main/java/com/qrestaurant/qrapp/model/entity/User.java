@@ -17,15 +17,15 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    @Email
+    @NotNull(message = "{email.notnull}")
+    @Email(message = "{email}")
     private String email;
-    @NotNull
-    @Size(min = 8)
+    @NotNull(message = "{password.notnull}")
+    @Size(min = 8, message = "{password.size}")
     private String password;
-    @NotNull
+    @NotNull(message = "{firstname.notnull}")
     private String firstname;
-    @NotNull
+    @NotNull(message = "{lastname.notnull}")
     private String lastname;
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Order> orders;

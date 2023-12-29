@@ -16,8 +16,8 @@ public class MealOrder {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-    @NotNull
-    @Min(value = 1)
+    @NotNull(message = "{amount.notnull}")
+    @Min(value = 1, message = "{amount.min}")
     private Integer amount;
 
     public MealOrder() {}

@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 public record UpdateOrderRequest(
-        @NotNull
+        @NotNull(message = "{id.notnull}")
         Long id,
-        @NotNull
+        @NotNull(message = "{status.notnull}")
         OrderStatus status,
         Date completionDate
 ) {}

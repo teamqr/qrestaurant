@@ -2,7 +2,7 @@ package com.qrestaurant.qrdashboard.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class MealCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
+    @NotNull(message = "{name.notnull}")
     private String name;
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
