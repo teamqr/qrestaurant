@@ -20,7 +20,7 @@ import axios from "@/services/axios";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 import { wait } from "@/utils/promise";
 
-const getTableData = async (code: string) => {
+export const getTableData = async (code: string) => {
   await wait(1000);
 
   const { data } = await axios.get<{ table: Table }>(`/api/app/table/${code}`);
@@ -104,16 +104,33 @@ export default function ScannerPage() {
           }}
         />
 
+        <Canvas style={StyleSheet.absoluteFill}>
+          <Rect width={size.width} height={size.height}>
+            <Shadow
+              dx={0}
+              dy={0}
+              blur={20}
+              inner
+              color={theme.colors.background}
+              shadowOnly
+            />
+          </Rect>
+        </Canvas>
+
         <View
           style={{
             marginTop: "auto",
             alignSelf: "stretch",
             marginHorizontal: theme.spacing(3),
             marginBottom: bottom,
+            zIndex: 999,
           }}
         >
           <ShadowContainer>
             <Button
+              onPress={() => {
+                router.replace("/(app)/code");
+              }}
               label="Wpisz kod ręcznie"
               icon={<Dialpad />}
               loading={table.isLoading}
@@ -121,19 +138,6 @@ export default function ScannerPage() {
           </ShadowContainer>
         </View>
       </View>
-
-      <Canvas style={StyleSheet.absoluteFill}>
-        <Rect width={size.width} height={size.height}>
-          <Shadow
-            dx={0}
-            dy={0}
-            blur={20}
-            inner
-            color={theme.colors.background}
-            shadowOnly
-          />
-        </Rect>
-      </Canvas>
     </>
   );
 }

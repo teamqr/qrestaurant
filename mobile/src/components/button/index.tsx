@@ -22,6 +22,7 @@ type Props = {
   variant?: ButtonType;
   onPress?: () => void;
   loading?: boolean;
+  disabled?: boolean;
 };
 
 export const Button = ({
@@ -30,6 +31,7 @@ export const Button = ({
   variant = "contained",
   onPress,
   loading = false,
+  disabled = false,
 }: Props) => {
   const loaderRotation = useSharedValue("0deg");
   const labelWidth = useSharedValue(0);
@@ -101,7 +103,7 @@ export const Button = ({
         ]}
         variant={variant}
         onPress={onPress}
-        disabled={loading}
+        disabled={loading || disabled}
       >
         <Animated.View
           onLayout={(e) => {
