@@ -1,6 +1,6 @@
 "use client";
 import { OrderData } from "@/types/OrderData";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Order from "./Order";
 import { getWebSocketClient } from "../../utils/webSocketUtils";
 import { StompSubscription } from "@stomp/stompjs";
@@ -20,35 +20,38 @@ type Props = {
 const OrdersPage = (props: Props) => {
   const [orders, setOrders] = useState(props.initialOrders);
   const ordersCount = orders.length;
-  const wsClient = getWebSocketClient(
-    props.token,
-    props.tokenData.restaurantId
-  );
-  let sub: StompSubscription | null = null;
 
-  wsClient.onConnect = () => {
-    sub = wsClient.subscribe(
-      `/topic/order/${props.tokenData.restaurantId}`,
-      (message) => {
-        const receivedOrders = JSON.parse(message.body).orders as OrderData[];
-        setOrders(receivedOrders);
-      }
+  useEffect(() => {
+    const wsClient = getWebSocketClient(
+      props.token,
+      props.tokenData.restaurantId
     );
-  };
+    let sub: StompSubscription | null = null;
 
-  wsClient.onDisconnect = function () {
-    if (sub) {
-      sub.unsubscribe();
-    }
-  };
+    wsClient.onConnect = () => {
+      sub = wsClient.subscribe(
+        `/topic/order/${props.tokenData.restaurantId}`,
+        (message) => {
+          const receivedOrders = JSON.parse(message.body).orders as OrderData[];
+          setOrders(receivedOrders);
+        }
+      );
+    };
 
-  wsClient.onWebSocketClose = function () {
-    if (sub) {
-      sub.unsubscribe();
-    }
-  };
+    wsClient.onDisconnect = function () {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    };
 
-  wsClient.activate();
+    wsClient.onWebSocketClose = function () {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    };
+
+    wsClient.activate();
+  }, []);
 
   return (
     <div>

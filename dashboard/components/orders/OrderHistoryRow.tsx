@@ -1,9 +1,9 @@
+"use client";
 import { OrderData } from "@/types/OrderData";
 import { OrderStatus } from "@/types/OrderStatus";
 import { TableData } from "@/types/TableData";
 import { changeOrderState } from "@/utils/apiUtils";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -36,14 +36,12 @@ const OrderHistoryRow = (props: Props) => {
   }
 
   const changeOrderStateAction = async () => {
-    "use server";
     await changeOrderState(
       order.id,
       OrderStatus.IN_PROGRESS,
       null,
       props.token
     );
-    redirect("/orders");
   };
 
   return (
@@ -52,7 +50,7 @@ const OrderHistoryRow = (props: Props) => {
       <td>#{getTableNumberById(order.tableId)}</td>
       <td>{`${orderDate}, ${orderTime}`}</td>
       <td>{`${orderCompleteDate}, ${orderCompleteTime}`}</td>
-      <td>{order.price.toPrecision(4)}zł</td>
+      <td>{order.price.toFixed(2)}zł</td>
       <td>
         <Link
           href={`/orders/history/details/${order.id}`}
@@ -62,11 +60,12 @@ const OrderHistoryRow = (props: Props) => {
         </Link>
       </td>
       <td>
-        <form action={changeOrderStateAction}>
-          <button className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 m-5">
-            Cofnij realizację
-          </button>
-        </form>
+        <button
+          className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 m-5"
+          onClick={changeOrderStateAction}
+        >
+          Cofnij realizację
+        </button>
       </td>
     </tr>
   );
