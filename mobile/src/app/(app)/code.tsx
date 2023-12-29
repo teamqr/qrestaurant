@@ -1,6 +1,7 @@
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
 import { forwardRef, memo, useEffect, useRef, useState } from "react";
 import {
-  Keyboard,
   KeyboardAvoidingView,
   StyleSheet,
   TextInput,
@@ -9,21 +10,18 @@ import {
 } from "react-native";
 import Animated, {
   useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+
+import { getTableData } from "./scanner";
 
 import { theme } from "@/common/theme";
 import { Button } from "@/components/button";
 import { CircleCheck } from "@/components/icons";
 import { ShadowContainer } from "@/components/shadow-container";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
-import { AppText } from "@/components/text";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getTableData } from "./scanner";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
-import { useRouter } from "expo-router";
 
 export default function CodePage() {
   const queryClient = useQueryClient();
@@ -53,8 +51,6 @@ export default function CodePage() {
 
     router.replace(`/(app)/restaurant/${restaurantId}`);
   };
-
-  console.log({ code });
 
   return (
     <View
