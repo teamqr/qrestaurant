@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { forwardRef, memo, useEffect, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   TextInput,
   TextInputProps,
@@ -62,7 +63,7 @@ export default function CodePage() {
       ]}
     >
       <KeyboardAvoidingView
-        behavior="padding"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{
           flex: 1,
         }}
