@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface TableRepository extends CrudRepository<Table, Long> {
-    Iterable<Table> getAllByRestaurant_Id(Long restaurantId);
+    Iterable<Table> getAllByRestaurant_IdOrderByNumberAsc(Long restaurantId);
     Optional<Table> findByIdAndRestaurant_Id(Long id, Long restaurantId);
     Optional<Table> findByNumberAndRestaurant_Id(Integer number, Long restaurantId);
     Optional<Table> findByPrefixAndRestaurant_Id(String prefix, Long restaurantId);

@@ -45,7 +45,7 @@ public class TableService {
         Jwt jwtToken = jwtUtil.getJWTToken(authorizationHeader);
         Long restaurantId = jwtToken.getClaim("restaurantId");
 
-        return tableRepository.getAllByRestaurant_Id(restaurantId);
+        return tableRepository.getAllByRestaurant_IdOrderByNumberAsc(restaurantId);
     }
 
     public Table getTable(String authorizationHeader, Long id) throws EntityNotFoundException {

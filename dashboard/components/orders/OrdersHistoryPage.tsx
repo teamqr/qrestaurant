@@ -11,13 +11,7 @@ type Props = {
 
 const OrdersHistoryPage = async (props: Props) => {
   const orders = props.orders;
-  orders.sort((o1, o2) => {
-    if (o1.id > o2.id) {
-      return -1;
-    } else {
-      return 1;
-    }
-  });
+
   return (
     <div className="flex flex-col items-center">
       <h1 className="flex flex-col justify-center items-center m-5">

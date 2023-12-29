@@ -11,15 +11,7 @@ const TableManagement = async () => {
   const role: string = tokenData?.role;
 
   const tablesData: TableData[] = await fetchTablesData(token);
-  tablesData.sort((a: TableData, b: TableData) => {
-    if (a.number > b.number) {
-      return -1;
-    } else if (a.id < b.id) {
-      return 1;
-    } else {
-      return 0;
-    }
-  });
+
   return (
     <div>
       <TableManagementPage tablesData={tablesData} role={role} />

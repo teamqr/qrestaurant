@@ -53,7 +53,7 @@ public class OrderService {
         Jwt jwtToken = jwtUtil.getJWTToken(authorizationHeader);
         Long id = jwtToken.getClaim("id");
 
-        return orderRepository.getAllByUser_Id(id);
+        return orderRepository.getAllByUser_IdOrderByOrderDateDesc(id);
     }
 
     public Order getOrder(String authorizationHeader, Long id) throws EntityNotFoundException {
