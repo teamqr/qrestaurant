@@ -58,6 +58,12 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
+        name="orders/index"
+        options={{
+          header: () => <AppHeader title={"Twoje\nparagony"} />,
+        }}
+      />
+      <Stack.Screen
         name="order/[order]"
         options={{
           header: () => <AppHeader title="Zamówienie" />,

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
+
 import { useStompStore } from "@/stores/stomp";
 
 type Options<Data> = {

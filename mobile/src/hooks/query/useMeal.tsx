@@ -1,6 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
+
 import { Meal } from "@/common/types";
 import axios from "@/services/axios";
-import { useQuery } from "@tanstack/react-query";
 
 const getMeal = async (id: number, restaurantId: number) => {
   const { data } = await axios.get<{ meal: Meal }>(`/api/app/meal/${id}`, {

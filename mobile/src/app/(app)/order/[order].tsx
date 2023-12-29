@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
 import { FlatList, View } from "react-native";
@@ -5,13 +6,13 @@ import { FlatList, View } from "react-native";
 import { theme } from "@/common/theme";
 import { OrderSummary } from "@/common/types";
 import { AppText } from "@/components/text";
-import { useMeal } from "@/hooks/query/useMeal";
 import { useOrder } from "@/hooks/query/useOrder";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import { useSubscribeWebSocket } from "@/hooks/useSubscribeWebSocket";
 import { formatter } from "@/utils/formatter";
 
 export default function OrderPage() {
+  const queryClient = useQueryClient();
   const { order: orderId } = useLocalSearchParams<{ order: string }>();
   const { bottom } = useFixedInsets();
 
@@ -21,6 +22,12 @@ export default function OrderPage() {
     initialData: data,
     topic: `/topic/order/${orderId}`,
   });
+
+  useEffect(() => {
+    if (liveData) {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    }
+  }, [liveData]);
 
   const { order } = liveData ?? {};
 
