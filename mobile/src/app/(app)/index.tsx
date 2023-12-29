@@ -21,14 +21,13 @@ const getRestaurants = async () => {
 
 export default function RestaurantsPage() {
   const { beginSession } = useRestaurantSessionStore();
+  const router = useRouter();
 
   const { bottom } = useFixedInsets();
   const restaurants = useQuery({
     queryKey: ["restaurants"],
     queryFn: getRestaurants,
   });
-
-  const router = useRouter();
 
   const handleRestaurantPress = (restaurant: Restaurant) => {
     beginSession({ restaurantId: restaurant.id });

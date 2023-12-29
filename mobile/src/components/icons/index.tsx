@@ -28,3 +28,4 @@ export { default as ShoppingCart } from "./shopping-cart";
 export { default as Plus } from "./plus";
 export { default as Minus } from "./minus";
 export { default as Wallet } from "./wallet";
+export { default as UserEdit } from "./user-edit";

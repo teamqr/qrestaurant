@@ -59,3 +59,11 @@ export type OrderSummary = Omit<Order, "mealOrderIds"> & {
     amount: number;
   }[];
 };
+
+export type AppUser = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  orderIds: number[];
+};
