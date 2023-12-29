@@ -1,19 +1,23 @@
-import { getCompleteOrders } from "@/sampleData/sampleOrders";
-import {
-  fetchMealsData,
-  fetchOrdersData,
-  fetchTablesData,
-} from "@/utils/apiUtils";
-import { getTokenFromCookies } from "@/utils/tokenUtils";
 import React from "react";
 import OrderHistoryRow from "./OrderHistoryRow";
 import { OrderData } from "@/types/OrderData";
+import { TableData } from "@/types/TableData";
 
-const OrdersHistoryPage = async () => {
-  const token = (await getTokenFromCookies()) as string;
-  const tables = await fetchTablesData(token);
+type Props = {
+  orders: OrderData[];
+  tables: TableData[];
+  token: string;
+};
 
-  const orders = await fetchOrdersData(token);
+const OrdersHistoryPage = async (props: Props) => {
+  const orders = props.orders;
+  orders.sort((o1, o2) => {
+    if (o1.id > o2.id) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
   return (
     <div className="flex flex-col items-center">
       <h1 className="flex flex-col justify-center items-center m-5">
@@ -37,8 +41,8 @@ const OrdersHistoryPage = async () => {
               <OrderHistoryRow
                 key={i}
                 data={order}
-                tablesData={tables}
-                token={token}
+                tablesData={props.tables}
+                token={props.token}
               />
             ))
           ) : (

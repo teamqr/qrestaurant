@@ -1,25 +1,35 @@
+"use client";
 import { MealData } from "@/types/MealData";
 import { OrderData } from "@/types/OrderData";
 import { OrderEntry } from "@/types/OrderEntry";
 import { OrderStatus } from "@/types/OrderStatus";
 import { TableData } from "@/types/TableData";
 import { changeOrderState, fetchOrderEntriesByOrderId } from "@/utils/apiUtils";
-import React from "react";
-import WSConnection from "./WSConnection";
+import React, { useEffect, useState } from "react";
 
 type Props = {
   data: OrderData;
   mealsData: MealData[];
   tablesData: TableData[];
+  initialEntries: OrderEntry[] | null;
   token: string;
 };
 
-const Order = async (props: Props) => {
+const Order = (props: Props) => {
   const order = props.data;
-  const orderEntries: OrderEntry[] = await fetchOrderEntriesByOrderId(
-    order.id,
-    props.token
+  const [orderEntries, setOrderEntries] = useState<OrderEntry[] | null>(
+    props.initialEntries
   );
+
+  useEffect(() => {
+    const fetchEntries = async () => {
+      const entries = await fetchOrderEntriesByOrderId(order.id, props.token);
+      setOrderEntries(entries);
+    };
+    if (!props.initialEntries) {
+      fetchEntries();
+    }
+  }, []);
 
   const orderDateTime = new Date(order.orderDate);
   const orderDate = orderDateTime.toLocaleDateString("pl-PL");
@@ -41,15 +51,8 @@ const Order = async (props: Props) => {
     return null;
   }
 
-  const changeOrderStateAction = async () => {
-    "use server";
-    await changeOrderState(
-      order.id,
-      OrderStatus.COMPLETED,
-      new Date(),
-      props.token
-    );
-    console.log("submit");
+  const changeOrderStateAction = () => {
+    changeOrderState(order.id, OrderStatus.COMPLETED, new Date(), props.token);
   };
 
   return (
@@ -71,17 +74,12 @@ const Order = async (props: Props) => {
           <></>
         )}
       </div>
-      <form
-        className="flex flex-col justify-end mt-auto"
-        action={changeOrderStateAction}
+      <button
+        onClick={changeOrderStateAction}
+        className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-green-500"
       >
-        <button
-          type="submit"
-          className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-green-500"
-        >
-          Zakończ realizację
-        </button>
-      </form>
+        Zakończ realizację
+      </button>
     </div>
   );
 };
