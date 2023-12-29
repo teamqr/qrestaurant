@@ -46,7 +46,7 @@ public class MealService {
         Jwt jwtToken = jwtUtil.getJWTToken(authorizationHeader);
         Long restaurantId = jwtToken.getClaim("restaurantId");
 
-        return mealRepository.getAllByMenu_Restaurant_Id(restaurantId);
+        return mealRepository.getAllByMenu_Restaurant_IdOrderByIdDesc(restaurantId);
     }
 
     public Iterable<Meal> getMealsByCategory(String authorizationHeader, Long mealCategoryId) {

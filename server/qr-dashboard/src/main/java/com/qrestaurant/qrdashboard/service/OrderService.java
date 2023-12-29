@@ -53,9 +53,9 @@ public class OrderService {
         Long restaurantId = jwtToken.getClaim("restaurantId");
 
         Iterable<Order> completedOrders =
-                orderRepository.getAllByStatusAndRestaurant_Id(OrderStatus.COMPLETED, restaurantId);
+                orderRepository.getAllByStatusAndRestaurant_IdOrderByOrderDateDesc(OrderStatus.COMPLETED, restaurantId);
         Iterable<Order> canceledOrders =
-                orderRepository.getAllByStatusAndRestaurant_Id(OrderStatus.CANCELED, restaurantId);
+                orderRepository.getAllByStatusAndRestaurant_IdOrderByOrderDateDesc(OrderStatus.CANCELED, restaurantId);
 
         return Stream.concat(
                 StreamSupport.stream(completedOrders.spliterator(), false),
@@ -67,7 +67,7 @@ public class OrderService {
         Jwt jwtToken = jwtUtil.getJWTToken(authorizationHeader);
         Long restaurantId = jwtToken.getClaim("restaurantId");
 
-        return orderRepository.getAllByStatusAndRestaurant_Id(OrderStatus.IN_PROGRESS, restaurantId);
+        return orderRepository.getAllByStatusAndRestaurant_IdOrderByOrderDateDesc(OrderStatus.IN_PROGRESS, restaurantId);
     }
 
     public Order getOrder(String authorizationHeader, Long id) throws EntityNotFoundException {
@@ -102,7 +102,7 @@ public class OrderService {
         orderKafkaTemplate.send("dashboard-order", mapperDTO.toOrderDTO(order));
 
         Iterable<Order> ordersInProgress =
-                orderRepository.getAllByStatusAndRestaurant_Id(OrderStatus.IN_PROGRESS, restaurantId);
+                orderRepository.getAllByStatusAndRestaurant_IdOrderByOrderDateDesc(OrderStatus.IN_PROGRESS, restaurantId);
 
         Map<String, Iterable<OrderDTO>> wsOrders = new HashMap<>();
         wsOrders.put("orders", mapperDTO.toOrderDTOs(ordersInProgress));
@@ -152,7 +152,7 @@ public class OrderService {
                 orderRepository.save(order);
                 mealOrderRepository.saveAll(mealOrders);
 
-                Iterable<Order> ordersInProgress = orderRepository.getAllByStatusAndRestaurant_Id(
+                Iterable<Order> ordersInProgress = orderRepository.getAllByStatusAndRestaurant_IdOrderByOrderDateDesc(
                         OrderStatus.IN_PROGRESS, order.getRestaurant().getId());
 
                 Map<String, Iterable<OrderDTO>> wsOrders = new HashMap<>();
