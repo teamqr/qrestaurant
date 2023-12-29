@@ -16,6 +16,7 @@ import { useTable } from "@/hooks/query/useTable";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import { useTotalCartPrice } from "@/hooks/useTotalCartPrice";
 import axios from "@/services/axios";
+import { useAuthStore } from "@/stores/auth";
 import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 import { formatter } from "@/utils/formatter";
 
@@ -39,6 +40,8 @@ export default function CartPage() {
   const cart = useRestaurantSessionStore((state) => state.cart);
   const addToCart = useRestaurantSessionStore((state) => state.addToCart);
   const remove = useRestaurantSessionStore((state) => state.removeFromCart);
+
+  const user = useAuthStore((state) => state.user);
 
   const stripe = useMutation({
     mutationFn: (amount: number) => fetchSheetParams(amount),
@@ -64,12 +67,20 @@ export default function CartPage() {
       merchantDisplayName: "QRestaurant",
       paymentIntentClientSecret: clientSecret,
       allowsDelayedPaymentMethods: false,
+      billingDetailsCollectionConfiguration: {
+        name: "always" as any,
+        email: "always" as any,
+      },
       defaultBillingDetails: {
-        name: "Test User",
+        email: user?.email,
+        name: `${user?.firstname} ${user?.lastname}`,
       },
     });
 
-    if (error) return;
+    if (error) {
+      console.log(error);
+      return;
+    }
 
     const { error: paymentError } = await presentPaymentSheet();
 
@@ -87,7 +98,7 @@ export default function CartPage() {
     });
 
     router.push(`/(app)/order/${order.id}`);
-  }, [cart, createOrder, restaurantId, table.data, total]);
+  }, [cart, createOrder, restaurantId, table.data, total, user]);
 
   const handleAddToCart = useCallback(
     (id: number) => (quantity: number) => {

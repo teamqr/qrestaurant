@@ -93,6 +93,13 @@ const RootLayoutStack = () => {
           header: ({ navigation }) => <Header onBack={navigation.goBack} />,
         }}
       />
+
+      <Stack.Screen
+        name="sign-up-confirm"
+        options={{
+          header: ({ navigation }) => <Header onBack={navigation.goBack} />,
+        }}
+      />
     </Stack>
   );
 };

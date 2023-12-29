@@ -1,12 +1,13 @@
 import { create } from "zustand";
 
+import { AppUser } from "@/common/types";
 import { SignInSchemaType, SignUpSchemaType } from "@/context/auth/types";
 import { auth } from "@/services/auth";
 import { wait } from "@/utils/promise";
 import { clearToken, getToken, setToken } from "@/utils/token";
 
 type AuthState = {
-  user: any;
+  user: AppUser | null;
   signUp: (creds: SignUpSchemaType) => Promise<void>;
   signInWithEmailAndPassword: (creds: SignInSchemaType) => Promise<void>;
   signOut: () => Promise<void>;
@@ -39,7 +40,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     });
 
     if (token) {
-      set({ user: { email, token } });
+      await get().validateToken();
       await setToken(token);
     } else {
       // throw new Error("Invalid credentials");

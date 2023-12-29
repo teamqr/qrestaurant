@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { isAxiosError } from "axios";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
@@ -22,7 +21,7 @@ import {
 import { Input } from "@/components/input";
 import { ShadowContainer } from "@/components/shadow-container";
 import { AppText } from "@/components/text";
-import { useAuthStore } from "@/stores/auth";
+import { useSignUpStore } from "@/stores/sign-up";
 
 const image = require("assets/images/character.png");
 
@@ -47,7 +46,8 @@ type RegisterForm = z.infer<typeof RegisterSchema>;
 export default function SignUpPage() {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const signUp = useAuthStore((state) => state.signUp);
+  const router = useRouter();
+  const setCache = useSignUpStore((state) => state.setCache);
 
   const { control, handleSubmit } = useForm<RegisterForm>({
     resolver: zodResolver(RegisterSchema),
@@ -59,25 +59,9 @@ export default function SignUpPage() {
     },
   });
 
-  const signUpMutation = useMutation({
-    mutationFn: signUp,
-    onSuccess: (data) => {
-      console.log("success", data);
-    },
-    onError: (error) => {
-      if (isAxiosError(error)) {
-        console.log(error.response?.data);
-      }
-    },
-  });
-
   const onSubmit = async ({ email, password }: RegisterForm) => {
-    signUpMutation.mutate({
-      email,
-      password,
-      firstname: "Adam",
-      lastname: "Kowalski",
-    });
+    setCache({ email, password });
+    router.push("/sign-up-confirm");
   };
 
   const handlePasswordVisibility = () => {
@@ -234,10 +218,9 @@ export default function SignUpPage() {
 
         <ShadowContainer>
           <Button
-            label="Zarejestruj się"
+            label="Kontynuuj"
             icon={<CircleCheck />}
             onPress={handleSubmit(onSubmit)}
-            loading={signUpMutation.isPending}
           />
         </ShadowContainer>
       </View>
