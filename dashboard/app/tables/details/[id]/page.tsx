@@ -1,12 +1,12 @@
 import TableDetails from "@/components/tables/TableDetails";
 import { TableData } from "@/types/TableData";
 import { fetchTableData, fetchTablesData } from "@/utils/apiUtils";
-import { checkAdminAccess } from "@/utils/tokenUtils";
+import { getTokenFromCookies } from "@/utils/tokenUtils";
 import { redirect } from "next/navigation";
 import React from "react";
 
 const TableDetailsPage = async ({ params }: { params: { id: number } }) => {
-  const token: string = await checkAdminAccess();
+  const token: string = (await getTokenFromCookies()) as string;
   const tableData = await fetchTableData(params.id, token);
   const tablesData = await fetchTablesData(token);
 

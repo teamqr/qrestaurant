@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-size: 1.2rem;
+}
+
 #signOutButton {
   position: absolute;
   left: 90%;
@@ -22,8 +26,10 @@ th {
 
 h1 {
   font-size: 2.5rem;
+  font-weight: bold;
 }
 
 h2 {
   font-size: 1.5rem;
+  font-weight: 700;
 }
