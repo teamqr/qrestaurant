@@ -30,14 +30,7 @@ const OrdersPage = (props: Props) => {
     sub = wsClient.subscribe(
       `/topic/order/${props.tokenData.restaurantId}`,
       (message) => {
-        const receivedOrders = JSON.parse(message.body) as OrderData[];
-        receivedOrders.sort((o1, o2) => {
-          if (o1.orderDate > o2.orderDate) {
-            return 1;
-          } else {
-            return -1;
-          }
-        });
+        const receivedOrders = JSON.parse(message.body).orders as OrderData[];
         setOrders(receivedOrders);
       }
     );

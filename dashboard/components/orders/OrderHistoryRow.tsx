@@ -1,6 +1,9 @@
 import { OrderData } from "@/types/OrderData";
+import { OrderStatus } from "@/types/OrderStatus";
 import { TableData } from "@/types/TableData";
+import { changeOrderState } from "@/utils/apiUtils";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -15,13 +18,11 @@ const OrderHistoryRow = (props: Props) => {
   const orderDate = orderDateTime.toLocaleDateString("pl-PL");
   const orderTime = orderDateTime.toLocaleTimeString("pl-PL").substring(0, 5);
 
-  let orderCompleteDateTime, orderCompleteDate, orderCompleteTime;
+  let orderCompleteDateTime: Date, orderCompleteDate, orderCompleteTime;
   if (order.completionDate) {
-    orderCompleteDateTime = order?.completionDate
-      .toLocaleString("pl-PL")
-      .split(",");
-    orderCompleteDate = orderDateTime.toLocaleDateString("pl-PL");
-    orderCompleteTime = orderDateTime
+    orderCompleteDateTime = new Date(order.completionDate);
+    orderCompleteDate = orderCompleteDateTime.toLocaleDateString("pl-PL");
+    orderCompleteTime = orderCompleteDateTime
       .toLocaleTimeString("pl-PL")
       .substring(0, 5);
   }
@@ -33,28 +34,39 @@ const OrderHistoryRow = (props: Props) => {
     }
     return null;
   }
+
+  const changeOrderStateAction = async () => {
+    "use server";
+    await changeOrderState(
+      order.id,
+      OrderStatus.IN_PROGRESS,
+      null,
+      props.token
+    );
+    redirect("/orders");
+  };
+
   return (
     <tr className="odd:bg-gray-800 even:bg-gray-900">
       <td>#{order.id}</td>
       <td>#{getTableNumberById(order.tableId)}</td>
       <td>{`${orderDate}, ${orderTime}`}</td>
-      <td>{`${orderDate}, ${orderTime}`}</td>
+      <td>{`${orderCompleteDate}, ${orderCompleteTime}`}</td>
       <td>{order.price.toPrecision(4)}zł</td>
       <td>
         <Link
-          href="/"
+          href={`/orders/history/details/${order.id}`}
           className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 m-5"
         >
           Szczegóły
         </Link>
       </td>
       <td>
-        <Link
-          href="/"
-          className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 m-5"
-        >
-          Cofnij realizację
-        </Link>
+        <form action={changeOrderStateAction}>
+          <button className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 m-5">
+            Cofnij realizację
+          </button>
+        </form>
       </td>
     </tr>
   );

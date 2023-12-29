@@ -437,11 +437,11 @@ export async function deleteCategory(id: number, token?: string | null) {
   }
 }
 
-export async function fetchOrdersData(
+export async function fetchOrdersHistoryData(
   token: string | null
 ): Promise<OrderData[]> {
   if (token) {
-    const reqUrl = `${serverUrl}/api/dashboard/order`;
+    const reqUrl = `${serverUrl}/api/dashboard/order/history`;
     const res = await fetch(reqUrl, {
       headers: { Authorization: "Bearer " + token },
       next: { tags: ["orders"] },
