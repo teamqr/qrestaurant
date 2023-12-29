@@ -32,9 +32,17 @@ export default function SettingsPage() {
         <SettingsSection>
           <SettingsSection.Title>aplikacja</SettingsSection.Title>
           <SettingsSection.Items>
-            <SettingsSection.Item label="Konto" icon={<Account />} />
-            <SettingsSection.Item label="Lokalizacja" icon={<Location />} />
-            <SettingsSection.Item label="Powiadomienia" icon={<Bell />} />
+            <SettingsSection.Item disabled label="Konto" icon={<Account />} />
+            <SettingsSection.Item
+              disabled
+              label="Lokalizacja"
+              icon={<Location />}
+            />
+            <SettingsSection.Item
+              disabled
+              label="Powiadomienia"
+              icon={<Bell />}
+            />
             <SettingsSection.Item disabled label="Reklamy" icon={<Ad />} />
           </SettingsSection.Items>
         </SettingsSection>
@@ -53,6 +61,7 @@ export default function SettingsPage() {
               onPress={signOut}
             />
             <SettingsSection.Item
+              disabled
               label="Usuń konto"
               icon={<Trash color="black" />}
               color="black"

@@ -29,6 +29,8 @@ export type MealCategory = {
   mealIds: number[];
 };
 
+export type OrderStatus = "IN_PROGRESS" | "CANCELED" | "COMPLETED";
+
 export type Order = {
   id: number;
   completionDate: string;
@@ -38,5 +40,22 @@ export type Order = {
   restaurantId: number;
   tableId: number;
   userId: number;
-  status: string;
+  status: OrderStatus;
+};
+
+export type MealOrder = {
+  id: number;
+  mealId: number;
+  orderId: number;
+  amount: number;
+};
+
+export type OrderSummary = Omit<Order, "mealOrderIds"> & {
+  meals: {
+    id: number;
+    name: string;
+    description: string;
+    totalPrice: number;
+    amount: number;
+  }[];
 };
