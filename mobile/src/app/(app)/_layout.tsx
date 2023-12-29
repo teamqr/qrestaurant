@@ -40,6 +40,12 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
+        name="code"
+        options={{
+          header: () => <AppHeader title={"Wpisz kod\nstolika"} />,
+        }}
+      />
+      <Stack.Screen
         name="restaurant"
         options={{
           headerShown: false,
