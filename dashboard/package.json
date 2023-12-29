@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@reacticons/ionicons": "^7.1.0",
+    "@stomp/stompjs": "^7.0.0",
+    "@types/sockjs-client": "^1.5.4",
     "iron-session": "^8.0.1",
     "jwt-decode": "^4.0.0",
     "next": "14.0.2",
@@ -17,7 +19,8 @@
     "next-qrcode": "^2.5.1",
     "react": "^18",
     "react-dom": "^18",
-    "react-select": "^5.8.0"
+    "react-select": "^5.8.0",
+    "sockjs-client": "^1.6.1"
   },
   "devDependencies": {
     "@types/node": "^20",
