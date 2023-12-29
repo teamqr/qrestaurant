@@ -13,14 +13,14 @@ public class Table {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    @Min(value = 1)
+    @NotNull(message = "{number.notnull}")
+    @Min(value = 1, message = "{number.min}")
     private Integer number;
-    @NotNull
-    @Size(min = 2, max = 2)
+    @NotNull(message = "{prefix.notnull}")
+    @Size(min = 2, max = 2, message = "{prefix.size}")
     private String prefix;
-    @NotNull
-    @Size(min = 6, max = 6)
+    @NotNull(message = "{code.notnull}")
+    @Size(min = 6, max = 6, message = "{code.size}")
     private String code;
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
