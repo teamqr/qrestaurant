@@ -32,7 +32,7 @@ const Meal = async (props: Props) => {
       <td>{categories.toString()}</td>
       <td>
         <Link
-          className="block rounded-md border-0 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500"
+          className="flex justify-center items-center rounded-md border-0 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500"
           href={`/menu/meal/edit/${props.data.id}`}
         >
           Edytuj
