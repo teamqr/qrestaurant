@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
+import { useDeferredValue, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { theme } from "@/common/theme";
@@ -17,6 +17,10 @@ import { useRestaurantSessionStore } from "@/stores/restaurant-session";
 export default function RestaurantPage() {
   const router = useRouter();
   const [category, setCategory] = useState<number>();
+  const [search, setSearch] = useState("");
+
+  const deferredSearch = useDeferredValue(search);
+
   const tableCode = useRestaurantSessionStore((state) => state.tableCode);
   const { restaurant: id } = useLocalSearchParams<{ restaurant: string }>();
 
@@ -95,7 +99,11 @@ export default function RestaurantPage() {
           </View>
         )}
       </View>
-      <Input prefix={<Search />} placeholder="na co masz ochotę?" />
+      <Input
+        prefix={<Search />}
+        placeholder="na co masz ochotę?"
+        onChangeText={setSearch}
+      />
 
       <CategoryList
         onCategoryChange={(c) => {
@@ -108,7 +116,7 @@ export default function RestaurantPage() {
         category={category}
       />
 
-      <MealList table={table} category={category} />
+      <MealList table={table} category={category} query={deferredSearch} />
 
       {table && <CartButton restaurantId={restaurant?.id} />}
     </View>

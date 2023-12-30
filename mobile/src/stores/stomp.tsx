@@ -2,9 +2,10 @@ import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { create } from "zustand";
 
-const BASE_URL = process.env.EXPO_PUBLIC_WS_URL ?? "http://localhost:8081";
+const BASE_URL =
+  process.env.EXPO_PUBLIC_WS_URL ?? "http://localhost:8081/ws-app";
 
-const sockFactory = () => new SockJS(`${BASE_URL}/ws-app`);
+const sockFactory = () => new SockJS(BASE_URL);
 
 type StompState = {
   stompClient: Client;
