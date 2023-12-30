@@ -17,9 +17,10 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 type Props = {
   table?: Table;
   category?: number;
+  query?: string;
 };
 
-export const MealList = ({ table, category }: Props) => {
+export const MealList = ({ table, category, query }: Props) => {
   const restaurantId = useRestaurantSessionStore((state) => state.restaurantId);
   const addToCart = useRestaurantSessionStore((state) => state.addToCart);
 
@@ -34,11 +35,15 @@ export const MealList = ({ table, category }: Props) => {
     return null;
   }
 
-  const filteredData = category
-    ? meals.data?.meals.filter((meal) =>
-        meal.mealCategoryIds.includes(category!),
-      )
-    : meals.data?.meals;
+  const filteredData = (
+    category
+      ? meals.data?.meals.filter((meal) =>
+          meal.mealCategoryIds.includes(category!),
+        )
+      : meals.data?.meals
+  )?.filter((meal) =>
+    meal.name.toLowerCase().includes(query?.toLowerCase() ?? ""),
+  );
 
   return (
     <Animated.FlatList

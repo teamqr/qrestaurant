@@ -93,7 +93,8 @@ export default function SignInPage() {
           }) => (
             <Animated.View style={{ gap: theme.spacing(1) }}>
               <Input
-                textContentType="emailAddress"
+                textContentType="username"
+                keyboardType="email-address"
                 placeholder="E-mail"
                 prefix={<Mail color="white" />}
                 value={value}

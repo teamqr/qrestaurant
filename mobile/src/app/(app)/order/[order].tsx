@@ -5,11 +5,18 @@ import { FlatList, View } from "react-native";
 
 import { theme } from "@/common/theme";
 import { OrderSummary } from "@/common/types";
+import { StatusIndicator } from "@/components/@order/status-indicator";
 import { AppText } from "@/components/text";
 import { useOrder } from "@/hooks/query/useOrder";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import { useSubscribeWebSocket } from "@/hooks/useSubscribeWebSocket";
 import { formatter } from "@/utils/formatter";
+
+const STATUS_MAP = {
+  IN_PROGRESS: "W trakcie przygotowania",
+  COMPLETED: "Zrealizowane",
+  CANCELED: "Anulowane",
+} as const satisfies Record<OrderSummary["status"], string>;
 
 export default function OrderPage() {
   const queryClient = useQueryClient();
@@ -51,11 +58,19 @@ export default function OrderPage() {
       <View
         style={{
           marginTop: "auto",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: theme.spacing(1),
+          marginBottom: theme.spacing(2),
         }}
       >
-        <AppText style={{ color: theme.colors.textOnBackground }}>
-          Status: {order?.status}
+        <AppText weight="bold" style={{ color: theme.colors.textOnBackground }}>
+          {STATUS_MAP[order?.status ?? "IN_PROGRESS"]}
         </AppText>
+
+        <View style={{ flex: 1 }}>
+          <StatusIndicator status={order?.status} />
+        </View>
       </View>
 
       <View

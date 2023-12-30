@@ -100,6 +100,14 @@ const RootLayoutStack = () => {
           header: ({ navigation }) => <Header onBack={navigation.goBack} />,
         }}
       />
+
+      <Stack.Screen
+        name="tos"
+        options={{
+          headerShown: false,
+          presentation: "modal",
+        }}
+      />
     </Stack>
   );
 };

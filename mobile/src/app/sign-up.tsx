@@ -204,7 +204,15 @@ export default function SignUpPage() {
                     color: theme.colors.textOnBackground,
                   }}
                 >
-                  akceptuję <AppText weight="bold">regulamin</AppText>
+                  akceptuję{" "}
+                  <AppText
+                    weight="bold"
+                    onPress={() => {
+                      router.push("/tos");
+                    }}
+                  >
+                    regulamin
+                  </AppText>
                 </AppText>
               </View>
               {!!error && (
