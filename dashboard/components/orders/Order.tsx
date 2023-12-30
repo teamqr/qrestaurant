@@ -46,9 +46,9 @@ const Order = (props: Props) => {
   function getTableNumberById(id: number) {
     const table = props.tablesData.find((e) => e.id == id);
     if (table) {
-      return table.number;
+      return `#${table.number}`;
     }
-    return null;
+    return "usunięty";
   }
 
   const changeOrderStateAction = () => {
@@ -58,7 +58,7 @@ const Order = (props: Props) => {
   return (
     <div className="flex flex-col items-center flex-wrap m-4 p-2 bg-slate-700 rounded-lg w-72 ">
       <h2>Zamówienie #{order.id}</h2>
-      <div className="w-full">Stolik #{getTableNumberById(order.tableId)}</div>
+      <div className="w-full">Stolik {getTableNumberById(order.tableId)}</div>
       <div className="flex flex-row justify-between w-full">
         <div>{orderTime}</div>
         <div>{orderDate}</div>

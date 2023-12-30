@@ -30,9 +30,9 @@ const OrderHistoryRow = (props: Props) => {
   function getTableNumberById(id: number) {
     const table = props.tablesData.find((e) => e.id == id);
     if (table) {
-      return table.number;
+      return `#${table.number}`;
     }
-    return null;
+    return "Stolik usunięty";
   }
 
   const changeOrderStateAction = async () => {
@@ -47,7 +47,7 @@ const OrderHistoryRow = (props: Props) => {
   return (
     <tr className="odd:bg-gray-800 even:bg-gray-900">
       <td>#{order.id}</td>
-      <td>#{getTableNumberById(order.tableId)}</td>
+      <td>{getTableNumberById(order.tableId)}</td>
       <td>{`${orderDate}, ${orderTime}`}</td>
       <td>{`${orderCompleteDate}, ${orderCompleteTime}`}</td>
       <td>{order.price.toFixed(2)}zł</td>
