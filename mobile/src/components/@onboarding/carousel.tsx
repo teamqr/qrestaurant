@@ -1,6 +1,6 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { Dimensions, View } from "react-native";
+import { Dimensions, ScrollView, View } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
@@ -25,16 +25,16 @@ const items = [
   {
     image: require("assets/images/onboarding_1.png"),
     description:
-      "Witaj w QRestaurant! Nasza aplikacja ułatwia zamawianie jedzenia w każdej restauracji. Przeglądaj menu, składaj zamówienia i płac za pomocą kilku kliknięć. Nie musisz już czekać na kelnera, aby złożyć zamówienie. Z QRestaurant zamawianie jedzenia jest szybkie i łatwe!",
+      "Witaj w QRestaurant! Nasza aplikacja ułatwia zamawianie jedzenia w każdej restauracji. Przeglądaj menu, składaj zamówienia i płać za pomocą kilku kliknięć. Nie musisz już czekać na kelnera, aby złożyć zamówienie. Z QRestaurant zamawianie jedzenia jest szybkie i łatwe!",
   },
   {
     image: require("assets/images/onboarding_2.png"),
     description:
-      "Pomożemy Ci znaleźć restaurację, która Ci odpowiada. Wyszukaj restaurację w okolicy, sprawdź menu i ceny, a następnie zarezerwuj stolik. Możesz również zobaczyć opinie innych użytkowników, aby dowiedzieć się, czy restauracja jest godna odwiedzenia.",
+      "Pomożemy Ci znaleźć restaurację, która Ci odpowiada. Wyszukaj restaurację w okolicy, sprawdź menu i ceny, a następnie zarezerwuj stolik.",
   },
   {
     image: require("assets/images/onboarding_3.png"),
-    description: "Zapraszamy do korzystania z QRestaurant! Smacznego!",
+    description: "Zapraszamy do korzystania z QRestaurant!\nSmacznego!",
   },
 ];
 
@@ -178,17 +178,22 @@ const Item = ({
         }}
       />
 
-      <AppText
+      <ScrollView
         style={{
-          fontSize: 16,
-          color: "white",
-          lineHeight: 24,
           alignSelf: "flex-start",
-          textAlign: "justify",
         }}
       >
-        {description}
-      </AppText>
+        <AppText
+          style={{
+            fontSize: 16,
+            color: "white",
+            lineHeight: 24,
+            textAlign: "justify",
+          }}
+        >
+          {description}
+        </AppText>
+      </ScrollView>
     </Animated.View>
   );
 };
