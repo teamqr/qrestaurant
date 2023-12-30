@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";
 import { Role } from "@/types/Role";
 import HomePageSection from "./HomePageSection";
 
@@ -29,75 +28,53 @@ const HomePage = (props: Props) => {
 
   return (
     <div className="flex flex-col px-5">
-      <h1 className="flex flex-col justify-center items-center m-5">
+      <h1 className="flex flex-col justify-center items-center">
         Strona główna
       </h1>
-      <main>
+      <main className="mx-10">
         <div id="userData" className="flex justify-between mb-10">
           <div>
-            <p>Restauracja: {restaurant} </p>
+            <h2>Restauracja: {restaurant} </h2>
           </div>
           <div className="flex flex-col items-end">
-            <p>Zalogowano jako: {session.user?.email}</p>
-            <p>Rola: {role} </p>
+            <h2>Zalogowano jako: {session.user?.email}</h2>
+            <h2>Rola: {role} </h2>
           </div>
         </div>
-        <div className="flex justify-center gap-10 items-center flex-wrap ">
+        <div className="flex justify-evenly gap-10 items-center flex-wrap h-72">
           {session.user?.role == Role.ADMIN ? (
             <>
-              <HomePageSection>
-                <h2>Zarządzanie restauracją</h2>
-                <p>Lorem ipsum cośtam xd</p>
-                <Link
-                  className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500"
-                  href="/restaurant"
-                >
-                  Zarządzaj restauracją
-                </Link>
+              <HomePageSection href="/restaurant">
+                <h2 className="flex items-center">Zarządzanie restauracją</h2>
+                <p>
+                  Sekcja informacji o restauracji oraz zarządzania kontami
+                  pracowników.
+                </p>
               </HomePageSection>
-              <HomePageSection>
+              <HomePageSection href="/menu">
                 <h2>Zarządzanie menu</h2>
-                <p>Lorem ipsum cośtam xd</p>
-                <Link
-                  className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500"
-                  href="/menu"
-                >
-                  Zarządzaj menu
-                </Link>
+                <p>
+                  Sekcja zarządzania posiłkami dostępnymi w ofercie restauracji.
+                </p>
               </HomePageSection>
             </>
           ) : (
             <></>
           )}
-          <HomePageSection>
+          <HomePageSection href="/tables">
             <h2>Zarządzanie stolikami</h2>
-            <p>Lorem ipsum cośtam xd</p>
-            <Link
-              className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500"
-              href="/tables"
-            >
-              Zarządzaj stolikami
-            </Link>
+            <p>
+              Sekcja zarządzania stolikami w restauracji oraz przypisanymi do
+              nich kodami QR.
+            </p>
           </HomePageSection>
-          <HomePageSection>
+          <HomePageSection href="/orders">
             <h2>Oczekujące zamówienia</h2>
-            <p>Lorem ipsum cośtam xd</p>
-            <Link
-              className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500"
-              href="/orders"
-            >
-              Oczekujące zamówienia
-            </Link>
+            <p>Sekcja zarządzania aktualnie oczekującymi zamówieniami.</p>
           </HomePageSection>
-          <HomePageSection>
+          <HomePageSection href="/orders/history">
             <h2>Historia zamówień</h2>
-            <p>Lorem ipsum cośtam xd</p>
-            <Link
-              className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500"
-              href="/orders/history"
-            >
-              Historia zamówień
-            </Link>
+            <p>Sekcja historii zamówień.</p>
           </HomePageSection>
         </div>
       </main>
