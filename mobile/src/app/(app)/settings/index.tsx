@@ -7,6 +7,7 @@ import { AppText } from "@/components/text";
 import { useDeleteAccount } from "@/hooks/mutation/useDeleteAccount";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import { useAuthStore } from "@/stores/auth";
+import { router } from "expo-router";
 
 export default function SettingsPage() {
   const signOut = useAuthStore((state) => state.signOut);
@@ -66,6 +67,13 @@ export default function SettingsPage() {
               icon={<Bell />}
             />
             <SettingsSection.Item disabled label="Reklamy" icon={<Ad />} />
+            <SettingsSection.Item
+              label="Regulamin"
+              icon={<Bell />}
+              onPress={() => {
+                router.push("/tos");
+              }}
+            />
           </SettingsSection.Items>
         </SettingsSection>
 
