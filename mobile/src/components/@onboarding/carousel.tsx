@@ -178,13 +178,16 @@ const Item = ({
         }}
       />
 
-      <ScrollView>
+      <ScrollView
+        style={{
+          alignSelf: "flex-start",
+        }}
+      >
         <AppText
           style={{
             fontSize: 16,
             color: "white",
             lineHeight: 24,
-            alignSelf: "flex-start",
             textAlign: "justify",
           }}
         >
