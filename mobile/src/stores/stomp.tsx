@@ -2,7 +2,9 @@ import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { create } from "zustand";
 
-const sockFactory = () => new SockJS("http://192.168.1.82:8081/ws-app");
+const BASE_URL = process.env.EXPO_PUBLIC_WS_URL ?? "http://localhost:8081";
+
+const sockFactory = () => new SockJS(`${BASE_URL}/ws-app`);
 
 type StompState = {
   stompClient: Client;
@@ -17,8 +19,8 @@ type StompState = {
 export const useStompStore = create<StompState>((set, get) => ({
   stompClient: new Client({
     webSocketFactory: sockFactory,
-    debug: console.log,
-    logRawCommunication: true,
+    // debug: console.log,
+    // logRawCommunication: true,
     onConnect: () => {
       set({ status: "CONNECTED" });
     },

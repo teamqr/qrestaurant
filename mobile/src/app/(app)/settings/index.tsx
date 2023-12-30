@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { Alert, ScrollView, View } from "react-native";
 
 import { theme } from "@/common/theme";
@@ -7,7 +8,6 @@ import { AppText } from "@/components/text";
 import { useDeleteAccount } from "@/hooks/mutation/useDeleteAccount";
 import { useFixedInsets } from "@/hooks/useFixedInsets";
 import { useAuthStore } from "@/stores/auth";
-import { router } from "expo-router";
 
 export default function SettingsPage() {
   const signOut = useAuthStore((state) => state.signOut);

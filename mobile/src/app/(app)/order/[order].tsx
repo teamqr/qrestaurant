@@ -14,7 +14,7 @@ import { formatter } from "@/utils/formatter";
 
 const STATUS_MAP = {
   IN_PROGRESS: "W trakcie przygotowania",
-  COMPLETED: "Przygotowane",
+  COMPLETED: "Zrealizowane",
   CANCELED: "Anulowane",
 } as const satisfies Record<OrderSummary["status"], string>;
 
