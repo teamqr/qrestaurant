@@ -1,1 +1,1 @@
-export const serverUrl = "http://localhost:8080";
+export const serverUrl = process.env.SERVER_URL ?? "http://localhost:8080";
