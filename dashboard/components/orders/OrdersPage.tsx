@@ -33,6 +33,12 @@ const OrdersPage = (props: Props) => {
         `/topic/order/${props.tokenData.restaurantId}`,
         (message) => {
           const receivedOrders = JSON.parse(message.body).orders as OrderData[];
+          receivedOrders.sort((o1, o2) => {
+            if (o1.id > o2.id) {
+              return 1;
+            }
+            return -1;
+          });
           setOrders(receivedOrders);
         }
       );
@@ -62,7 +68,7 @@ const OrdersPage = (props: Props) => {
         {orders ? (
           orders.map((order: OrderData, i: number) => (
             <Order
-              key={i}
+              key={order.id}
               data={order}
               mealsData={props.meals}
               tablesData={props.tables}
