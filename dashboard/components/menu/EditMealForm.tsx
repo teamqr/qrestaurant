@@ -61,7 +61,7 @@ const EditMealForm = async (props: Props) => {
             placeholder="Nazwa dania"
           />
 
-          <h2>Cena</h2>
+          <h2>Cena (zł)</h2>
           <ReactiveInput
             type="number"
             name="price"

@@ -9,7 +9,7 @@ const NavBar = () => {
 
   return (
     <div>
-      <header className="flex justify-center bg-gray-900 px-5 p-5 mb-5">
+      <header className="flex justify-center items-center bg-slate-900 px-5 p-5 mb-5">
         <div className="flex text-6xl justify-center items-center w-full">
           <Link href="/">
             <strong>QR</strong>estaurant
@@ -19,7 +19,7 @@ const NavBar = () => {
           {session?.user ? (
             <>
               <button
-                className="text-red-500"
+                className="text-white rounded-md bg-red-700 p-2 hover:bg-red-500"
                 onClick={async () => {
                   await removeTokenFromCookies();
                   signOut();

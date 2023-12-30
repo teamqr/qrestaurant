@@ -41,7 +41,7 @@ const AddMealForm = async (props: Props) => {
             placeholder="Nazwa dania"
           />
 
-          <h2>Cena</h2>
+          <h2>Cena (zł)</h2>
           <input
             className="block rounded-md border-0 my-1 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 text-black"
             type="number"

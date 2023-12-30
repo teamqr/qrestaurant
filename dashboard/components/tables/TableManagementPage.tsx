@@ -11,11 +11,11 @@ type Props = {
 
 const TableManagementPage = (props: Props) => {
   return (
-    <div className="m-5">
+    <div className="flex flex-col justify-center items-center m-5">
       <h1 className="flex flex-col justify-center items-center m-5">
         Zarządzanie stolikami
       </h1>
-      <table>
+      <table className="w-3/4">
         <thead>
           <tr>
             <th>ID</th>
@@ -38,7 +38,7 @@ const TableManagementPage = (props: Props) => {
       </table>
       {props.role == Role.ADMIN ? (
         <Link
-          className="block rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 w-max"
+          className="rounded-md border-0 my-4 py-1.5 px-7 text-white-900 ring-1 ring-inset ring-gray-300 hover:ring-2 hover:bg-blue-500 w-3/4 flex justify-center text-2xl"
           href="/tables/add"
         >
           Dodaj stolik

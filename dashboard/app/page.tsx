@@ -1,4 +1,4 @@
-import HomePage from "@/components/HomePage";
+import HomePage from "@/components/home/HomePage";
 import { fetchRestaurantData } from "@/utils/apiUtils";
 import { getTokenFromCookies } from "@/utils/tokenUtils";
 import { revalidatePath } from "next/cache";
