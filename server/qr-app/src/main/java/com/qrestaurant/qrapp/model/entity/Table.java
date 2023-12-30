@@ -24,7 +24,7 @@ public class Table {
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-    @OneToMany(mappedBy = "table", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "table")
     private List<Order> orders;
 
     public Table() {}
@@ -82,5 +82,10 @@ public class Table {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    @PreRemove
+    public void preRemove() {
+        orders.forEach(order -> order.setTable(null));
     }
 }

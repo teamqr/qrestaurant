@@ -162,9 +162,14 @@ public class MapperDTO {
                     .toList();
         }
 
+        Long tableId = null;
+
+        if (order.getTable() != null) {
+            tableId = order.getTable().getId();
+        }
+
         return new OrderDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
-                order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(),
-                order.getUser().getId(), mealOrderIds);
+                order.getCompletionDate(), tableId, order.getRestaurant().getId(), order.getUser().getId(), mealOrderIds);
     }
 
     public Iterable<OrderDTO> toOrderDTOs(Iterable<Order> orders) {
@@ -180,9 +185,15 @@ public class MapperDTO {
                         .toList();
             }
 
+            Long tableId = null;
+
+            if (order.getTable() != null) {
+                tableId = order.getTable().getId();
+            }
+
             orderDTOs.add(new OrderDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
-                    order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(),
-                    order.getUser().getId(), mealOrderIds));
+                    order.getCompletionDate(), tableId, order.getRestaurant().getId(), order.getUser().getId(),
+                    mealOrderIds));
         });
 
         return orderDTOs;
@@ -214,9 +225,14 @@ public class MapperDTO {
             });
         }
 
+        Long tableId = null;
+
+        if (order.getTable() != null) {
+            tableId = order.getTable().getId();
+        }
+
         return new OrderSummaryDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
-                order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(),
-                order.getUser().getId(), meals);
+                order.getCompletionDate(), tableId, order.getRestaurant().getId(), order.getUser().getId(), meals);
     }
 
     public Iterable<OrderSummaryDTO> toOrderSummaryDTOs(Iterable<Order> orders) {
@@ -234,9 +250,15 @@ public class MapperDTO {
                 });
             }
 
+            Long tableId = null;
+
+            if (order.getTable() != null) {
+                tableId = order.getTable().getId();
+            }
+
             orderSummaryDTOs.add(new OrderSummaryDTO(order.getId(), order.getPrice(), order.getStatus(),
-                    order.getOrderDate(), order.getCompletionDate(), order.getTable().getId(),
-                    order.getRestaurant().getId(), order.getUser().getId(), meals));
+                    order.getOrderDate(), order.getCompletionDate(), tableId, order.getRestaurant().getId(),
+                    order.getUser().getId(), meals));
         });
 
         return orderSummaryDTOs;
