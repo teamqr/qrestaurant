@@ -174,7 +174,7 @@ public class MapperDTO {
 
         Long tableId = null;
 
-        if (order.getTable().getId() != null) {
+        if (order.getTable() != null) {
             tableId = order.getTable().getId();
         }
 
@@ -193,7 +193,7 @@ public class MapperDTO {
 
             Long tableId = null;
 
-            if (order.getTable().getId() != null) {
+            if (order.getTable() != null) {
                 tableId = order.getTable().getId();
             }
 
