@@ -172,8 +172,14 @@ public class MapperDTO {
                 .map(MealOrder::getId)
                 .toList();
 
+        Long tableId = null;
+
+        if (order.getTable() != null) {
+            tableId = order.getTable().getId();
+        }
+
         return new OrderDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
-                order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(), mealOrderIds);
+                order.getCompletionDate(), tableId, order.getRestaurant().getId(), mealOrderIds);
     }
     
     public Iterable<OrderDTO> toOrderDTOs(Iterable<Order> orders) {
@@ -185,8 +191,14 @@ public class MapperDTO {
                     .map(MealOrder::getId)
                     .toList();
 
+            Long tableId = null;
+
+            if (order.getTable() != null) {
+                tableId = order.getTable().getId();
+            }
+
             orderDTOs.add(new OrderDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
-                    order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(), mealOrderIds));
+                    order.getCompletionDate(), tableId, order.getRestaurant().getId(), mealOrderIds));
         });
 
         return orderDTOs;
