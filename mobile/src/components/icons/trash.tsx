@@ -6,10 +6,11 @@ const SvgTrash = (props: SvgProps) => (
     height={24}
     fill="none"
     viewBox="0 0 24 24"
+    color="white"
     {...props}
   >
     <Path
-      stroke="#000"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}

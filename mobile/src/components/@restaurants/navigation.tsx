@@ -20,7 +20,12 @@ export const RestaurantsNavigation = () => {
         styles.container,
       ]}
     >
-      <IconButton icon={<Receipt color="white" />} onPress={() => {}} />
+      <IconButton
+        icon={<Receipt color="white" />}
+        onPress={() => {
+          router.push("/(app)/orders");
+        }}
+      />
       <IconButton
         icon={<QrCode color="white" />}
         variant="large"

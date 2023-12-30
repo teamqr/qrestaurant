@@ -3,6 +3,7 @@ package com.qrestaurant.qrdashboard.model.entity;
 import com.qrestaurant.qrdashboard.common.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -14,18 +15,19 @@ import java.util.List;
 public class Order {
     @Id
     private Long id;
-    @NotNull
+    @NotNull(message = "{price.notnull}")
+    @DecimalMin(value = "0.00", message = "{price.decimal.min}")
     private BigDecimal price;
-    @NotNull
+    @NotNull(message = "{status.notnull}")
     private OrderStatus status;
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE NOT NULL")
-    @NotNull
+    @NotNull(message = "{order.date.notnull}")
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date orderDate;
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date completionDate;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order")
     private List<MealOrder> mealOrders;
     @ManyToOne
     @JoinColumn(name = "table_id")

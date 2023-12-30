@@ -5,6 +5,7 @@ import com.qrestaurant.qrapp.model.entity.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -199,5 +200,45 @@ public class MapperDTO {
                 mealOrder.getMeal().getId(), mealOrder.getOrder().getId(), mealOrder.getAmount())));
 
         return mealOrderDTOs;
+    }
+
+    public OrderSummaryDTO toOrderSummaryDTO(Order order) {
+        List<MealSummaryDTO> meals = new ArrayList<>();
+
+        if (order.getMealOrders() != null) {
+            order.getMealOrders().forEach(mealOrder -> {
+                Meal meal = mealOrder.getMeal();
+
+                meals.add(new MealSummaryDTO(meal.getId(), meal.getName(), meal.getDescription(),
+                        meal.getPrice().multiply(new BigDecimal(mealOrder.getAmount())), mealOrder.getAmount()));
+            });
+        }
+
+        return new OrderSummaryDTO(order.getId(), order.getPrice(), order.getStatus(), order.getOrderDate(),
+                order.getCompletionDate(), order.getTable().getId(), order.getRestaurant().getId(),
+                order.getUser().getId(), meals);
+    }
+
+    public Iterable<OrderSummaryDTO> toOrderSummaryDTOs(Iterable<Order> orders) {
+        List<OrderSummaryDTO> orderSummaryDTOs = new ArrayList<>();
+
+        orders.forEach(order -> {
+            List<MealSummaryDTO> meals = new ArrayList<>();
+
+            if (order.getMealOrders() != null) {
+                order.getMealOrders().forEach(mealOrder -> {
+                    Meal meal = mealOrder.getMeal();
+
+                    meals.add(new MealSummaryDTO(meal.getId(), meal.getName(), meal.getDescription(),
+                            meal.getPrice().multiply(new BigDecimal(mealOrder.getAmount())), mealOrder.getAmount()));
+                });
+            }
+
+            orderSummaryDTOs.add(new OrderSummaryDTO(order.getId(), order.getPrice(), order.getStatus(),
+                    order.getOrderDate(), order.getCompletionDate(), order.getTable().getId(),
+                    order.getRestaurant().getId(), order.getUser().getId(), meals));
+        });
+
+        return orderSummaryDTOs;
     }
 }

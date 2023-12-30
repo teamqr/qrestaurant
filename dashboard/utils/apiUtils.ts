@@ -9,6 +9,9 @@ import { MealData } from "@/types/MealData";
 import { RestaurantData } from "@/types/RestaurantData";
 import { TableData } from "@/types/TableData";
 import { MealCategoryData } from "@/types/MealCategoryData";
+import { OrderData } from "@/types/OrderData";
+import { OrderEntry } from "@/types/OrderEntry";
+import { OrderStatus } from "@/types/OrderStatus";
 
 export async function decodeToken(token: string | null): Promise<TokenData> {
   if (token) {
@@ -357,7 +360,7 @@ export async function fetchCategoriesData(
       return json.mealCategories;
     }
   }
-  return {} as MealData[];
+  return [] as MealCategoryData[];
 }
 
 export async function fetchCategoryData(
@@ -376,7 +379,7 @@ export async function fetchCategoryData(
       return json.mealCategory;
     }
   }
-  return {} as MealData;
+  return {} as MealCategoryData;
 }
 
 export async function addCategory(name: string, token?: string | null) {
@@ -431,5 +434,102 @@ export async function deleteCategory(id: number, token?: string | null) {
       cache: "no-store",
     });
     revalidatePath("/menu");
+  }
+}
+
+export async function fetchOrdersHistoryData(
+  token: string | null
+): Promise<OrderData[]> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/order/history`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["orders"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.orders;
+    }
+  }
+  return [] as OrderData[];
+}
+export async function fetchOrdersInProgressData(
+  token: string | null
+): Promise<OrderData[]> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/order/in-progress`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["orders"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.orders;
+    }
+  }
+  return [] as OrderData[];
+}
+
+export async function fetchOrderData(
+  id: number,
+  token: string | null
+): Promise<OrderData> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/order/${id}`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["orders"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.order;
+    }
+  }
+  return {} as OrderData;
+}
+
+export async function fetchOrderEntriesByOrderId(
+  orderId: number,
+  token: string | null
+): Promise<OrderEntry[]> {
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/meal-order/${orderId}`;
+    const res = await fetch(reqUrl, {
+      headers: { Authorization: "Bearer " + token },
+      next: { tags: ["orders"] },
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.mealOrders;
+    }
+  }
+  return [] as OrderEntry[];
+}
+
+export async function changeOrderState(
+  id: number,
+  status: OrderStatus,
+  completionDate: Date | null,
+  token?: string | null
+) {
+  "use server";
+  if (token) {
+    const reqUrl = `${serverUrl}/api/dashboard/order`;
+    const reqBody = { id, status, completionDate };
+    await fetch(reqUrl, {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+      next: { tags: ["orders"] },
+      cache: "no-store",
+    });
+    revalidatePath("/orders");
   }
 }

@@ -1,11 +1,10 @@
 package com.qrestaurant.qrdashboard.model.request;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record UpdateMealCategoryRequest(
-        @NotNull
+        @NotNull(message = "{id.notnull}")
         Long id,
-        @NotBlank
+        @NotNull(message = "{name.notnull}")
         String name
 ) {}

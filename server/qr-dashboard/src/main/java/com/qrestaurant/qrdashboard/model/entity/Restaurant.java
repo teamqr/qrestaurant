@@ -13,14 +13,14 @@ public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+    @NotNull(message = "{name.notnull}")
     private String name;
-    @NotNull
-    @Size(min = 2, max = 2)
+    @NotNull(message = "{prefix.notnull}")
+    @Size(min = 2, max = 2, message = "{prefix.size}")
     private String prefix;
     @Lob
     private String image;
-    @NotNull
+    @NotNull(message = "{featured.notnull}")
     @Column(columnDefinition = "boolean default false")
     private Boolean featured;
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE)

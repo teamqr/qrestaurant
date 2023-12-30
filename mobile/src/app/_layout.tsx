@@ -1,10 +1,14 @@
+import "text-encoding-polyfill";
 import {
   OpenSans_400Regular,
   OpenSans_700Bold,
   OpenSans_800ExtraBold,
   useFonts,
 } from "@expo-google-fonts/open-sans";
+import { StripeProvider } from "@stripe/stripe-react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Constants from "expo-constants";
+import * as Linking from "expo-linking";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
@@ -14,6 +18,8 @@ import { useCameraPermission } from "react-native-vision-camera";
 import { Header } from "../components/ui/header";
 
 SplashScreen.preventAutoHideAsync();
+
+const publishableKey = process.env.EXPO_PUBLIC_STRIPE_PK;
 
 const queryClient = new QueryClient();
 
@@ -36,14 +42,23 @@ export default function RootLayout() {
 
   return (
     <>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <QueryClientProvider client={queryClient}>
-          <>
-            <RootLayoutStack />
-            <StatusBar style="light" />
-          </>
-        </QueryClientProvider>
-      </GestureHandlerRootView>
+      <StripeProvider
+        publishableKey={publishableKey!}
+        urlScheme={
+          Constants.appOwnership === "expo"
+            ? Linking.createURL("/--/")
+            : Linking.createURL("")
+        }
+      >
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <QueryClientProvider client={queryClient}>
+            <>
+              <RootLayoutStack />
+              <StatusBar style="light" />
+            </>
+          </QueryClientProvider>
+        </GestureHandlerRootView>
+      </StripeProvider>
     </>
   );
 }
@@ -74,6 +89,13 @@ const RootLayoutStack = () => {
 
       <Stack.Screen
         name="sign-up"
+        options={{
+          header: ({ navigation }) => <Header onBack={navigation.goBack} />,
+        }}
+      />
+
+      <Stack.Screen
+        name="sign-up-confirm"
         options={{
           header: ({ navigation }) => <Header onBack={navigation.goBack} />,
         }}

@@ -2,6 +2,7 @@ package com.qrestaurant.qrdashboard.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -13,10 +14,11 @@ public class Meal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+    @NotNull(message = "{name.notnull}")
     private String name;
     private String description;
-    @NotNull
+    @NotNull(message = "{price.notnull}")
+    @DecimalMin(value = "0.00", message = "{price.decimal.min}")
     private BigDecimal price;
     @Lob
     private String image;

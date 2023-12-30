@@ -4,10 +4,10 @@ import com.qrestaurant.qrapp.model.OrderProduct;
 import jakarta.validation.constraints.NotNull;
 
 public record NewOrderRequest(
-        @NotNull
+        @NotNull(message = "{restaurant.id.notnull}")
         Long restaurantId,
-        @NotNull
+        @NotNull(message = "{table.id.notnull}")
         Long tableId,
-        @NotNull
+        @NotNull(message = "{order.products.notnull}")
         Iterable<OrderProduct> orderProducts
 ) {}

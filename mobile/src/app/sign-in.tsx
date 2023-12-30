@@ -10,7 +10,7 @@ import { z } from "zod";
 
 import { theme } from "@/common/theme";
 import { Button } from "@/components/button";
-import { Facebbok, Google, Login, Mail, Password } from "@/components/icons";
+import { Login, Mail, Password } from "@/components/icons";
 import { Input } from "@/components/input";
 import { ShadowContainer } from "@/components/shadow-container";
 import { AppText } from "@/components/text";
@@ -145,34 +145,6 @@ export default function SignInPage() {
             loading={signInMutation.isPending}
           />
         </ShadowContainer>
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: theme.spacing(4),
-            marginVertical: theme.spacing(2),
-          }}
-        >
-          <View style={styles.line} />
-          <AppText style={{ color: "white" }} weight="bold">
-            lub
-          </AppText>
-          <View style={styles.line} />
-        </View>
-
-        <Button
-          label="Zaloguj się przez Facebook"
-          variant="outlined"
-          icon={<Facebbok color="white" />}
-        />
-
-        <Button
-          label="Zaloguj się przez Google"
-          variant="outlined"
-          icon={<Google color="white" />}
-        />
       </View>
     </Animated.ScrollView>
   );

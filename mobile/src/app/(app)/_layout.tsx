@@ -40,15 +40,39 @@ export default function AppLayout() {
         }}
       />
       <Stack.Screen
-        name="[restaurant]"
+        name="code"
+        options={{
+          header: () => <AppHeader title={"Wpisz kod\nstolika"} />,
+        }}
+      />
+      <Stack.Screen
+        name="restaurant"
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="cart"
+        options={{
+          header: () => <AppHeader title="Koszyk" />,
         }}
       />
       <Stack.Screen
         name="settings/index"
         options={{
           header: () => <AppHeader title="Ustawienia" />,
+        }}
+      />
+      <Stack.Screen
+        name="orders/index"
+        options={{
+          header: () => <AppHeader title={"Twoje\nparagony"} />,
+        }}
+      />
+      <Stack.Screen
+        name="order/[order]"
+        options={{
+          header: () => <AppHeader title="Zamówienie" />,
         }}
       />
     </Stack>
