@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pl">
-      <body className="text-white bg-gray-800">
+      <body className="text-white bg-slate-800">
         <NextAuthSessionProvider>
           <NavBar />
           <div>{children}</div>
