@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
+import { useDeferredValue, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 
 import { theme } from "@/common/theme";
@@ -20,6 +21,8 @@ const getRestaurants = async () => {
 };
 
 export default function RestaurantsPage() {
+  const [query, setQuery] = useState("");
+  const deferredQuery = useDeferredValue(query);
   const { beginSession } = useRestaurantSessionStore();
   const router = useRouter();
 
@@ -33,6 +36,13 @@ export default function RestaurantsPage() {
     beginSession({ restaurantId: restaurant.id });
     router.push(`/(app)/restaurant/${restaurant.id}`);
   };
+
+  const { data } = restaurants ?? {};
+
+  const filteredRestaurants =
+    data?.restaurants.filter((restaurant) =>
+      restaurant.name.toLowerCase().includes(deferredQuery.toLowerCase()),
+    ) ?? [];
 
   return (
     <View
@@ -54,6 +64,7 @@ export default function RestaurantsPage() {
           placeholder="szukaj restauracji"
           prefix={<Search color="white" />}
           containerStyle={{ flex: 1 }}
+          onChangeText={setQuery}
         />
       </View>
       <ScrollView
@@ -74,7 +85,7 @@ export default function RestaurantsPage() {
             flex: 1,
           }}
         >
-          {restaurants.data?.restaurants.map((restaurant) => (
+          {filteredRestaurants.map((restaurant) => (
             <Pressable
               key={restaurant.id}
               onPress={() => handleRestaurantPress(restaurant)}

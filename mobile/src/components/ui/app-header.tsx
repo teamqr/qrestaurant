@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { ArrowLeft } from "../icons";
@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     color: theme.colors.textOnBackground,
-    maxWidth: "60%",
+    maxWidth: Platform.OS === "android" ? undefined : "60%",
   },
 });
