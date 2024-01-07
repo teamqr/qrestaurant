@@ -9,7 +9,7 @@ const LoginPage = (props: Props) => {
   return (
     <div>
       <LoginForm
-        callBackUrl={props.searchParams?.callbackUrl}
+        callBackUrl={process.env.NEXTAUTH_URL}
         error={props.searchParams?.error}
       />
     </div>
