@@ -1,7 +1,7 @@
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
-const sockFactory = () => new SockJS("http://localhost:8082/ws-dashboard");
+const sockFactory = () => new SockJS("http://18.193.97.14:8082/ws-dashboard");
 
 export const getWebSocketClient = (token: string, restaurantId: number) => {
   let stompClient = new Client({
