@@ -20,7 +20,7 @@ public class CORSConfiguration {
         CorsConfiguration dashboardCorsConfiguration = new CorsConfiguration();
         dashboardCorsConfiguration.setAllowedMethods(List.of("*"));
         dashboardCorsConfiguration.setAllowedHeaders(List.of("*"));
-        dashboardCorsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+        dashboardCorsConfiguration.setAllowedOrigins(List.of("*"));
 
         CorsConfiguration swaggerCorsConfiguration = new CorsConfiguration();
         swaggerCorsConfiguration.setAllowedMethods(List.of("*"));
