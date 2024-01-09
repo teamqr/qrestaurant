@@ -22,7 +22,9 @@ const NavBar = () => {
                 className="text-white rounded-md bg-red-700 p-2 hover:bg-red-500"
                 onClick={async () => {
                   await removeTokenFromCookies();
-                  signOut();
+                  signOut({
+                    callbackUrl: "/dashboard",
+                  });
                 }}
               >
                 Wyloguj się

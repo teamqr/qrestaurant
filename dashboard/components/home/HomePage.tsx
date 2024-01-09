@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { Role } from "@/types/Role";
 import HomePageSection from "./HomePageSection";
+import { redirect } from "next/navigation";
 
 type Props = {
   restaurantName: string | null;
@@ -10,13 +11,17 @@ type Props = {
 };
 
 const HomePage = (props: Props) => {
-  if (!props.token) {
-    signOut({ redirect: false });
-  }
-
   const { data: session, status } = useSession({
     required: true,
+    onUnauthenticated: () => {
+      redirect("/login")
+    }
   });
+  
+  useEffect(() => {
+    if (!props.token)
+      signOut({ redirect: false });
+  }, [props.token])
 
   if (status === "loading") {
     return <></>;
@@ -24,7 +29,7 @@ const HomePage = (props: Props) => {
 
   const restaurant = props?.restaurantName;
 
-  const role = session.user?.role == Role.ADMIN ? "Administrator" : "Pracownik";
+  const role = session?.user?.role == Role.ADMIN ? "Administrator" : "Pracownik";
 
   return (
     <div className="flex flex-col px-5">
